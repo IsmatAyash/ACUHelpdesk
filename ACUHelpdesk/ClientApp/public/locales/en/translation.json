@@ -1,0 +1,107 @@
+{
+  "title": "ACU Helpdesk",
+  "menubar": {
+    "home": "Home",
+    "socecocab": "Socio Eco Cabinet",
+    "spcomm": {
+      "spcomm": "Specialized Committee",
+      "maincom": "Base camp Committee",
+      "execcom": "Executive Committee",
+      "othercom": "Other Committee",
+      "customcom": "Customs Committee",
+      "tariffcom": "Tariffs Committee"
+    },
+    "reports": "Reports",
+    "meetings": {
+      "meetings": "Meetings",
+      "formalmeetings": "Formal Meetings",
+      "upcomingmeetings": "Upcoming Meetings"
+    },
+    "negotiation": "Negotiation",
+    "products": "Products",
+    "login": "Login",
+    "logout": "Logout",
+    "signup": "Sign-up",
+    "profile": "User Profile",
+    "english": "English",
+    "french": "French",
+    "arabic": "Arabic",
+    "language": "Lang",
+    "search": "Search",
+    "settings": "Settings",
+    "users": "User Management",
+    "countries": "Member Countries"
+  },
+  "home": {
+    "events": {
+      "header": "Events",
+      "learnMore": "Learn More..."
+    },
+    "news": {
+      "header": "News"
+    }
+  },
+  "footer": {
+    "aboutus": {
+      "aboutus": "About Us",
+      "overview": "Overview",
+      "overviewLink": "about-escwa",
+      "executiveSecretary": "Executive Secretary",
+      "executiveSecretaryLink": "about-escwa/executive-secretary",
+      "memberStates": "Member States",
+      "memberStatesLink": "about-escwa/overview/member-states",
+      "regionalCoordination": "Regional Coordination Mechanism",
+      "regionalCoordinationLink": "about-escwa/regional-coordination-mechanism",
+      "statisticsInfo": "Statistics Information Portal",
+      "statisticsInfoLink": "sub-site/statistics-information-portal"
+    },
+    "links": {
+      "links": "Links",
+      "escwadata": "ESCWA Data Portal",
+      "elearning": "E-Learning",
+      "unDigitalLib": "United Nation Digital Library",
+      "unIntlDays": "UN International Days",
+      "greeningTheBlue": "Greening the Blue",
+      "unSystem": "UN System"
+    },
+    "services": {
+      "services": "Services",
+      "technicalCooperationNetwork": "Technical Cooperation Network",
+      "conferenceServices": "Conference Services",
+      "library": "Library",
+      "procurement": "Procurement",
+      "jobsAtEscwa": "Jobs @ ESCWA",
+      "escwaTechnologyCenter": "ESCWA Technology Center"
+    }
+  },
+  "login": {
+    "header": "Login to negotiators portal",
+    "login": "Login",
+    "emailplaceholder": "email address",
+    "passwordplaceholder": "password",
+    "emailerrmsg": "Please enter a valid email address",
+    "passworderrmsg": "Please enter a valid password",
+    "invalidcredentials": "Invalid Credentials",
+    "forgotpassword": "Forgot Password",
+    "register": "Not a user click to register"
+  },
+  "register": {
+    "header": "Register a user",
+    "register": "Register",
+    "emailplaceholder": "email address",
+    "passwordplaceholder": "password",
+    "firstnameplaceholder": "first name",
+    "lastnameplaceholder": "last name",
+    "countryplaceholder": "select country",
+    "roleplaceholder": "select role",
+    "emailerrmsg": "Please enter a valid email address",
+    "passworderrmsg": "Please enter a valid password",
+    "roleerrmsg": "Please enter a valid role",
+    "firstnameerrmsg": "Please enter a valid email address",
+    "lastnameerrmsg": "Please enter a valid password",
+    "countryerrmsg": "Please enter a valid role",
+    "alreadyexist": "😲 User with this email already exist",
+    "registration": "👍 Successful Registration",
+    "chooseavatar": "Choose avatar image"
+  }
+}

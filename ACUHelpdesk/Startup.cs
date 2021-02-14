@@ -1,10 +1,16 @@
+using ACUHelpdesk.Helpers;
+using ACUHelpdesk.Models;
+using ACUHelpdesk.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace ACUHelpdesk
 {
@@ -20,8 +26,22 @@ namespace ACUHelpdesk
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+            services.AddDbContext<ACUContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("ACUConn")));
 
-            services.AddControllersWithViews();
+            services.AddControllers();
+
+            //configure strongly typed settings object
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            //configure DI for application services
+
+           services.AddScoped<IUserService, UserService>();
+           services.AddScoped<IEmailService, EmailService>();
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -49,6 +69,22 @@ namespace ACUHelpdesk
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+
+            // global error handler
+            app.UseMiddleware<ErrorHandlerMiddleWare>();
+
+            app.UseMiddleware<JwtMiddleware>();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content/Avatars")),
+                RequestPath = "/Content/Avatars"
+            });
+
 
             app.UseEndpoints(endpoints =>
             {
