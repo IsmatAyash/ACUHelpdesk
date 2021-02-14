@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACUHelpdesk", "ACUHelpdesk\ACUHelpdesk.csproj", "{81DF885E-2B86-4792-B778-9FEFF4B94555}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81DF885E-2B86-4792-B778-9FEFF4B94555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DF885E-2B86-4792-B778-9FEFF4B94555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DF885E-2B86-4792-B778-9FEFF4B94555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DF885E-2B86-4792-B778-9FEFF4B94555}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D08ACB4D-4166-4E4B-B7D3-9DAE5C88C6D7}
+	EndGlobalSection
+EndGlobal
