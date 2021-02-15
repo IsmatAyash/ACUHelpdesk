@@ -27,6 +27,8 @@ namespace ACUHelpdesk.Services
         User Register(AddUserRequest model, string origin);
         void VerifyEmail(string passcode);
         void ForgotPassword(ForgotPasswordRequest model, string origin);
+        NegPasscodeResponse NegPassCode(string email);
+
     }
     public class UserService : IUserService
     {
@@ -112,6 +114,40 @@ namespace ACUHelpdesk.Services
             }
             return avatarName;
         }
+
+        public NegPasscodeResponse NegPassCode(string email)
+        {
+            // used the forgot password request because it is identical
+            var user = _context.Users.SingleOrDefault(x => x.Email == email && x.Active == true);
+
+            if (user == null) throw new AppException("User not found to generate a pass code for");
+
+            user.NegPassCode = randomNegPassCode();
+            user.NegPassCodeExpires = DateTime.UtcNow.AddDays(7);
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            sendNegPasscodeEmail(user);
+
+            return new NegPasscodeResponse(user);
+
+        }
+
+        private string randomNegPassCode()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[8];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(stringChars);
+        }
+
         public void VerifyEmail(string passcode)
         {
             var user = _context.Users.SingleOrDefault(x => x.PassCode == passcode);
@@ -209,15 +245,19 @@ namespace ACUHelpdesk.Services
             );
         }
 
-        //private static byte[] ConvertToByteArray(string str, Encoding encoding)
-        //{
-        //    return encoding.GetBytes(str);
-        //}
+        private void sendNegPasscodeEmail(User user)
+        {
+            string message;
+            message = $@"<p>Please use the below Passcode to start the requested agreed upon negotiation </p>
+            <p><code>{user.NegPassCode}</code></p>";
 
-        //private static String ToBinary(Byte[] data)
-        //{
-        //    return string.Join(" ", data.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
-        //}
+            _emailService.Send(
+                to: user.Email,
+                subject: "Negotiation pass code - ACU Helpdask",
+                html: $@"<h4>Negotiation Passcode</h4>
+                         {message}"
+            );
+        }
 
         private string GenerateJwtToken(User user)
         {

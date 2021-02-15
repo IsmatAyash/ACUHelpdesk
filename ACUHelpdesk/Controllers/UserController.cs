@@ -52,8 +52,6 @@ namespace ACUHelpdesk.Controllers
             return Ok(user);
         }
 
-
-
         [HttpPost("register")]
         public IActionResult Register([FromForm] AddUserRequest model)
         {
@@ -79,6 +77,15 @@ namespace ACUHelpdesk.Controllers
             return Ok(new { message = "Please check your email for password reset instructions" });
         }
 
+        [HttpPost("neg-passcode")]
+        public IActionResult NegPassCode(ForgotPasswordRequest model)
+        {
+            var response = _userService.NegPassCode(model.Email);
+
+            if (response == null) return BadRequest(new { message = "User was not found to generate a passcode for, registration required first" });
+
+            return Ok(response);
+        }
 
         // Helpers 
         private string ipAddress()

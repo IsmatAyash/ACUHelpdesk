@@ -41,7 +41,7 @@ const Schema = () => {
         "any.required": `${t("login.passworderrmsg")}`,
         "string.empty": `${t("login.passworderrmsg")}`,
       }),
-    // confirmPassword: Joi.string().required().valid(Joi.ref("password")),
+    confirmPassword: Joi.string().required().valid(Joi.ref("password")),
   });
   return schema;
 };

@@ -428,6 +428,12 @@ namespace ACUHelpdesk.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("NegPassCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NegPassCodeExpires")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PassCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -459,8 +465,9 @@ namespace ACUHelpdesk.Migrations
                             Email = "ismat.ayash@gmail.com",
                             FirstName = "Ismat",
                             LastName = "Ayash",
+                            NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAEMCl6hovTEKFLmTqOGE+mGQwLp8aSIjFigYARFdResc7ckBq5epiE86JUajkILA0Wg==",
+                            Password = "AQAAAAEAACcQAAAAELvXCpJ+EE3Rw+2UbWV6aACXZsnqoSqdapn1sVzpc4sQW+2ADHQQb+6WM8XKxw67qA==",
                             RoleId = 1
                         });
                 });

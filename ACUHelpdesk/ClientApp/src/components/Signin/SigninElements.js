@@ -74,3 +74,7 @@ export const TextLink = styled(Link)`
     transition: 0.3s ease-out;
   }
 `;
+
+export const FormLabel = styled(Form.Label)`
+  font-weight: bold;
+`;

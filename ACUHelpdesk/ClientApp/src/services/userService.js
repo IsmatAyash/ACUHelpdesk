@@ -12,6 +12,7 @@ export const userService = {
   forgotPassword,
   validateResetToken,
   resetPassword,
+  negPassCode,
 };
 
 async function login(email, password) {
@@ -23,29 +24,18 @@ async function login(email, password) {
   return user;
 }
 
-// function login(email, password) {
-//   return http
-//     .post(`${baseUrl}/authenticate`, { email, password })
-//     .then(user => {
-//       // publish user to subscribers and start timer to refresh token
-//       userSubject.next(user);
-//       startRefreshTokenTimer();
-//       return user;
-//     });
-// }
-
 function logout() {
-  // revoke token, stop refresh timer, publish null to user subscribers and redirect to login page
   http.post(`${baseUrl}/revoke-token`, {});
-  // stopRefreshTokenTimer();
-  // userSubject.next(null);
   localStorage.removeItem(tokenKey);
   history.push("/user/login");
 }
 
 function verifyEmail(passcode) {
-  console.log("Inside user service", passcode);
   return http.post(`${baseUrl}/verify-email`, { passcode });
+}
+
+function negPassCode(email) {
+  return http.post(`${baseUrl}/neg-passcode`, { email });
 }
 
 export function register(params) {

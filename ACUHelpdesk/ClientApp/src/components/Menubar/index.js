@@ -26,11 +26,7 @@ const Menubar = ({ onSelect }) => {
   const adminItems = [
     { id: "/register", option: `${t("menubar.users")}` },
     { id: "/countries", option: `${t("menubar.countries")}` },
-  ];
-
-  const userItems = [
-    { id: "/profile", option: `${t("menubar.profile")}` },
-    { id: "/signout", option: `${t("menubar.logout")}` },
+    { id: "/createpasscode", option: `${t("menubar.createpasscode")}` },
   ];
 
   const icon = () => (
@@ -98,7 +94,7 @@ const Menubar = ({ onSelect }) => {
   ];
 
   const handleSelect = opt => {
-    // setExpanded(false);
+    setExpanded(false);
   };
 
   const handleClick = e => {
@@ -183,19 +179,20 @@ const Menubar = ({ onSelect }) => {
               >
                 {t("menubar.products")}
               </NavLink>
-              {user.role === "Admin" && (
-                <Nav className={lngStyle}>
-                  <DropdownNav
-                    onItemSelect={opt => handleSelect(opt)}
-                    items={adminItems}
-                    text={t("menubar.settings")}
-                    child={<MdSettings color="white" />}
-                  />
-                </Nav>
-              )}
             </>
           )}
         </Nav>
+        {user && user.role === "Admin" && (
+          <Nav className={lng === "ar" ? "mr-auto" : "ml-auto"}>
+            <DropdownNav
+              menuAlign="right"
+              onItemSelect={opt => handleSelect(opt)}
+              items={adminItems}
+              text={user.fullName}
+              child={<MdSettings color="white" />}
+            />
+          </Nav>
+        )}
       </Navbar.Collapse>
     </Navbar>
   );

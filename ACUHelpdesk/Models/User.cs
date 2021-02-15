@@ -23,6 +23,8 @@ namespace ACUHelpdesk.Models
         public bool Active { get; set; }
         public string PassCode { get; set; }
         public DateTime PassCodeExpires { get; set; }
+        public string NegPassCode { get; set; }
+        public DateTime NegPassCodeExpires { get; set; }
         public int RoleId { get; set; }
         public int CountryId { get; set; }
         public DateTime ActivationDate { get; set; }

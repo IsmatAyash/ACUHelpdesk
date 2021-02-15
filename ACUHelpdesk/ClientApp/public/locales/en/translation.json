@@ -3,6 +3,7 @@
   "menubar": {
     "home": "Home",
     "socecocab": "Socio Eco Cabinet",
+    "createpasscode": "Generate Negotiation Passcode",
     "spcomm": {
       "spcomm": "Specialized Committee",
       "maincom": "Base camp Committee",
@@ -103,5 +104,11 @@
     "alreadyexist": "😲 User with this email already exist",
     "registration": "👍 Successful Registration",
     "chooseavatar": "Choose avatar image"
+  },
+  "createpasscode": {
+    "header": "Generate a negotiation passcode",
+    "generate": "Generate",
+    "emailplaceholder": "email address",
+    "passcodegenerated": "Pass code has been generated and sent"
   }
 }

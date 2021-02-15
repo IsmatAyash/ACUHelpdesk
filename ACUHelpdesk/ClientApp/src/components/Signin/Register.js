@@ -248,7 +248,7 @@ const Register = () => {
           </Form.Row>
           <Form.Row className="justify-content-start">
             <Button
-              // disabled={validate(values, schema)}
+              disabled={validate(values, schema)}
               variant="success"
               type="submit"
               style={{ textAlign: lng === "ar" ? "right" : "left" }}

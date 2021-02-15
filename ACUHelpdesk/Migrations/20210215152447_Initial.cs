@@ -69,6 +69,8 @@ namespace ACUHelpdesk.Migrations
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     PassCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PassCodeExpires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NegPassCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NegPassCodeExpires = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     ActivationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -239,8 +241,8 @@ namespace ACUHelpdesk.Migrations
 
             migrationBuilder.InsertData(
                 table: "User",
-                columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "ismat.jpg", 8, "ismat.ayash@gmail.com", "Ismat", "Ayash", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEMCl6hovTEKFLmTqOGE+mGQwLp8aSIjFigYARFdResc7ckBq5epiE86JUajkILA0Wg==", 1 });
+                columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "ismat.jpg", 8, "ismat.ayash@gmail.com", "Ismat", "Ayash", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAELvXCpJ+EE3Rw+2UbWV6aACXZsnqoSqdapn1sVzpc4sQW+2ADHQQb+6WM8XKxw67qA==", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_NegotiationDiscussions_NegotiationId",

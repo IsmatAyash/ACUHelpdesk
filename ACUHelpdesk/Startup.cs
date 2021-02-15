@@ -85,6 +85,13 @@ namespace ACUHelpdesk
                 RequestPath = "/Content/Avatars"
             });
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content/Attachments")),
+                RequestPath = "/Content/Attachments"
+            });
+
+
 
             app.UseEndpoints(endpoints =>
             {

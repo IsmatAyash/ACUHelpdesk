@@ -25,6 +25,7 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import FormalMeetings from "./components/Meetings/FormalMeetings";
 import UpcomingMeetings from "./components/Meetings/UpcomingMeetings";
+import CreatePasscode from "./components/Settings/CreatePasscode";
 
 function App() {
   const [user, setUser] = useState({});
@@ -60,6 +61,7 @@ function App() {
               <Route path="/register" component={Register} />
               <Route path="/profile" component={Profile} />
               <Route path="/countries" component={Countries} />
+              <Route path="/createpasscode" component={CreatePasscode} />
               <Route path="/signout" component={Signout} />
               <Route path="/socecocab" component={Socecocab} />
               <Route
@@ -67,11 +69,10 @@ function App() {
                 render={props => <Spcomm {...props} comReps={reps} />}
               />
               <Route path="/reports" component={Reports} />
-              <Route path="/meetings" component={Meetings} />
-              <Route
-                path="/meetings/formalmeetings"
-                component={FormalMeetings}
-              />
+              {/* <Route path="/meetings" component={Meetings} /> */}
+              <Route path="/meetings" component={Negotiate} />
+              {/* <Route path="/meetings/formalmeetings" component={FormalMeetings} /> */}
+              <Route path="/meetings/negotiation" component={Negotiate} />
               <Route
                 path="/meetings/upcomingmeetings"
                 component={UpcomingMeetings}
