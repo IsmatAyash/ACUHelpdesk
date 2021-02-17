@@ -62,7 +62,7 @@ const MainHeader = () => {
                 aria-describedby="basic-addon1"
                 size="sm"
               />
-            </InputGroup>{" "}
+            </InputGroup>
             {/* <Button size="sm" variant="outline-success" onClick={handleSearch}>
               <FaSearch />
             </Button>
