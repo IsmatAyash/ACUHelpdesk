@@ -4,8 +4,8 @@ import { Card } from "react-bootstrap";
 const NewsCard = ({ text, img, label }) => {
   return (
     <>
-      <Card style={{ width: "100%", height: "20rem" }}>
-        <Card.Img variant="top" src={img} />
+      <Card>
+        <Card.Img variant="top" src={img} className="img-fluid img-thumbnail" />
         <Card.Body>
           <Card.Title>{label}</Card.Title>
           <Card.Text>{text}</Card.Text>

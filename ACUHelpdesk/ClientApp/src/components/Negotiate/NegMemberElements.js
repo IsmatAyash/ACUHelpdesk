@@ -1,5 +1,12 @@
 import styled from "styled-components";
-import { Container, Row, Col, Card, ListGroup } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  ListGroup,
+  ListGroupItem,
+} from "react-bootstrap";
 
 export const NegContainer = styled(Container)`
   display: flex;
@@ -48,9 +55,13 @@ export const NegMemberCard = styled(Card)`
 
 export const NegMemberListGroup = styled(ListGroup)`
   text-align: ${({ lng }) => (lng === "ar" ? `right;` : `left;`)};
-  overflow: auto;
-  height: 91vh;
+  overflow-y: auto;
+  height: 72vh;
+  padding: 0;
+  margin: 0;
+  width: 100%;
   background-color: #ebebeb;
+  cursor: pointer;
 `;
 
 export const OnlineIcon = styled.span`

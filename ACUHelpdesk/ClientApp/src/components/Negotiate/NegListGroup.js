@@ -38,14 +38,52 @@ const members = [
     lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
     online: true,
   },
+  {
+    id: 5,
+    name: "عصمت العياش",
+    image: "/images/ismat.jpg",
+    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
+    online: true,
+  },
+  {
+    id: 6,
+    name: "مارون عبود",
+    image: "/images/flags/lb.svg",
+    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
+  },
+  {
+    id: 7,
+    name: "فليمون وهبي",
+    image: "/images/avatarPlaceholder.png",
+    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
+    online: true,
+  },
+  {
+    id: 8,
+    name: "عصمت العياش",
+    image: "/images/ismat.jpg",
+    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
+    online: true,
+  },
+  {
+    id: 9,
+    name: "مارون عبود",
+    image: "/images/flags/lb.svg",
+    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
+  },
+  {
+    id: 10,
+    name: "فليمون وهبي",
+    image: "/images/avatarPlaceholder.png",
+    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
+    online: true,
+  },
 ];
 
 const NegListGroup = ({ lng, onAction, addIcon }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const lngAlign = lng === "ar" ? " text-right" : " text-left";
-
-  console.log("members as passed", members);
 
   return (
     <NegMemberCard border="success">
@@ -74,7 +112,7 @@ const NegListGroup = ({ lng, onAction, addIcon }) => {
           </span>
         </div>
       </Card.Header>
-      <div className="d-flex pt-2">
+      <div className="d-flex p-2">
         <Button size="sm" variant="outline-success" className="mx-1">
           <MdSearch />
         </Button>
@@ -82,26 +120,17 @@ const NegListGroup = ({ lng, onAction, addIcon }) => {
           size="sm"
           type="text"
           placeholder={t("menubar.search")}
-          className={"mr-1 ml-1" + lngAlign}
+          className={lngAlign}
         />
       </div>
-      <Card.Body
-        style={{
-          overflowY: "auto",
-          whiteSpace: "nowrap",
-          padding: "5px",
-          backgroundColor: "#f8f8f8",
-        }}
-      >
+      <Card.Body className="p-0">
         <NegMemberListGroup as="ul" lng={lng}>
           {members.map(member => (
             <ListGroup.Item
               as="li"
-              className="py-2"
-              style={{
-                backgroundColor: "#ebebeb",
-                borderBottom: "1px solid #c4c4c4",
-              }}
+              className="py-1"
+              action
+              variant={member.id % 2 === 0 ? "light" : "secondary"}
               key={member.id}
             >
               <NegMember

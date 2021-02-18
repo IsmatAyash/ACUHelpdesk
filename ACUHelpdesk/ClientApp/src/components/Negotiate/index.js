@@ -3,7 +3,6 @@ import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
 import { MdGroupAdd, MdAddCircle } from "react-icons/md";
 import { Col, Card, Button, Form } from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
-import "./Negotiate.scss";
 import { useTranslation } from "react-i18next";
 import NegListGroup from "./NegListGroup";
 

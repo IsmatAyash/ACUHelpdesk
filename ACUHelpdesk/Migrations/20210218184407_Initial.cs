@@ -24,7 +24,7 @@ namespace ACUHelpdesk.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "Product",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -39,7 +39,7 @@ namespace ACUHelpdesk.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +93,7 @@ namespace ACUHelpdesk.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Negotiations",
+                name: "Negotiation",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -102,21 +102,21 @@ namespace ACUHelpdesk.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     InitiatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedById = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Negotiations", x => x.Id);
+                    table.PrimaryKey("PK_Negotiation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Negotiations_User_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_Negotiation_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "NegotiationDiscussions",
+                name: "NegotiationDiscussion",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -131,15 +131,15 @@ namespace ACUHelpdesk.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NegotiationDiscussions", x => x.Id);
+                    table.PrimaryKey("PK_NegotiationDiscussion", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NegotiationDiscussions_Negotiations_NegotiationId",
+                        name: "FK_NegotiationDiscussion_Negotiation_NegotiationId",
                         column: x => x.NegotiationId,
-                        principalTable: "Negotiations",
+                        principalTable: "Negotiation",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_NegotiationDiscussions_User_SenderId",
+                        name: "FK_NegotiationDiscussion_User_SenderId",
                         column: x => x.SenderId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -147,27 +147,28 @@ namespace ACUHelpdesk.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NegotiationMembers",
+                name: "NegotiationMember",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Status = table.Column<int>(type: "int", nullable: false),
                     ActionAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NegotiationId = table.Column<int>(type: "int", nullable: true),
+                    isLeader = table.Column<bool>(type: "bit", nullable: false),
+                    NegotiationId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NegotiationMembers", x => x.Id);
+                    table.PrimaryKey("PK_NegotiationMember", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NegotiationMembers_Negotiations_NegotiationId",
+                        name: "FK_NegotiationMember_Negotiation_NegotiationId",
                         column: x => x.NegotiationId,
-                        principalTable: "Negotiations",
+                        principalTable: "Negotiation",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_NegotiationMembers_User_UserId",
+                        name: "FK_NegotiationMember_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -175,30 +176,30 @@ namespace ACUHelpdesk.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NegotiationProducts",
+                name: "NegotiationProduct",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Tariff = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: true),
-                    NegotiationId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    NegotiationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NegotiationProducts", x => x.Id);
+                    table.PrimaryKey("PK_NegotiationProduct", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NegotiationProducts_Negotiations_NegotiationId",
+                        name: "FK_NegotiationProduct_Negotiation_NegotiationId",
                         column: x => x.NegotiationId,
-                        principalTable: "Negotiations",
+                        principalTable: "Negotiation",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_NegotiationProducts_Products_ProductId",
+                        name: "FK_NegotiationProduct_Product_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Products",
+                        principalTable: "Product",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -215,10 +216,9 @@ namespace ACUHelpdesk.Migrations
                     { 17, "SM", "SOM", "Somalia", "الصومال" },
                     { 16, "SA", "SAU", "Saudi Arabia", "السعودية" },
                     { 15, "QA", "QAT", "Qatar", "قطر" },
-                    { 14, "PL", "PSE", "Palestine", "فلسطين" },
                     { 13, "OM", "OMN", "Oman", "عمان" },
                     { 12, "MA", "MAR", "Morocco", "المغرب" },
-                    { 11, "MR", "MRT", "Mauritania", "موريتانيا" },
+                    { 14, "PL", "PSE", "Palestine", "فلسطين" },
                     { 10, "LY", "LBY", "Libya", "ليبيا" },
                     { 9, "LB", "LBN", "Lebanon", "لبنان" },
                     { 8, "KW", "KWT", "Kuwait", "الكويت" },
@@ -227,7 +227,18 @@ namespace ACUHelpdesk.Migrations
                     { 5, "EG", "EGY", "Egypt", "مصر" },
                     { 4, "DJ", "DJI", "Djibouti", "جيبوتي" },
                     { 3, "KM", "COM", "Comoros", "جزر القمر" },
-                    { 2, "BH", "BHR", "Bahrain", "البحرين " }
+                    { 2, "BH", "BHR", "Bahrain", "البحرين " },
+                    { 11, "MR", "MRT", "Mauritania", "موريتانيا" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Product",
+                columns: new[] { "Id", "NomenclatureCode", "ParentCode", "ParentID", "ProductCode", "ProductDescription", "ProductDescriptionAR", "Tier" },
+                values: new object[,]
+                {
+                    { 1, "HS", "", null, "0101", null, "خيول وحمير", 2 },
+                    { 2, "HS", "0101", 1, "010101", null, "خيول وحمير 2", 3 },
+                    { 3, "HS", "0101", 1, "010102", null, "خيول وحمير 1", 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -242,42 +253,77 @@ namespace ACUHelpdesk.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "ismat.jpg", 8, "ismat.ayash@gmail.com", "Ismat", "Ayash", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAELvXCpJ+EE3Rw+2UbWV6aACXZsnqoSqdapn1sVzpc4sQW+2ADHQQb+6WM8XKxw67qA==", 1 });
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "Ismat", "Ayash", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEL8HMzci39oFrJ/gZnWr2766ryZDeHyg1TeU1fZ1i9jVvBZlEGX03DIjgLfS3Y8wlw==", 1 });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
+                values: new object[] { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "layale.jpg", 7, "layale@gmail.com", "Layale", "Bassil", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEBVNlBvDDPrmvKq7SwSObdnlHifaKSAL52Lsp3RieW3URvb0+wH4espfU2jXJj4hGQ==", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Negotiation",
+                columns: new[] { "Id", "CreatedAt", "InitiatedAt", "Status", "Subject", "UserId" },
+                values: new object[] { 1, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "منصة التفاوض لبنان الأردن", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Negotiation",
+                columns: new[] { "Id", "CreatedAt", "InitiatedAt", "Status", "Subject", "UserId" },
+                values: new object[] { 2, new DateTime(2021, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "منصة التفاوض لبنان الأردن", 1 });
+
+            migrationBuilder.InsertData(
+                table: "NegotiationMember",
+                columns: new[] { "Id", "ActionAt", "NegotiationId", "Status", "UserId", "isLeader" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 2, null, true },
+                    { 2, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 2, null, false },
+                    { 3, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2, null, true },
+                    { 4, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2, null, false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "NegotiationProduct",
+                columns: new[] { "Id", "NegotiationId", "ProductId", "Tariff" },
+                values: new object[,]
+                {
+                    { 1, 1, 2, 12.12m },
+                    { 2, 2, 3, 10.23m }
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_NegotiationDiscussions_NegotiationId",
-                table: "NegotiationDiscussions",
-                column: "NegotiationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NegotiationDiscussions_SenderId",
-                table: "NegotiationDiscussions",
-                column: "SenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NegotiationMembers_NegotiationId",
-                table: "NegotiationMembers",
-                column: "NegotiationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NegotiationMembers_UserId",
-                table: "NegotiationMembers",
+                name: "IX_Negotiation_UserId",
+                table: "Negotiation",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NegotiationProducts_NegotiationId",
-                table: "NegotiationProducts",
+                name: "IX_NegotiationDiscussion_NegotiationId",
+                table: "NegotiationDiscussion",
                 column: "NegotiationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NegotiationProducts_ProductId",
-                table: "NegotiationProducts",
-                column: "ProductId");
+                name: "IX_NegotiationDiscussion_SenderId",
+                table: "NegotiationDiscussion",
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Negotiations_CreatedById",
-                table: "Negotiations",
-                column: "CreatedById");
+                name: "IX_NegotiationMember_NegotiationId",
+                table: "NegotiationMember",
+                column: "NegotiationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NegotiationMember_UserId",
+                table: "NegotiationMember",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NegotiationProduct_NegotiationId",
+                table: "NegotiationProduct",
+                column: "NegotiationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NegotiationProduct_ProductId",
+                table: "NegotiationProduct",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_CountryId",
@@ -293,19 +339,19 @@ namespace ACUHelpdesk.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "NegotiationDiscussions");
+                name: "NegotiationDiscussion");
 
             migrationBuilder.DropTable(
-                name: "NegotiationMembers");
+                name: "NegotiationMember");
 
             migrationBuilder.DropTable(
-                name: "NegotiationProducts");
+                name: "NegotiationProduct");
 
             migrationBuilder.DropTable(
-                name: "Negotiations");
+                name: "Negotiation");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "User");

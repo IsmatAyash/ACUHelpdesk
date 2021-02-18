@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CryptoHelper;
+using System;
+using ACUHelpdesk.Services;
 
 namespace ACUHelpdesk.Models
 {
@@ -20,10 +22,26 @@ namespace ACUHelpdesk.Models
             modelBuilder.Entity<Country>().ToTable("Country");
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Product>().ToTable("Product");
+            modelBuilder.Entity<Negotiation>().ToTable("Negotiation");
+            modelBuilder.Entity<NegotiationMember>().ToTable("NegotiationMember");
+            modelBuilder.Entity<NegotiationProduct>().ToTable("NegotiationProduct");
+            modelBuilder.Entity<NegotiationDiscussion>().ToTable("NegotiationDiscussion");
+
+            //modelBuilder.Entity<NegotiationProduct>()
+            //    .HasOptional(n => n.Negotiation)
+            //    .WithMany()
+            //    .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" },
                 new Role { Id = 2, Name = "User" });
+
+            modelBuilder.Entity<Product>().HasData(
+                new Product { Id = 1, NomenclatureCode = "HS", Tier = 2, ProductCode = "0101", ProductDescriptionAR = "خيول وحمير", ParentID = null, ParentCode = "" },
+                new Product { Id = 2, NomenclatureCode = "HS", Tier = 3, ProductCode = "010101", ProductDescriptionAR = "خيول وحمير 2", ParentID = 1, ParentCode = "0101" },
+                new Product { Id = 3, NomenclatureCode = "HS", Tier = 3, ProductCode = "010102", ProductDescriptionAR = "خيول وحمير 1", ParentID = 1, ParentCode = "0101" });
+
 
             modelBuilder.Entity<Country>().HasData(
                 new Country { Id = 1, Name = "Algeria", NameAR = "الجزائر", Alpha2 = "DZ", Alpha3 = "DZA" },
@@ -54,14 +72,103 @@ namespace ACUHelpdesk.Models
                 {
                     Id = 1,
                     RoleId = 1,
-                    CountryId = 8,
+                    CountryId = 9,
                     Email = "ismat.ayash@gmail.com",
                     FirstName = "Ismat",
                     LastName = "Ayash",
                     Password = Crypto.HashPassword("admin"),
                     Active = true,
                     Avatar = "ismat.jpg"
-        });
+                }, 
+                new User
+                {
+                    Id = 2,
+                    RoleId = 1,
+                    CountryId = 7,
+                    Email = "layale@gmail.com",
+                    FirstName = "Layale",
+                    LastName = "Bassil",
+                    Password = Crypto.HashPassword("admin"),
+                    Active = true,
+                    Avatar = "layale.jpg"
+                });
+
+            modelBuilder.Entity<Negotiation>().HasData(
+                new Negotiation
+                {
+                    Id = 1,
+                    Subject = "منصة التفاوض لبنان الأردن",
+                    Status = 2,
+                    CreatedAt = new DateTime(2021, 2, 14),
+                    UserId = 1
+                },
+                new Negotiation 
+                {
+                    Id = 2,
+                    Subject = "منصة التفاوض لبنان الأردن",
+                    Status = 1,
+                    CreatedAt = new DateTime(2021, 1, 20),
+                    UserId = 1
+                });
+
+            modelBuilder.Entity<NegotiationMember>().HasData(
+                new NegotiationMember
+                {
+                    Id = 1,
+                    Status = 2,
+                    ActionAt = new DateTime(2021, 2, 14),
+                    //UserId = 1,
+                    NegotiationId = 1,
+                    isLeader = true
+                },
+                new NegotiationMember
+                {
+                    Id = 2,
+                    Status = 2,
+                    ActionAt = new DateTime(2021, 2, 14),
+                    //UserId = 2,
+                    NegotiationId = 1,
+                    isLeader = false
+                });
+
+            modelBuilder.Entity<NegotiationProduct>().HasData(
+                new NegotiationProduct
+                {
+                    Id = 1,
+                    ProductId = 2,
+                    NegotiationId = 1,
+                    Tariff = (decimal)12.12
+                });
+
+            modelBuilder.Entity<NegotiationMember>().HasData(
+                new NegotiationMember
+                {
+                    Id = 3,
+                    Status = 2,
+                    ActionAt = new DateTime(2021, 2, 14),
+                    //UserId = 1,
+                    NegotiationId = 2,
+                    isLeader = true
+                },
+                new NegotiationMember
+                {
+                    Id = 4,
+                    Status = 2,
+                    ActionAt = new DateTime(2021, 2, 14),
+                    //UserId = 2,
+                    NegotiationId = 2,
+                    isLeader = false
+                });
+
+            modelBuilder.Entity<NegotiationProduct>().HasData(
+                new NegotiationProduct
+                {
+                    Id = 2,
+                    ProductId = 3,
+                    NegotiationId = 2,
+                    Tariff = (decimal)10.23
+                });
+
         }
     }
 }

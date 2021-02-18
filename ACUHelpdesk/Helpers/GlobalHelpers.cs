@@ -17,12 +17,10 @@ namespace ACUHelpdesk.Helpers
 
         public enum NegotiationStatus
         { 
-            Saved = 1,
-            Initiated = 2,
-            InProgress = 3,
-            OnHold = 4,
-            Completed = 5,
-            Cancelled = 6
+            Pending = 1,
+            Active = 2,
+            Completed = 3,
+            Cancelled = 4
         }
 
         public enum MemberStatus

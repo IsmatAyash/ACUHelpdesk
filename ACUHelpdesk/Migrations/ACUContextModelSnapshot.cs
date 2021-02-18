@@ -231,9 +231,6 @@ namespace ACUHelpdesk.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatedById")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("InitiatedAt")
                         .HasColumnType("datetime2");
 
@@ -243,11 +240,34 @@ namespace ACUHelpdesk.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Negotiations");
+                    b.ToTable("Negotiation");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2,
+                            Subject = "منصة التفاوض لبنان الأردن",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2021, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 1,
+                            Subject = "منصة التفاوض لبنان الأردن",
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationDiscussion", b =>
@@ -284,7 +304,7 @@ namespace ACUHelpdesk.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("NegotiationDiscussions");
+                    b.ToTable("NegotiationDiscussion");
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationMember", b =>
@@ -297,7 +317,7 @@ namespace ACUHelpdesk.Migrations
                     b.Property<DateTime>("ActionAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("NegotiationId")
+                    b.Property<int>("NegotiationId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -306,13 +326,50 @@ namespace ACUHelpdesk.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isLeader")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NegotiationId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("NegotiationMembers");
+                    b.ToTable("NegotiationMember");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegotiationId = 1,
+                            Status = 2,
+                            isLeader = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegotiationId = 1,
+                            Status = 2,
+                            isLeader = false
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegotiationId = 2,
+                            Status = 2,
+                            isLeader = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegotiationId = 2,
+                            Status = 2,
+                            isLeader = false
+                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationProduct", b =>
@@ -322,10 +379,10 @@ namespace ACUHelpdesk.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("NegotiationId")
+                    b.Property<int>("NegotiationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Tariff")
@@ -337,7 +394,23 @@ namespace ACUHelpdesk.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("NegotiationProducts");
+                    b.ToTable("NegotiationProduct");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            NegotiationId = 1,
+                            ProductId = 2,
+                            Tariff = 12.12m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            NegotiationId = 2,
+                            ProductId = 3,
+                            Tariff = 10.23m
+                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.Product", b =>
@@ -370,7 +443,38 @@ namespace ACUHelpdesk.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            NomenclatureCode = "HS",
+                            ParentCode = "",
+                            ProductCode = "0101",
+                            ProductDescriptionAR = "خيول وحمير",
+                            Tier = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            NomenclatureCode = "HS",
+                            ParentCode = "0101",
+                            ParentID = 1,
+                            ProductCode = "010101",
+                            ProductDescriptionAR = "خيول وحمير 2",
+                            Tier = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            NomenclatureCode = "HS",
+                            ParentCode = "0101",
+                            ParentID = 1,
+                            ProductCode = "010102",
+                            ProductDescriptionAR = "خيول وحمير 1",
+                            Tier = 3
+                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.Role", b =>
@@ -461,24 +565,41 @@ namespace ACUHelpdesk.Migrations
                             ActivationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Active = true,
                             Avatar = "ismat.jpg",
-                            CountryId = 8,
+                            CountryId = 9,
                             Email = "ismat.ayash@gmail.com",
                             FirstName = "Ismat",
                             LastName = "Ayash",
                             NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAELvXCpJ+EE3Rw+2UbWV6aACXZsnqoSqdapn1sVzpc4sQW+2ADHQQb+6WM8XKxw67qA==",
+                            Password = "AQAAAAEAACcQAAAAEL8HMzci39oFrJ/gZnWr2766ryZDeHyg1TeU1fZ1i9jVvBZlEGX03DIjgLfS3Y8wlw==",
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Active = true,
+                            Avatar = "layale.jpg",
+                            CountryId = 7,
+                            Email = "layale@gmail.com",
+                            FirstName = "Layale",
+                            LastName = "Bassil",
+                            NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Password = "AQAAAAEAACcQAAAAEBVNlBvDDPrmvKq7SwSObdnlHifaKSAL52Lsp3RieW3URvb0+wH4espfU2jXJj4hGQ==",
                             RoleId = 1
                         });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.Negotiation", b =>
                 {
-                    b.HasOne("ACUHelpdesk.Models.User", "CreatedBy")
+                    b.HasOne("ACUHelpdesk.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("CreatedBy");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationDiscussion", b =>
@@ -500,7 +621,9 @@ namespace ACUHelpdesk.Migrations
                 {
                     b.HasOne("ACUHelpdesk.Models.Negotiation", "Negotiation")
                         .WithMany("Members")
-                        .HasForeignKey("NegotiationId");
+                        .HasForeignKey("NegotiationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACUHelpdesk.Models.User", "User")
                         .WithMany()
@@ -515,11 +638,15 @@ namespace ACUHelpdesk.Migrations
                 {
                     b.HasOne("ACUHelpdesk.Models.Negotiation", "Negotiation")
                         .WithMany("Products")
-                        .HasForeignKey("NegotiationId");
+                        .HasForeignKey("NegotiationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACUHelpdesk.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Negotiation");
 

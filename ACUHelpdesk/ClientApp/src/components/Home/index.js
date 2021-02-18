@@ -11,14 +11,29 @@ const Home = () => {
 
   return (
     <Container
+      fluid
       className="p-2"
       style={{ textAlign: lng === "ar" ? "right" : "left" }}
     >
       <Carousel>
         {intros.map(intro => (
-          <Carousel.Item interval={intro.interval} key={intro.id}>
-            <NewsCard img={intro.img} />
-            <Carousel.Caption>
+          <Carousel.Item
+            interval={intro.interval}
+            key={intro.id}
+            style={{
+              backgroundSize: "cover",
+              width: "100%",
+              height: "400px",
+              backgroundPosition: "center",
+              backgroundImage: intro.img,
+            }}
+          >
+            <Carousel.Caption
+              style={{
+                color: !intro.lightBg && "black",
+                backgroundColor: "rgba(0,0,0,0.6)",
+              }}
+            >
               <h3>{intro.label}</h3>
               <p>{intro.text}</p>
             </Carousel.Caption>
