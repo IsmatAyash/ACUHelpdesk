@@ -18,7 +18,7 @@ namespace ACUHelpdesk.Models
         [ForeignKey("User")]
         public int UserId { get; set; }
         public virtual User User { get; set; }
-        public virtual ICollection<NegotiationMember> Members { get; set; }
-        public virtual ICollection<NegotiationProduct> Products { get; set; }
+        public virtual ICollection<NegotiationMember> NegotiationMembers { get; set; }
+        public virtual ICollection<NegotiationProduct> NegotiationProducts { get; set; }
     }
 }

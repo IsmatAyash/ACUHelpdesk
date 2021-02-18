@@ -24,7 +24,9 @@ namespace ACUHelpdesk.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Negotiation>>> GetNegotiations()
         {
-            return await _context.Negotiations.ToListAsync();
+            return await _context.Negotiations
+                                 .Include(u => u.User)
+                                 .ToListAsync();
         }
 
         // GET: api/Negotiation/5

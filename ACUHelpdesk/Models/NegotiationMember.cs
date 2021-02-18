@@ -17,9 +17,6 @@ namespace ACUHelpdesk.Models
         [ForeignKey("Negotiation")]
         public int NegotiationId { get; set; }
         public virtual Negotiation Negotiation { get; set; }
-        //[ForeignKey("User")]
-        //public int UserId { get; set; }
-
         public virtual User User { get; set; }
     }
 }

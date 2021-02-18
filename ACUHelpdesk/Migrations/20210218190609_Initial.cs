@@ -253,12 +253,12 @@ namespace ACUHelpdesk.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "Ismat", "Ayash", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEL8HMzci39oFrJ/gZnWr2766ryZDeHyg1TeU1fZ1i9jVvBZlEGX03DIjgLfS3Y8wlw==", 1 });
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "Ismat", "Ayash", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEPD/Ny1UK1JmPdGkykNb8lf0icr0T3jknO3DQdQ/MciEsB/U3ayqk2Y9ziboatmu4g==", 1 });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "layale.jpg", 7, "layale@gmail.com", "Layale", "Bassil", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEBVNlBvDDPrmvKq7SwSObdnlHifaKSAL52Lsp3RieW3URvb0+wH4espfU2jXJj4hGQ==", 1 });
+                values: new object[] { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "layale.jpg", 7, "layale@gmail.com", "Layale", "Bassil", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAENnThKJhDuHbU+6TDWFVLniupLTYJXF0JH1ALgiTh9g4ymK0PlFCzr9PXNpikEk2Gg==", 1 });
 
             migrationBuilder.InsertData(
                 table: "Negotiation",

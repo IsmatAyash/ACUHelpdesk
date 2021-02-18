@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACUHelpdesk.Migrations
 {
     [DbContext(typeof(ACUContext))]
-    [Migration("20210218184407_Initial")]
+    [Migration("20210218190609_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -573,7 +573,7 @@ namespace ACUHelpdesk.Migrations
                             LastName = "Ayash",
                             NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAEL8HMzci39oFrJ/gZnWr2766ryZDeHyg1TeU1fZ1i9jVvBZlEGX03DIjgLfS3Y8wlw==",
+                            Password = "AQAAAAEAACcQAAAAEPD/Ny1UK1JmPdGkykNb8lf0icr0T3jknO3DQdQ/MciEsB/U3ayqk2Y9ziboatmu4g==",
                             RoleId = 1
                         },
                         new
@@ -588,7 +588,7 @@ namespace ACUHelpdesk.Migrations
                             LastName = "Bassil",
                             NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAEBVNlBvDDPrmvKq7SwSObdnlHifaKSAL52Lsp3RieW3URvb0+wH4espfU2jXJj4hGQ==",
+                            Password = "AQAAAAEAACcQAAAAENnThKJhDuHbU+6TDWFVLniupLTYJXF0JH1ALgiTh9g4ymK0PlFCzr9PXNpikEk2Gg==",
                             RoleId = 1
                         });
                 });
@@ -622,7 +622,7 @@ namespace ACUHelpdesk.Migrations
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationMember", b =>
                 {
                     b.HasOne("ACUHelpdesk.Models.Negotiation", "Negotiation")
-                        .WithMany("Members")
+                        .WithMany("NegotiationMembers")
                         .HasForeignKey("NegotiationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -639,7 +639,7 @@ namespace ACUHelpdesk.Migrations
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationProduct", b =>
                 {
                     b.HasOne("ACUHelpdesk.Models.Negotiation", "Negotiation")
-                        .WithMany("Products")
+                        .WithMany("NegotiationProducts")
                         .HasForeignKey("NegotiationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -681,9 +681,9 @@ namespace ACUHelpdesk.Migrations
 
             modelBuilder.Entity("ACUHelpdesk.Models.Negotiation", b =>
                 {
-                    b.Navigation("Members");
+                    b.Navigation("NegotiationMembers");
 
-                    b.Navigation("Products");
+                    b.Navigation("NegotiationProducts");
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.Role", b =>
