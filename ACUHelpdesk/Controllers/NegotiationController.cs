@@ -24,9 +24,37 @@ namespace ACUHelpdesk.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Negotiation>>> GetNegotiations()
         {
-            return await _context.Negotiations
+            var negotiations = await _context.Negotiations
                                  .Include(u => u.User)
-                                 .ToListAsync();
+                                 .ThenInclude(c => c.Country)
+                                 .Include(p => p.NegotiationProducts)
+                                 .ThenInclude(p => p.Product)
+                                 .Include(nm => nm.NegotiationMembers)
+                                 .ThenInclude(m => m.User)
+                                 .AsNoTracking()
+                                 .Select(r => new 
+                                 { 
+                                     r.Id,
+                                     r.NegSubject,
+                                     r.NegStatus,
+                                     r.NegCreatedAt,
+                                     r.NegName,
+                                     r.NegInitiatedAt,
+                                     NegCreatedBy = r.User.FirstName + " " + r.User.LastName,
+                                     Members = r.NegotiationMembers.Select(m => new 
+                                     { 
+                                         MemberId = m.Id, 
+                                         MemberName = m.User.FirstName + ' ' + m.User.LastName, 
+                                         Avatar = string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
+                                         m.MemberStatus, 
+                                         m.isLeader, 
+                                         m.OnlineStatus,
+                                         Flag = m.User.Country.Alpha2
+                                     }),
+                                     Products = r.NegotiationProducts.Select(p => new {ProductId = p.Id, p.Product.ProductDescriptionAR, p.Product.ProductCode})
+                                 }).ToListAsync();
+
+            return Ok(negotiations);
         }
 
         // GET: api/Negotiation/5

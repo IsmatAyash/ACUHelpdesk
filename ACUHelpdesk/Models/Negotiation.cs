@@ -11,10 +11,11 @@ namespace ACUHelpdesk.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Subject { get; set; }
-        public int Status { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime InitiatedAt { get; set; }
+        public string NegName { get; set; }
+        public string NegSubject { get; set; }
+        public string NegStatus { get; set; }
+        public DateTime NegCreatedAt { get; set; }
+        public DateTime NegInitiatedAt { get; set; }
         [ForeignKey("User")]
         public int UserId { get; set; }
         public virtual User User { get; set; }

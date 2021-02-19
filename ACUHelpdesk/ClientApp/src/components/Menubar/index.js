@@ -46,28 +46,28 @@ const Menubar = ({ onSelect }) => {
       label: `${t("menubar.spcomm.spcomm")}`,
       dditems: [
         {
-          idd: 4,
+          id: 4,
           option: `${t("menubar.spcomm.maincom")}`,
           eventKey: "mainreps",
         },
         {
-          idd: 5,
+          id: 5,
           option: `${t("menubar.spcomm.execcom")}`,
           eventKey: "execreps",
         },
         {
-          idd: 6,
+          id: 6,
           option: `${t("menubar.spcomm.othercom")}`,
           eventKey: "othercom",
         },
-        { idd: 7, option: "divider" },
+        { id: 7, option: "divider" },
         {
-          idd: 8,
+          id: 8,
           option: `${t("menubar.spcomm.customcom")}`,
           eventKey: "customreps",
         },
         {
-          idd: 9,
+          id: 9,
           option: `${t("menubar.spcomm.tariffcom")}`,
           eventKey: "tariffreps",
         },
@@ -80,12 +80,12 @@ const Menubar = ({ onSelect }) => {
       label: `${t("menubar.meetings.meetings")}`,
       dditems: [
         {
-          idd: 12,
+          id: 12,
           option: `${t("menubar.meetings.formalmeetings")}`,
           path: "/meetings/formalmeetings",
         },
         {
-          idd: 13,
+          id: 13,
           option: `${t("menubar.meetings.upcomingmeetings")}`,
           path: "/meetings/upcomingmeetings",
         },

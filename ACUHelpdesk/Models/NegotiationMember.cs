@@ -11,12 +11,15 @@ namespace ACUHelpdesk.Models
     {
         [Key]
         public int Id { get; set; }
-        public int Status { get; set; }
+        public string MemberStatus { get; set; }
         public DateTime ActionAt { get; set; }
         public bool isLeader { get; set; }
+        public bool OnlineStatus { get; set; }
         [ForeignKey("Negotiation")]
         public int NegotiationId { get; set; }
         public virtual Negotiation Negotiation { get; set; }
+        [ForeignKey("User")]
+        public int? UserId { get; set; }
         public virtual User User { get; set; }
     }
 }

@@ -1,41 +1,94 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
 import { MdGroupAdd, MdAddCircle } from "react-icons/md";
-import { Col, Card, Button, Form } from "react-bootstrap";
+import {
+  Container,
+  Col,
+  Card,
+  Button,
+  Form,
+  Row,
+  Badge,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
 import { useTranslation } from "react-i18next";
 import NegListGroup from "./NegListGroup";
+import { getNegotiations } from "../../services/negService";
+import DisHeader from "./DisHeader";
+import NegNew from "./NegNew";
 
 const Negotiate = () => {
+  const [data, setData] = useState([]);
+  const [negs, setNegs] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [negHeader, setNegHeader] = useState({});
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const lng = localStorage.getItem("i18nextLng");
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const lngAlign = lng === "ar" ? " text-right" : " text-left";
 
-  const handleButtonClick = action => {
-    console.log("Add group clicked", action);
+  const handleAction = action => {
+    console.log("action clicked", action);
   };
 
+  const handleItemSelect = id => {
+    const filtered = data.filter(n => n.id === id)[0];
+    setMembers(filtered.members);
+    setNegHeader(filtered);
+  };
+
+  useEffect(() => {
+    async function getNegs() {
+      const { data } = await getNegotiations();
+      setData(data);
+      const result = data.map(d => ({
+        id: d.id,
+        subject: d.negSubject,
+        title: d.negName,
+        status: d.negStatus,
+        createdAt: d.negCreatedAt,
+        initiatedAt: d.negInitiatedAt,
+        products: d.products,
+        createdBy: d.negCreatedBy,
+      }));
+      setNegs(result);
+    }
+    getNegs();
+  }, []);
+
   return (
-    <NegContainer fluid className="neg-container">
+    <NegContainer fluid>
+      {show && <NegNew onClose={handleClose} lng={lng} show />}
+
       <NegRow
         className="justify-content-between"
         style={{ textAlign: lng === "ar" ? "text-right" : "text-left" }}
       >
-        <NegMemberCol md={2}>
+        <NegMemberCol md={3}>
           <NegListGroup
             lng={lng}
-            onAction={handleButtonClick}
+            onItemSelect={handleItemSelect}
+            onNew={handleShow}
+            onClose={handleClose}
+            show={show}
             addIcon={<MdAddCircle />}
+            data={negs}
+            mem={false}
+            placement="bottom"
+            tooltip="زيادة منصة للمفاوضات"
           />
         </NegMemberCol>
-        <NegMemberCol md={7}>
+        <NegMemberCol md={6}>
           <Card style={{ height: "91vh" }}>
-            <Card.Header className="text-right" as="h6">
-              التعريفة الجمركية الموحدة
-            </Card.Header>
-            <Card.Header className="text-right" as="h6">
-              السلع موضوع المفاوضات: 00 12 22، 00 23 03
+            <Card.Header className="d-flex text-right p-0 m-0" as="h6">
+              <DisHeader negHeader={negHeader} />
             </Card.Header>
             <Card.Body style={{ overflowY: "auto", textAlign: "right" }}>
               <Card.Text style={{ float: "left" }}>
@@ -83,8 +136,9 @@ const Negotiate = () => {
         <NegMemberCol lng={lng} md={3}>
           <NegListGroup
             lng={lng}
-            onAction={handleButtonClick}
             addIcon={<MdGroupAdd />}
+            data={members}
+            mem={true}
           />
         </NegMemberCol>
       </NegRow>

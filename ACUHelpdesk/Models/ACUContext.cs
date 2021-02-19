@@ -28,11 +28,6 @@ namespace ACUHelpdesk.Models
             modelBuilder.Entity<NegotiationProduct>().ToTable("NegotiationProduct");
             modelBuilder.Entity<NegotiationDiscussion>().ToTable("NegotiationDiscussion");
 
-            //modelBuilder.Entity<NegotiationProduct>()
-            //    .HasOptional(n => n.Negotiation)
-            //    .WithMany()
-            //    .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" },
                 new Role { Id = 2, Name = "User" });
@@ -74,8 +69,8 @@ namespace ACUHelpdesk.Models
                     RoleId = 1,
                     CountryId = 9,
                     Email = "ismat.ayash@gmail.com",
-                    FirstName = "Ismat",
-                    LastName = "Ayash",
+                    FirstName = "عصمت",
+                    LastName = "العياش",
                     Password = Crypto.HashPassword("admin"),
                     Active = true,
                     Avatar = "ismat.jpg"
@@ -86,8 +81,8 @@ namespace ACUHelpdesk.Models
                     RoleId = 1,
                     CountryId = 7,
                     Email = "layale@gmail.com",
-                    FirstName = "Layale",
-                    LastName = "Bassil",
+                    FirstName = "ليال",
+                    LastName = "باسيل",
                     Password = Crypto.HashPassword("admin"),
                     Active = true,
                     Avatar = "layale.jpg"
@@ -97,17 +92,19 @@ namespace ACUHelpdesk.Models
                 new Negotiation
                 {
                     Id = 1,
-                    Subject = "منصة التفاوض لبنان الأردن",
-                    Status = 2,
-                    CreatedAt = new DateTime(2021, 2, 14),
+                    NegName = "منصة التفاوض لبنان الأردن",
+                    NegSubject = "التعريفة الجمركية الموح",
+                    NegStatus = "Active",
+                    NegCreatedAt = new DateTime(2021, 2, 14),
                     UserId = 1
                 },
                 new Negotiation 
                 {
                     Id = 2,
-                    Subject = "منصة التفاوض لبنان الأردن",
-                    Status = 1,
-                    CreatedAt = new DateTime(2021, 1, 20),
+                    NegName = "آليات التعويض والتضامن",
+                    NegSubject = "منصة التفاوض لبنان الأردن",
+                    NegStatus = "Pending",
+                    NegCreatedAt = new DateTime(2021, 1, 20),
                     UserId = 1
                 });
 
@@ -115,20 +112,22 @@ namespace ACUHelpdesk.Models
                 new NegotiationMember
                 {
                     Id = 1,
-                    Status = 2,
+                    MemberStatus = "Active",
                     ActionAt = new DateTime(2021, 2, 14),
-                    //UserId = 1,
+                    UserId = 1,
                     NegotiationId = 1,
-                    isLeader = true
+                    isLeader = true,
+                    OnlineStatus = true
                 },
                 new NegotiationMember
                 {
                     Id = 2,
-                    Status = 2,
+                    MemberStatus = "Active",
                     ActionAt = new DateTime(2021, 2, 14),
-                    //UserId = 2,
+                    UserId = 2,
                     NegotiationId = 1,
-                    isLeader = false
+                    isLeader = false,
+                    OnlineStatus = true
                 });
 
             modelBuilder.Entity<NegotiationProduct>().HasData(
@@ -138,32 +137,42 @@ namespace ACUHelpdesk.Models
                     ProductId = 2,
                     NegotiationId = 1,
                     Tariff = (decimal)12.12
+                },
+                new NegotiationProduct
+                {
+                    Id = 2,
+                    ProductId = 3,
+                    NegotiationId = 1,
+                    Tariff = (decimal)11.10
                 });
+
 
             modelBuilder.Entity<NegotiationMember>().HasData(
                 new NegotiationMember
                 {
                     Id = 3,
-                    Status = 2,
+                    MemberStatus = "Active",
                     ActionAt = new DateTime(2021, 2, 14),
-                    //UserId = 1,
+                    UserId = 1,
                     NegotiationId = 2,
-                    isLeader = true
+                    isLeader = true,
+                    OnlineStatus = true,
                 },
                 new NegotiationMember
                 {
                     Id = 4,
-                    Status = 2,
+                    MemberStatus = "Active",
                     ActionAt = new DateTime(2021, 2, 14),
-                    //UserId = 2,
+                    UserId = 2,
                     NegotiationId = 2,
-                    isLeader = false
+                    isLeader = false,
+                    OnlineStatus = false
                 });
 
             modelBuilder.Entity<NegotiationProduct>().HasData(
                 new NegotiationProduct
                 {
-                    Id = 2,
+                    Id = 3,
                     ProductId = 3,
                     NegotiationId = 2,
                     Tariff = (decimal)10.23

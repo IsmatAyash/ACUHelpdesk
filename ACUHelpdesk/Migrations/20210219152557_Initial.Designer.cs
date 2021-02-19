@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACUHelpdesk.Migrations
 {
     [DbContext(typeof(ACUContext))]
-    [Migration("20210218190609_Initial")]
+    [Migration("20210219152557_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,16 +230,19 @@ namespace ACUHelpdesk.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("NegCreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("InitiatedAt")
+                    b.Property<DateTime>("NegInitiatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("NegName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Subject")
+                    b.Property<string>("NegStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NegSubject")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
@@ -255,19 +258,21 @@ namespace ACUHelpdesk.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Status = 2,
-                            Subject = "منصة التفاوض لبنان الأردن",
+                            NegCreatedAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegInitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegName = "منصة التفاوض لبنان الأردن",
+                            NegStatus = "Active",
+                            NegSubject = "التعريفة الجمركية الموح",
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2021, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Status = 1,
-                            Subject = "منصة التفاوض لبنان الأردن",
+                            NegCreatedAt = new DateTime(2021, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegInitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NegName = "آليات التعويض والتضامن",
+                            NegStatus = "Pending",
+                            NegSubject = "منصة التفاوض لبنان الأردن",
                             UserId = 1
                         });
                 });
@@ -319,11 +324,14 @@ namespace ACUHelpdesk.Migrations
                     b.Property<DateTime>("ActionAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("MemberStatus")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("NegotiationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<bool>("OnlineStatus")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -344,32 +352,40 @@ namespace ACUHelpdesk.Migrations
                         {
                             Id = 1,
                             ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MemberStatus = "Active",
                             NegotiationId = 1,
-                            Status = 2,
+                            OnlineStatus = true,
+                            UserId = 1,
                             isLeader = true
                         },
                         new
                         {
                             Id = 2,
                             ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MemberStatus = "Active",
                             NegotiationId = 1,
-                            Status = 2,
+                            OnlineStatus = true,
+                            UserId = 2,
                             isLeader = false
                         },
                         new
                         {
                             Id = 3,
                             ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MemberStatus = "Active",
                             NegotiationId = 2,
-                            Status = 2,
+                            OnlineStatus = true,
+                            UserId = 1,
                             isLeader = true
                         },
                         new
                         {
                             Id = 4,
                             ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MemberStatus = "Active",
                             NegotiationId = 2,
-                            Status = 2,
+                            OnlineStatus = false,
+                            UserId = 2,
                             isLeader = false
                         });
                 });
@@ -409,6 +425,13 @@ namespace ACUHelpdesk.Migrations
                         new
                         {
                             Id = 2,
+                            NegotiationId = 1,
+                            ProductId = 3,
+                            Tariff = 11.1m
+                        },
+                        new
+                        {
+                            Id = 3,
                             NegotiationId = 2,
                             ProductId = 3,
                             Tariff = 10.23m
@@ -573,7 +596,7 @@ namespace ACUHelpdesk.Migrations
                             LastName = "Ayash",
                             NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAEPD/Ny1UK1JmPdGkykNb8lf0icr0T3jknO3DQdQ/MciEsB/U3ayqk2Y9ziboatmu4g==",
+                            Password = "AQAAAAEAACcQAAAAEJMGdicwUrVEwAY15mX/PLFQEQjXADW0hunoGIoEUuy2OErYeembW+k1eU2AS5ceqQ==",
                             RoleId = 1
                         },
                         new
@@ -588,7 +611,7 @@ namespace ACUHelpdesk.Migrations
                             LastName = "Bassil",
                             NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAENnThKJhDuHbU+6TDWFVLniupLTYJXF0JH1ALgiTh9g4ymK0PlFCzr9PXNpikEk2Gg==",
+                            Password = "AQAAAAEAACcQAAAAEE1MjRJLInp5ckLAKJUYIBS4UxHfN31bMe3Z3XwTpHpY1mQEt5UKB5Y3adeotngIkg==",
                             RoleId = 1
                         });
                 });

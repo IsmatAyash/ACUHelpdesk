@@ -12,7 +12,7 @@ export const NegContainer = styled(Container)`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #27ae60;
+  /* background: #27ae60; */
   height: 100vh;
 `;
 
@@ -77,4 +77,17 @@ export const OnlineIcon = styled.span`
       ? `background-color: #4cd137;`
       : `background-color: #c23616 !important;
   `}
+`;
+
+export const NegIconButton = styled.i`
+  margin-top: 10px;
+  font-size: 25px;
+  color: grey;
+  margin-left: 10px;
+  transition: 0.3s;
+
+  &:hover {
+    color: var(--success);
+    cursor: pointer;
+  }
 `;

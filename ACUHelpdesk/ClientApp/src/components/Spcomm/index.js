@@ -17,8 +17,6 @@ const Spcomm = ({ comReps }) => {
     setReps(repData(eventKey));
   }, [eventKey]);
 
-  console.log("Setreps value", reps);
-
   return (
     <Container
       className="p-2"

@@ -1,5 +1,13 @@
 import React from "react";
-import { Card, ListGroup, Image, Button, FormControl } from "react-bootstrap";
+import {
+  Card,
+  ListGroup,
+  Image,
+  Button,
+  FormControl,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import IconButton from "./IconButton";
 import { MdDelete, MdSearch } from "react-icons/md";
 import { RiEdit2Fill } from "react-icons/ri";
@@ -9,78 +17,20 @@ import {
   NegMemberListGroup,
   NegMemberListGroupItem,
   NegMemberCard,
+  NegIconButton,
 } from "./NegMemberElements";
+import NegNeg from "./NegNeg";
 
-const members = [
-  {
-    id: 1,
-    name: "ليال باسيل",
-    image: "/images/layale.jpg",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-  },
-  {
-    id: 2,
-    name: "عصمت العياش",
-    image: "/images/ismat.jpg",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-    online: true,
-  },
-  {
-    id: 3,
-    name: "مارون عبود",
-    image: "/images/flags/lb.svg",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-  },
-  {
-    id: 4,
-    name: "فليمون وهبي",
-    image: "/images/avatarPlaceholder.png",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-    online: true,
-  },
-  {
-    id: 5,
-    name: "عصمت العياش",
-    image: "/images/ismat.jpg",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-    online: true,
-  },
-  {
-    id: 6,
-    name: "مارون عبود",
-    image: "/images/flags/lb.svg",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-  },
-  {
-    id: 7,
-    name: "فليمون وهبي",
-    image: "/images/avatarPlaceholder.png",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-    online: true,
-  },
-  {
-    id: 8,
-    name: "عصمت العياش",
-    image: "/images/ismat.jpg",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-    online: true,
-  },
-  {
-    id: 9,
-    name: "مارون عبود",
-    image: "/images/flags/lb.svg",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-  },
-  {
-    id: 10,
-    name: "فليمون وهبي",
-    image: "/images/avatarPlaceholder.png",
-    lastmsg: "المتفاوض الرئيسي للدولة المعنية من خلال",
-    online: true,
-  },
-];
-
-const NegListGroup = ({ lng, onAction, addIcon }) => {
+const NegListGroup = ({
+  lng,
+  onNew,
+  addIcon,
+  data,
+  mem,
+  onItemSelect,
+  placement,
+  tooltip,
+}) => {
   const { t } = useTranslation();
 
   const lngAlign = lng === "ar" ? " text-right" : " text-left";
@@ -91,13 +41,21 @@ const NegListGroup = ({ lng, onAction, addIcon }) => {
         <div className="d-flex justify-content-between">
           <Image src="/images/ismat.jpg" width="40px" roundedCircle />
           <span>
-            <IconButton
+            <OverlayTrigger
+              key={placement}
+              placement={placement}
+              overlay={<Tooltip id={`tooltip-${placement}`}>{tooltip}</Tooltip>}
+            >
+              <NegIconButton onClick={onNew}>{addIcon}</NegIconButton>
+            </OverlayTrigger>
+
+            {/* <IconButton
               icon={addIcon}
               tooltip="زيادة منصة للمفاوضات"
               placement="bottom"
-              onAction={() => onAction("addGroup")}
-            />
-            <IconButton
+              onNew={onNew}
+            /> */}
+            {/* <IconButton
               icon={<RiEdit2Fill />}
               tooltip="تعديل منصة للمفاوضات"
               placement="bottom"
@@ -108,7 +66,7 @@ const NegListGroup = ({ lng, onAction, addIcon }) => {
               tooltip="إلغاء منصة للمفاوضات"
               placement="bottom"
               onAction={() => onAction("delGroup")}
-            />
+            /> */}
           </span>
         </div>
       </Card.Header>
@@ -124,25 +82,15 @@ const NegListGroup = ({ lng, onAction, addIcon }) => {
         />
       </div>
       <Card.Body className="p-0">
-        <NegMemberListGroup as="ul" lng={lng}>
-          {members.map(member => (
-            <ListGroup.Item
-              as="li"
-              className="py-1"
-              action
-              variant={member.id % 2 === 0 ? "light" : "secondary"}
-              key={member.id}
-            >
-              <NegMember
-                name={member.name}
-                lastMsg={member.lastmsg}
-                avatar={member.image}
-                lng={lng}
-                online={member.online}
-              />
-            </ListGroup.Item>
-          ))}
-        </NegMemberListGroup>
+        {mem ? (
+          <NegMemberListGroup as="ul" lng={lng}>
+            <NegMember members={data} lng={lng} lastMsg="مرحبا يا أحلى عالم" />
+          </NegMemberListGroup>
+        ) : (
+          <NegMemberListGroup as="ul" lng={lng}>
+            <NegNeg negs={data} onItemSelect={onItemSelect} />
+          </NegMemberListGroup>
+        )}
       </Card.Body>
     </NegMemberCard>
   );
