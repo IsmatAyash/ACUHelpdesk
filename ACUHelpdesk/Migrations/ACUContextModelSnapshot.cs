@@ -228,10 +228,10 @@ namespace ACUHelpdesk.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("NegCreatedAt")
+                    b.Property<DateTime?>("NegCreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NegInitiatedAt")
+                    b.Property<DateTime?>("NegInitiatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NegName")
@@ -257,7 +257,6 @@ namespace ACUHelpdesk.Migrations
                         {
                             Id = 1,
                             NegCreatedAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NegInitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             NegName = "منصة التفاوض لبنان الأردن",
                             NegStatus = "Active",
                             NegSubject = "التعريفة الجمركية الموح",
@@ -267,7 +266,6 @@ namespace ACUHelpdesk.Migrations
                         {
                             Id = 2,
                             NegCreatedAt = new DateTime(2021, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NegInitiatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             NegName = "آليات التعويض والتضامن",
                             NegStatus = "Pending",
                             NegSubject = "منصة التفاوض لبنان الأردن",
@@ -319,7 +317,7 @@ namespace ACUHelpdesk.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("ActionAt")
+                    b.Property<DateTime?>("ActionAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MemberStatus")
@@ -534,7 +532,7 @@ namespace ACUHelpdesk.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("ActivationDate")
+                    b.Property<DateTime?>("ActivationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Active")
@@ -558,13 +556,13 @@ namespace ACUHelpdesk.Migrations
                     b.Property<string>("NegPassCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("NegPassCodeExpires")
+                    b.Property<DateTime?>("NegPassCodeExpires")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PassCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PassCodeExpires")
+                    b.Property<DateTime?>("PassCodeExpires")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
@@ -585,31 +583,25 @@ namespace ACUHelpdesk.Migrations
                         new
                         {
                             Id = 1,
-                            ActivationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Active = true,
                             Avatar = "ismat.jpg",
                             CountryId = 9,
                             Email = "ismat.ayash@gmail.com",
-                            FirstName = "Ismat",
-                            LastName = "Ayash",
-                            NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAEJMGdicwUrVEwAY15mX/PLFQEQjXADW0hunoGIoEUuy2OErYeembW+k1eU2AS5ceqQ==",
+                            FirstName = "عصمت",
+                            LastName = "العياش",
+                            Password = "AQAAAAEAACcQAAAAENGbcmSv1pnFjqB4PsDiek/4kQMqrI4oz7CUJW1//OfuIqsgdGYy2cOXkRNPL9i2EA==",
                             RoleId = 1
                         },
                         new
                         {
                             Id = 2,
-                            ActivationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Active = true,
                             Avatar = "layale.jpg",
                             CountryId = 7,
                             Email = "layale@gmail.com",
-                            FirstName = "Layale",
-                            LastName = "Bassil",
-                            NegPassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PassCodeExpires = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "AQAAAAEAACcQAAAAEE1MjRJLInp5ckLAKJUYIBS4UxHfN31bMe3Z3XwTpHpY1mQEt5UKB5Y3adeotngIkg==",
+                            FirstName = "ليال",
+                            LastName = "باسيل",
+                            Password = "AQAAAAEAACcQAAAAENum+ytpNIgyl9ctgnlql8YVJoYRFEGw8ZkjsHddmhd2hStAatcT49Pg0LQ7+f9jwA==",
                             RoleId = 1
                         });
                 });

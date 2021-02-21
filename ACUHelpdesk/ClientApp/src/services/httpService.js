@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import { toast } from "react-toastify";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.interceptors.response.use(null, error => {
@@ -10,14 +10,14 @@ axios.interceptors.response.use(null, error => {
     error.response.status < 500;
 
   if (!expectedError) {
-    toast.error('An unexpected error occurrred.');
+    toast.error("An unexpected error occurrred.");
   }
 
   return Promise.reject(error);
 });
 
 function setJwt(jwt) {
-  axios.defaults.headers.common['x-auth-token'] = jwt;
+  axios.defaults.headers.common["x-auth-token"] = jwt;
 }
 
 export default {

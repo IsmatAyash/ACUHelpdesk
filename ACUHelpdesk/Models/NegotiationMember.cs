@@ -12,7 +12,7 @@ namespace ACUHelpdesk.Models
         [Key]
         public int Id { get; set; }
         public string MemberStatus { get; set; }
-        public DateTime ActionAt { get; set; }
+        public DateTime? ActionAt { get; set; }
         public bool isLeader { get; set; }
         public bool OnlineStatus { get; set; }
         [ForeignKey("Negotiation")]

@@ -107,8 +107,47 @@ namespace ACUHelpdesk.Controllers
         [HttpPost]
         public async Task<ActionResult<Negotiation>> PostNegotiation(Negotiation negotiation)
         {
-            _context.Negotiations.Add(negotiation);
-            await _context.SaveChangesAsync();
+            if (negotiation == null)
+            {
+                return BadRequest(new { message = "Http Request mistake please check" }); ;
+            }
+
+            using var transaction = _context.Database.BeginTransaction();
+
+            try
+            {
+                _context.Negotiations.Add(negotiation);
+                await _context.SaveChangesAsync();
+                foreach( var product in negotiation.NegotiationProducts)
+                {
+                    NegotiationProduct NegProd = new NegotiationProduct();
+                    NegProd.ProductId = product.ProductId;
+                    NegProd.NegotiationId = product.NegotiationId;
+                    _context.NegotiationProducts.Add(NegProd);
+                }
+                await _context.SaveChangesAsync();
+
+                foreach (var member in negotiation.NegotiationMembers)
+                {
+                    NegotiationMember NegMemb = new NegotiationMember();
+                    NegMemb.UserId = member.UserId;
+                    NegMemb.NegotiationId = member.NegotiationId;
+                    NegMemb.isLeader = false;
+                    NegMemb.OnlineStatus = false;
+                    NegMemb.MemberStatus = "Pending";
+                    NegMemb.ActionAt = null;
+                    _context.NegotiationMembers.Add(NegMemb);
+                }
+                await _context.SaveChangesAsync();
+                
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Something went wrong. Data was not saved" });
+            }
 
             return CreatedAtAction("GetNegotiation", new { id = negotiation.Id }, negotiation);
         }

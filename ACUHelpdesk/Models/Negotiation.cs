@@ -14,8 +14,8 @@ namespace ACUHelpdesk.Models
         public string NegName { get; set; }
         public string NegSubject { get; set; }
         public string NegStatus { get; set; }
-        public DateTime NegCreatedAt { get; set; }
-        public DateTime NegInitiatedAt { get; set; }
+        public DateTime? NegCreatedAt { get; set; }
+        public DateTime? NegInitiatedAt { get; set; }
         [ForeignKey("User")]
         public int UserId { get; set; }
         public virtual User User { get; set; }

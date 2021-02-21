@@ -6,10 +6,10 @@ export const getCountries = async () => {
   return await http.get(apiEndpoint);
 };
 
-export function addUser(user) {
-  return http.post(`${apiEndpoint}/register`, {
-    email: user.email,
-    password: user.password,
-    roleId: user.role,
-  });
-}
+// export function addUser(user) {
+//   return http.post(`${apiEndpoint}/register`, {
+//     email: user.email,
+//     password: user.password,
+//     roleId: user.role,
+//   });
+// }

@@ -19,7 +19,6 @@ const assignObjectPaths = (obj, stack) => {
 };
 
 const HOC = Wrapped => ({ data, ...rest }) => {
-  console.log("data", data);
   assignObjectPaths(data);
 
   return <Wrapped data={data} {...rest} />;

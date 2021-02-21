@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const NegIconButton = styled.i`
   margin-top: 10px;

@@ -8,6 +8,7 @@ namespace ACUHelpdesk.ViewModels
 {
     public class AuthResponse
     {
+        public int UserId { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }
         public string Role { get; set; }
@@ -19,6 +20,7 @@ namespace ACUHelpdesk.ViewModels
 
         public AuthResponse(User user, string token)
         {
+            UserId = user.Id;
             Email = user.Email;
             FullName = user.FirstName + ' ' + user.LastName;
             Role = user.Role.Name;

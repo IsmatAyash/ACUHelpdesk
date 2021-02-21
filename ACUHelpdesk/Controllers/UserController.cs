@@ -38,6 +38,14 @@ namespace ACUHelpdesk.Controllers
             return Ok(users);
         }
 
+        [HttpGet("members")]
+        public IActionResult GetMembers()
+        {
+
+            var users = _userService.GetMembers();
+            return Ok(users);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetUser(int id)
         {
@@ -51,6 +59,7 @@ namespace ACUHelpdesk.Controllers
             user.AvatarSrc = string.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, user.Avatar);
             return Ok(user);
         }
+
 
         [HttpPost("register")]
         public IActionResult Register([FromForm] AddUserRequest model)

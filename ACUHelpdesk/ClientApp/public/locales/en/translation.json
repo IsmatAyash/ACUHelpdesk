@@ -1,4 +1,5 @@
 {
+  "genericmsg": "Enter correct data",
   "title": "ACU Helpdesk",
   "menubar": {
     "home": "Home",
@@ -110,5 +111,13 @@
     "generate": "Generate",
     "emailplaceholder": "email address",
     "passcodegenerated": "Pass code has been generated and sent"
+  },
+  "negnew": {
+    "header": "Add new negotiation",
+    "negnameplaceholder": "Title",
+    "negsubjectplaceholder": "Subject",
+    "passcodeplaceholder": "Passcode",
+    "productsplaceholder": "Products",
+    "membersplaceholder": "Members"
   }
 }

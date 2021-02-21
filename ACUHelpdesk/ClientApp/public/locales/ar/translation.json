@@ -1,4 +1,5 @@
 ﻿{
+  "genericmsg": "أدخل معلومات صحيحة",
   "title": "منصة تسهيل مفاوضات الإتحاد الجمركي العربي",
   "menubar": {
     "home": "الصفحة الرئيسية",
@@ -110,5 +111,13 @@
     "generate": "تابع",
     "emailplaceholder": "البريد الإلكتروني",
     "passcodegenerated": "لقد تم خلق وإرسال كلمة السر بنجاح"
+  },
+  "negnew": {
+    "header": "زيادة منصة مفاوضات",
+    "negnameplaceholder": "عنوان المفاوضات",
+    "negsubjectplaceholder": "موضوع المفاوضات",
+    "passcodeplaceholder": "كلمة سر المفاوضات",
+    "productsplaceholder": "السلع",
+    "membersplaceholder": "الأعضاء "
   }
 }

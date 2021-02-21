@@ -13,6 +13,7 @@ export const userService = {
   validateResetToken,
   resetPassword,
   negPassCode,
+  getMembers,
 };
 
 async function login(email, password) {
@@ -39,8 +40,6 @@ function negPassCode(email) {
 }
 
 export function register(params) {
-  console.log("in user service", params);
-  console.log(baseUrl);
   return http.post(`${baseUrl}/register`, params);
 }
 
@@ -58,4 +57,8 @@ function resetPassword({ passcode, password, confirmPassword }) {
     password,
     confirmPassword,
   });
+}
+
+function getMembers() {
+  return http.get(`${baseUrl}/members`);
 }

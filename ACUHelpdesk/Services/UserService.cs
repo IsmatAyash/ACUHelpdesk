@@ -23,6 +23,7 @@ namespace ACUHelpdesk.Services
     {
         AuthResponse Auth(AuthRequest model);
         IEnumerable<User> GetAll();
+        IEnumerable<Member> GetMembers();
         User GetById(int id);
         User Register(AddUserRequest model, string origin);
         void VerifyEmail(string passcode);
@@ -67,6 +68,20 @@ namespace ACUHelpdesk.Services
         public IEnumerable<User> GetAll()
         {
             return _context.Users.Include(r => r.Role).Include(c => c.Country).ToList();
+        }
+
+        public IEnumerable<Member> GetMembers()
+        {
+            return _context.Users
+                           .Include(c => c.Country)
+                           .Select(x => new Member
+                           {
+                               value = x.Id,
+                               label = x.FirstName + " " + x.LastName,
+                               className = "flag " + x.Country.Alpha2,
+                               tagClassName = "flag " + x.Country.Alpha2,
+                               country = x.Country.NameAR
+                           }).ToList();
         }
 
         public User GetById(int id)
