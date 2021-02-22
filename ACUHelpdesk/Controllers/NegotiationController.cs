@@ -114,24 +114,26 @@ namespace ACUHelpdesk.Controllers
 
             using var transaction = _context.Database.BeginTransaction();
 
-            try
-            {
+            //try
+            //{
+                negotiation.NegStatus = "Pending";
                 _context.Negotiations.Add(negotiation);
                 await _context.SaveChangesAsync();
-                foreach( var product in negotiation.NegotiationProducts)
+                foreach ( var product in negotiation.NegotiationProducts)
                 {
                     NegotiationProduct NegProd = new NegotiationProduct();
                     NegProd.ProductId = product.ProductId;
-                    NegProd.NegotiationId = product.NegotiationId;
+                    NegProd.NegotiationId = negotiation.Id;
                     _context.NegotiationProducts.Add(NegProd);
                 }
                 await _context.SaveChangesAsync();
 
-                foreach (var member in negotiation.NegotiationMembers)
+
+            foreach (var member in negotiation.NegotiationMembers)
                 {
                     NegotiationMember NegMemb = new NegotiationMember();
                     NegMemb.UserId = member.UserId;
-                    NegMemb.NegotiationId = member.NegotiationId;
+                    NegMemb.NegotiationId = negotiation.Id;
                     NegMemb.isLeader = false;
                     NegMemb.OnlineStatus = false;
                     NegMemb.MemberStatus = "Pending";
@@ -139,15 +141,16 @@ namespace ACUHelpdesk.Controllers
                     _context.NegotiationMembers.Add(NegMemb);
                 }
                 await _context.SaveChangesAsync();
-                
-                // Commit transaction if all commands succeed, transaction will auto-rollback
-                // when disposed if either commands fails
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                return BadRequest(new { message = "Something went wrong. Data was not saved" });
-            }
+
+
+            // Commit transaction if all commands succeed, transaction will auto-rollback
+            // when disposed if either commands fails
+            transaction.Commit();
+            //}
+            //catch (Exception)
+            //{
+            //    return BadRequest(new { message = "Something went wrong. Data was not saved" });
+            //}
 
             return CreatedAtAction("GetNegotiation", new { id = negotiation.Id }, negotiation);
         }

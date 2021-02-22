@@ -15,33 +15,30 @@ import RenderSelect from "../common/Form/RenderSelect";
 import { useTranslation } from "react-i18next";
 import { getProducts } from "../../services/productService";
 import { userService } from "../../services/userService";
-import { getNegnewdata } from "../../services/negService";
+import { postNegotiation } from "../../services/negService";
 import { UserContext } from "../../services/UserContext";
 import Container from "./DropdownContainer";
 import Schema from "./negnewschema";
 import { toast } from "react-toastify";
 import "./BootStrap.css";
+import { members } from "./NegData";
 
 const initialValues = {
   negName: "",
   negSubject: "",
   negPassCode: "",
-  products: [],
-  members: [],
 };
-
-let selectedProds = [];
-let selectedMembs = [];
 
 const NegNew = props => {
   const { onClose, lng, show } = props;
   const { user } = useContext(UserContext);
   const [prods, setProds] = useState([]);
   const [membs, setMembs] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [members, setMembers] = useState([]);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState(initialValues);
-  const [selP, setSelP] = useState([{}]);
 
   const { t } = useTranslation();
 
@@ -54,37 +51,13 @@ const NegNew = props => {
   ];
 
   const handleProducts = (currentNode, selectedNodes) => {
-    // selectedProds = [];
-    // selectedProds.push(selectedNodes);
-    // console.log("Selected Prods", selectedProds);
-    console.log(currentNode);
-    setSelP([...selP, currentNode]);
-    console.log("selP", selP);
-
-    setFormData({
-      ...formData,
-      negName: "Ismat",
-      products: [5],
-    });
-    console.log("on change products executed", formData.products);
-
-    // console.log("onChange::", currentNode, selectedNodes);
+    const nodes = [...selectedNodes];
+    setProducts(nodes);
   };
 
   const handleMembers = (currentNode, selectedNodes) => {
-    // selectedMembs = [];
-    // selectedMembs.push(selectedNodes);
-    // console.log("Selected Membs", selectedMembs);
-    console.log(currentNode);
-
-    setFormData({
-      ...formData,
-      members: [...formData.members, currentNode.value],
-    });
-    console.log("on change members executed", formData.members);
-
-    // setFormData({ ...formData, members: currentNode });
-    // console.log("onChange::", currentNode, selectedNodes);
+    const nodes = [...selectedNodes];
+    setMembers(nodes);
   };
 
   // const onChange = (currentNode, selectedNodes) => {
@@ -111,6 +84,8 @@ const NegNew = props => {
 
   const resetForm = () => {
     setFormData(initialValues);
+    setProducts([]);
+    setMembers([]);
     setErrors({});
   };
 
@@ -143,32 +118,42 @@ const NegNew = props => {
     getMembers();
   }, []);
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    // console.log("Submit clicked before", formData);
-    // const cloneProd = [...selectedProds];
-    // console.log("Cloned Prods", cloneProd);
-    // setFormData({
-    //   ...formData,
-    //   products: [...selectedProds],
-    //   members: [...selectedMembs],
-    // });
-    toast.success("لقد تم حفظ هذه المفاوضات بنجاح");
-    console.log("Submit clicked", formData);
+    const negotiation = {
+      negSubject,
+      negName,
+      userId: user.userId,
+      negotiationProducts: products.map(product => ({
+        productId: product.value,
+      })),
+      negotiationMembers: members.map(member => ({ userId: member.value })),
+    };
+
+    console.log("neg to send", negotiation);
+
+    try {
+      await postNegotiation(negotiation);
+      toast.success("لقد تم حفظ هذه المفاوضات بنجاح");
+      resetForm();
+      setErrors({});
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        setErrors({ ...errors, message: ex.response.data.message });
+        toast.error(`Something has failed ,${ex.response.data.message}`);
+      }
+    }
+
+    console.log("negotiation to post", negotiation);
   };
 
-  // console.log("Products", !products && products);
-  // console.log("Members", !members && members);
-  // console.log("formData memb", formData.members);
-  // console.log("formData prod", formData.products);
-
-  const { negName, negSubject, negPassCode, members, products } = formData;
+  const { negName, negSubject, negPassCode } = formData;
 
   const loading = () => {
     return (
       <>
         <span
-          class="spinner-border spinner-border-sm"
+          className="spinner-border spinner-border-sm"
           role="status"
           aria-hidden="true"
         ></span>
@@ -176,6 +161,8 @@ const NegNew = props => {
       </>
     );
   };
+
+  console.log("formData", formData);
 
   return (
     <>
@@ -283,7 +270,12 @@ const NegNew = props => {
               <MdCancel className="mx-2" />
               إلغاء
             </Button>
-            <Button variant="primary" type="submit" className="text-right">
+            <Button
+              disabled={negPassCode !== user.negPassCode}
+              variant="primary"
+              type="submit"
+              className="text-right"
+            >
               <MdSave className="mx-2" /> حفظ المعلومات
             </Button>
           </Modal.Footer>

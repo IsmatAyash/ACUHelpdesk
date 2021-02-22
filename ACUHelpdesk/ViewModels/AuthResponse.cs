@@ -16,6 +16,7 @@ namespace ACUHelpdesk.ViewModels
         public string Token { get; set; }
         public string Avatar { get; set; }
         public string AvatarSrc { get; set; }
+        public string NegPassCode { get; set; }
 
 
         public AuthResponse(User user, string token)
@@ -28,6 +29,7 @@ namespace ACUHelpdesk.ViewModels
             Avatar = user.Avatar;
             Token = token;
             AvatarSrc = "";
+            NegPassCode = user.NegPassCode;
         }
     }
 }

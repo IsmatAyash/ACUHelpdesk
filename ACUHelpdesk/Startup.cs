@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using System.IO;
 
 namespace ACUHelpdesk
@@ -48,6 +49,7 @@ namespace ACUHelpdesk
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,7 +92,6 @@ namespace ACUHelpdesk
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content/Attachments")),
                 RequestPath = "/Content/Attachments"
             });
-
 
 
             app.UseEndpoints(endpoints =>
