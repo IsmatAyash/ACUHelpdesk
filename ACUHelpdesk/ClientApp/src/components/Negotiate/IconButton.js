@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const NegIconButton = styled.i`
-  margin-top: 10px;
+  margin-top: 0;
   font-size: 25px;
   color: grey;
   margin-left: 10px;

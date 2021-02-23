@@ -2,6 +2,10 @@ import http from "./httpService";
 
 const apiEndpoint = "/negotiation";
 
+function negUrl(id) {
+  return `${apiEndpoint}/${id}`;
+}
+
 export const getNegotiations = async () => {
   return await http.get(apiEndpoint);
 };
@@ -9,3 +13,7 @@ export const getNegotiations = async () => {
 export const postNegotiation = params => {
   return http.post(apiEndpoint, params);
 };
+
+export function deleteNegotiation(negId) {
+  return http.delete(negUrl(negId));
+}

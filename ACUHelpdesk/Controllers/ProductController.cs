@@ -25,7 +25,7 @@ namespace ACUHelpdesk.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var products = await _context.Products
-                                 .Where(p => p.Tier == 2 && p.ProductDescriptionAR != null && !String.IsNullOrEmpty(p.ProductDescriptionAR)).Take(500)
+                                 .Where(p => p.Tier == 2 && p.ProductDescriptionAR != null && !String.IsNullOrEmpty(p.ProductDescriptionAR)).Take(100)
                                  .Select(x => new
                                  {
                                      Label = x.ProductCode + " " + x.ProductDescriptionAR,

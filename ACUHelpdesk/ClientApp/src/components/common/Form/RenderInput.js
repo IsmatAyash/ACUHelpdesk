@@ -15,9 +15,11 @@ const RenderInput = ({
   return (
     <FormGrp controlId={name}>
       <InputGroup>
-        <InputGroup.Prepend>
-          <InputGroup.Text>{children}</InputGroup.Text>
-        </InputGroup.Prepend>
+        {children && (
+          <InputGroup.Prepend>
+            <InputGroup.Text>{children}</InputGroup.Text>
+          </InputGroup.Prepend>
+        )}
         <FormCtrl
           type={type}
           placeholder={placeholder}

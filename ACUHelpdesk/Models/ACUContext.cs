@@ -28,6 +28,17 @@ namespace ACUHelpdesk.Models
             modelBuilder.Entity<NegotiationProduct>().ToTable("NegotiationProduct");
             modelBuilder.Entity<NegotiationDiscussion>().ToTable("NegotiationDiscussion");
 
+            modelBuilder.Entity<NegotiationProduct>()
+                        .HasOne(np => np.Negotiation)
+                        .WithMany(np => np.NegotiationProducts)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<NegotiationMember>()
+                        .HasOne(nm => nm.Negotiation)
+                        .WithMany(nm => nm.NegotiationMembers)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" },
                 new Role { Id = 2, Name = "User" });

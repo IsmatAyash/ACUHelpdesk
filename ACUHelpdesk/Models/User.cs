@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 
 namespace ACUHelpdesk.Models
 {
@@ -20,6 +21,7 @@ namespace ACUHelpdesk.Models
 
         public string Avatar { get; set; }
         public string Password { get; set; }
+        [DefaultValue(false)]
         public bool Active { get; set; }
         public string PassCode { get; set; }
         public DateTime? PassCodeExpires { get; set; }
@@ -28,11 +30,15 @@ namespace ACUHelpdesk.Models
         public int RoleId { get; set; }
         public int CountryId { get; set; }
         public DateTime? ActivationDate { get; set; }
+        [DefaultValue(2)]
+
         public virtual Role Role { get; set; }
         public virtual Country Country { get; set; }
         [NotMapped]
         public string AvatarFile { get; set; }
         [NotMapped]
+        [DefaultValue("/images/avatarPlaceholder.png")]
+
         public string AvatarSrc { get; set; }
     }
 }

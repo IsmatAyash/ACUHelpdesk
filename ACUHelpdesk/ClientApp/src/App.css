@@ -7,3 +7,9 @@
   /* font-family: "Lato", sans-serif; */
   font-size: small;
 }
+
+.modal-header .close {
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: medium;
+}

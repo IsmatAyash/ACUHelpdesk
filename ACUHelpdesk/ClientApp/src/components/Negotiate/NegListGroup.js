@@ -28,8 +28,10 @@ const NegListGroup = ({
   data,
   mem,
   onItemSelect,
+  onAction,
   placement,
   tooltip,
+  user,
 }) => {
   const { t } = useTranslation();
 
@@ -88,7 +90,11 @@ const NegListGroup = ({
           </NegMemberListGroup>
         ) : (
           <NegMemberListGroup as="ul" lng={lng}>
-            <NegNeg negs={data} onItemSelect={onItemSelect} />
+            <NegNeg
+              negs={data}
+              onItemSelect={onItemSelect}
+              onAction={onAction}
+            />
           </NegMemberListGroup>
         )}
       </Card.Body>

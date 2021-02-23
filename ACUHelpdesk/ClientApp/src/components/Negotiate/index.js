@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
 import { MdGroupAdd, MdAddCircle } from "react-icons/md";
 import {
@@ -15,16 +15,27 @@ import {
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
 import { useTranslation } from "react-i18next";
 import NegListGroup from "./NegListGroup";
-import { getNegotiations } from "../../services/negService";
+import {
+  getNegotiations,
+  deleteNegotiation,
+  postNegotiation,
+} from "../../services/negService";
+import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
+import ConfirmDialog from "../common/ConfirmDialog";
+import { toast } from "react-toastify";
+import { userService } from "./../../services/userService";
 
 const Negotiate = () => {
+  const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [negs, setNegs] = useState([]);
   const [members, setMembers] = useState([]);
   const [negHeader, setNegHeader] = useState({});
   const [show, setShow] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [negIdToDel, setNegIdToDel] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -34,14 +45,40 @@ const Negotiate = () => {
 
   const lngAlign = lng === "ar" ? " text-right" : " text-left";
 
-  const handleAction = action => {
-    console.log("action clicked", action);
+  const handleAction = (action, id) => {
+    if (action === "delGroup") {
+      setNegIdToDel(id);
+      setShowConfirm(true);
+    } else {
+      console.log("editing here");
+    }
+  };
+
+  const handleNegDelete = async () => {
+    const originalNegs = negs;
+    const filteredNegs = originalNegs.filter(n => n.id !== negIdToDel);
+    setNegs(filteredNegs);
+    console.log("filtered negs in index negotiate", filteredNegs);
+
+    try {
+      await deleteNegotiation(negIdToDel);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        toast.error("لقد تم محو المفاوضات المعنية");
+
+      setNegs({ negs: originalNegs });
+    }
+    setShowConfirm(false);
   };
 
   const handleItemSelect = id => {
     const filtered = data.filter(n => n.id === id)[0];
-    setMembers(filtered.members);
-    setNegHeader(filtered);
+    populateMembers(filtered);
+  };
+
+  const populateMembers = neg => {
+    setMembers(neg.members);
+    setNegHeader(neg);
   };
 
   useEffect(() => {
@@ -63,9 +100,73 @@ const Negotiate = () => {
     getNegs();
   }, []);
 
+  const handleSubmit = async (
+    e,
+    { negSubject, negName },
+    products,
+    members
+  ) => {
+    e.preventDefault();
+    const negotiation = {
+      negSubject,
+      negName,
+      userId: user.userId,
+      negotiationProducts: products.map(product => ({
+        productId: product.value,
+      })),
+      negotiationMembers: members.map(member => ({ userId: member.value })),
+    };
+
+    console.log("neg to send", negotiation);
+
+    try {
+      const { data: neg } = await postNegotiation(negotiation);
+      setNegs({ ...negs, neg });
+      populateMembers(neg);
+      toast.success("لقد تم حفظ هذه المفاوضات بنجاح");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        // setErrors({ ...errors, message: ex.response.data.message });
+        toast.error(`Something has failed ,${ex.response.data.message}`);
+      }
+    }
+
+    console.log("negotiation to post", negotiation);
+    setShow(false);
+  };
+
+  const mapToViewModel = neg => {
+    return {
+      id: neg.id,
+      subject: neg.negSubject,
+      title: neg.negName,
+      status: neg.negStatus,
+      createdAt: neg.negCreatedAt,
+      initiatedAt: neg.negInitiatedAt,
+      products: neg.products,
+      createdBy: neg.negCreatedBy,
+    };
+  };
+
   return (
     <NegContainer fluid>
-      {show && <NegNew onClose={handleClose} lng={lng} show />}
+      {show && (
+        <NegNew
+          onClose={handleClose}
+          doSubmit={handleSubmit}
+          user={user}
+          lng={lng}
+          show
+        />
+      )}
+      {showConfirm && (
+        <ConfirmDialog
+          onCancel={() => setShowConfirm(false)}
+          onConfirm={() => handleNegDelete()}
+          lng={lng}
+          showConfirm
+        />
+      )}
 
       <NegRow
         className="justify-content-between"
@@ -75,6 +176,7 @@ const Negotiate = () => {
           <NegListGroup
             lng={lng}
             onItemSelect={handleItemSelect}
+            onAction={handleAction}
             onNew={handleShow}
             onClose={handleClose}
             show={show}

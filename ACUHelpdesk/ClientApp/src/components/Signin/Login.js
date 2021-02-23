@@ -49,7 +49,6 @@ const Login = () => {
       const usr = await userService.login(email, password);
       if (usr) setUser(usr);
       history.push("/");
-      console.log("In Login user response", usr);
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         setErrors({ ...errors, message: ex.response.data.message });

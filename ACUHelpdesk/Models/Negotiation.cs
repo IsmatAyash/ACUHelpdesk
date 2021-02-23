@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 
 namespace ACUHelpdesk.Models
 {
@@ -22,4 +23,5 @@ namespace ACUHelpdesk.Models
         public virtual ICollection<NegotiationMember> NegotiationMembers { get; set; }
         public virtual ICollection<NegotiationProduct> NegotiationProducts { get; set; }
     }
+
 }
