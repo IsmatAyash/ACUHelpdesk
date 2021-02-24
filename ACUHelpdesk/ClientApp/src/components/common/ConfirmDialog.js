@@ -11,7 +11,7 @@ const StyledHeader = styled(Modal.Header)`
 `;
 
 const ConfirmDialog = props => {
-  const { onConfirm, onCancel, showConfirm } = props;
+  const { onConfirm, onCancel, showConfirm, msg, status } = props;
   return (
     <>
       <Modal
@@ -22,18 +22,22 @@ const ConfirmDialog = props => {
         show={showConfirm}
         className="text-right"
       >
-        <StyledHeader closeButton onClick={props.onCancel}>
+        <StyledHeader closeButton onClick={onCancel}>
           <Modal.Title id="contained-modal-title-vcenter">
             تأكيد العملية
           </Modal.Title>
         </StyledHeader>
-        <Modal.Body>هل أنت متأكد من محو هذه المعلومات من ؟</Modal.Body>
+        <Modal.Body>{msg}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onCancel}>
             <MdCancel className="ml-2" />
             كلا
           </Button>
-          <Button variant="primary" onClick={onConfirm}>
+          <Button
+            variant="primary"
+            onClick={onConfirm}
+            disabled={status === "Completed" || status === "Active"}
+          >
             <MdCheckCircle className="ml-2" />
             نعم
           </Button>

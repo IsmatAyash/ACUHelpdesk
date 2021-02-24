@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
-import {
-  MdSave,
-  MdCancel,
-  MdSubject,
-  MdFingerprint,
-  MdTextFields,
-} from "react-icons/md";
+import { MdSave, MdCancel, MdFingerprint } from "react-icons/md";
 import { validateProperty } from "../common/Form/validation";
 import _ from "lodash";
 import RenderInput from "./../common/Form/RenderInput";
@@ -47,6 +41,7 @@ const NegNew = props => {
   ];
 
   const handleProducts = (currentNode, selectedNodes) => {
+    console.log("currentNode", currentNode);
     const nodes = [...selectedNodes];
     setProducts(nodes);
   };
@@ -94,35 +89,6 @@ const NegNew = props => {
     }
     getMembers();
   }, []);
-
-  // const handleSubmit = async e => {
-  //   e.preventDefault();
-  //   const negotiation = {
-  //     negSubject,
-  //     negName,
-  //     userId: user.userId,
-  //     negotiationProducts: products.map(product => ({
-  //       productId: product.value,
-  //     })),
-  //     negotiationMembers: members.map(member => ({ userId: member.value })),
-  //   };
-
-  //   console.log("neg to send", negotiation);
-
-  //   try {
-  //     await postNegotiation(negotiation);
-  //     toast.success("لقد تم حفظ هذه المفاوضات بنجاح");
-  //     resetForm();
-  //     setErrors({});
-  //   } catch (ex) {
-  //     if (ex.response && ex.response.status === 400) {
-  //       setErrors({ ...errors, message: ex.response.data.message });
-  //       toast.error(`Something has failed ,${ex.response.data.message}`);
-  //     }
-  //   }
-
-  //   console.log("negotiation to post", negotiation);
-  // };
 
   const { negName, negSubject, negPassCode } = formData;
 

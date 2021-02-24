@@ -31,11 +31,12 @@ const Negotiate = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [negs, setNegs] = useState([]);
+  const [neg, setNeg] = useState({});
   const [members, setMembers] = useState([]);
   const [negHeader, setNegHeader] = useState({});
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [negIdToDel, setNegIdToDel] = useState(null);
+  const [negIdToDel, setNegIdToDel] = useState({});
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -45,9 +46,9 @@ const Negotiate = () => {
 
   const lngAlign = lng === "ar" ? " text-right" : " text-left";
 
-  const handleAction = (action, id) => {
+  const handleAction = (action, id, status) => {
     if (action === "delGroup") {
-      setNegIdToDel(id);
+      setNegIdToDel({ id, status });
       setShowConfirm(true);
     } else {
       console.log("editing here");
@@ -56,15 +57,15 @@ const Negotiate = () => {
 
   const handleNegDelete = async () => {
     const originalNegs = negs;
-    const filteredNegs = originalNegs.filter(n => n.id !== negIdToDel);
+    const filteredNegs = originalNegs.filter(n => n.id !== negIdToDel.id);
     setNegs(filteredNegs);
-    console.log("filtered negs in index negotiate", filteredNegs);
 
     try {
-      await deleteNegotiation(negIdToDel);
+      await deleteNegotiation(negIdToDel.id);
+      toast.error("لقد تم محو المفاوضات المعنية");
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
-        toast.error("لقد تم محو المفاوضات المعنية");
+        toast.error("لم تتم عمليالة محو بنجاح");
 
       setNegs({ negs: originalNegs });
     }
@@ -72,33 +73,44 @@ const Negotiate = () => {
   };
 
   const handleItemSelect = id => {
-    const filtered = data.filter(n => n.id === id)[0];
+    const filtered = negs.filter(n => n.id === id)[0];
     populateMembers(filtered);
   };
 
-  const populateMembers = neg => {
-    setMembers(neg.members);
-    setNegHeader(neg);
+  const populateMembers = n => {
+    setMembers(n.members);
+    setNegHeader(n);
   };
 
   useEffect(() => {
+    let isSubscribed = true;
     async function getNegs() {
       const { data } = await getNegotiations();
-      setData(data);
-      const result = data.map(d => ({
-        id: d.id,
-        subject: d.negSubject,
-        title: d.negName,
-        status: d.negStatus,
-        createdAt: d.negCreatedAt,
-        initiatedAt: d.negInitiatedAt,
-        products: d.products,
-        createdBy: d.negCreatedBy,
-      }));
-      setNegs(result);
+      console.log("data after getting negs inside useeffect", data);
+      if (isSubscribed) setNegs(data.map(d => mapToViewModel(d)));
     }
     getNegs();
+    return () => (isSubscribed = false);
   }, []);
+
+  useEffect(() => {
+    setNegs([...negs, mapToViewModel(neg)]);
+    populateMembers(neg);
+  }, [neg]);
+
+  const mapToViewModel = neg => {
+    return {
+      id: neg.id,
+      subject: neg.negSubject,
+      title: neg.negName,
+      status: neg.negStatus,
+      createdAt: neg.negCreatedAt,
+      initiatedAt: neg.negInitiatedAt,
+      products: neg.products,
+      members: neg.members,
+      createdBy: neg.negCreatedBy,
+    };
+  };
 
   const handleSubmit = async (
     e,
@@ -117,12 +129,9 @@ const Negotiate = () => {
       negotiationMembers: members.map(member => ({ userId: member.value })),
     };
 
-    console.log("neg to send", negotiation);
-
     try {
       const { data: neg } = await postNegotiation(negotiation);
-      setNegs({ ...negs, neg });
-      populateMembers(neg);
+      setNeg(neg);
       toast.success("لقد تم حفظ هذه المفاوضات بنجاح");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
@@ -130,22 +139,7 @@ const Negotiate = () => {
         toast.error(`Something has failed ,${ex.response.data.message}`);
       }
     }
-
-    console.log("negotiation to post", negotiation);
     setShow(false);
-  };
-
-  const mapToViewModel = neg => {
-    return {
-      id: neg.id,
-      subject: neg.negSubject,
-      title: neg.negName,
-      status: neg.negStatus,
-      createdAt: neg.negCreatedAt,
-      initiatedAt: neg.negInitiatedAt,
-      products: neg.products,
-      createdBy: neg.negCreatedBy,
-    };
   };
 
   return (
@@ -163,6 +157,12 @@ const Negotiate = () => {
         <ConfirmDialog
           onCancel={() => setShowConfirm(false)}
           onConfirm={() => handleNegDelete()}
+          status={negIdToDel.status}
+          msg={
+            negIdToDel.status === "Completed" || negIdToDel.status === "Active"
+              ? "لا يمكن محو المفاوضات الجارية أو المبرمة"
+              : "هل أنت متأكد من محو هذه المعلومات من ؟"
+          }
           lng={lng}
           showConfirm
         />

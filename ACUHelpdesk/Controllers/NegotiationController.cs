@@ -153,7 +153,7 @@ namespace ACUHelpdesk.Controllers
                 return BadRequest(new { message = ex.Message });
             }
 
-            return CreatedAtAction("GetNegotiation", new { id = negotiation.Id }, negotiation);
+            return CreatedAtAction(nameof(GetNegotiation), new { id = negotiation.Id }, negotiation);
         }
 
         // DELETE: api/Negotiation/5

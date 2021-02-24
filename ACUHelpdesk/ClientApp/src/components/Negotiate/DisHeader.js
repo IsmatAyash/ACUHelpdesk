@@ -7,7 +7,10 @@ import {
   Container,
   Row,
   Col,
+  ButtonGroup,
+  Button,
 } from "react-bootstrap";
+import { MdInfoOutline, MdPlayCircleOutline } from "react-icons/md";
 
 const BadgeTag = styled(Badge)`
   padding: 6px;
@@ -24,11 +27,12 @@ const BadgeTag = styled(Badge)`
 
 const DisHeader = ({ negHeader }) => {
   const {
-    negName: title,
-    negSubject: subject,
-    negCreatedBy: createdBy,
-    negInitiatedAt: initiatedAt,
+    title,
+    subject,
+    createdBy,
+    initiatedAt,
     products,
+    status,
   } = negHeader;
   return (
     <Container style={{ minHeight: "12vh" }}>
@@ -56,7 +60,7 @@ const DisHeader = ({ negHeader }) => {
         </Col>
       </Row>
       <Row>
-        <div>
+        <Col sm={8}>
           <strong>السلع:</strong>{" "}
           {products &&
             products.map(p => (
@@ -72,7 +76,17 @@ const DisHeader = ({ negHeader }) => {
                 <BadgeTag variant="light">{p.productCode}</BadgeTag>
               </OverlayTrigger>
             ))}
-        </div>
+        </Col>
+        <Col sm={4} className="px-0 mx-0">
+          <Button size="sm" className="ml-1" variant="outline-success">
+            <MdPlayCircleOutline className="ml-1" />
+            {status === "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
+          </Button>
+          <Button size="sm" variant="outline-info">
+            <MdInfoOutline className="ml-1" />
+            معلومات
+          </Button>
+        </Col>
       </Row>
     </Container>
   );

@@ -1,21 +1,17 @@
 import React from "react";
 import {
   Card,
-  ListGroup,
   Image,
   Button,
   FormControl,
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import IconButton from "./IconButton";
-import { MdDelete, MdSearch } from "react-icons/md";
-import { RiEdit2Fill } from "react-icons/ri";
+import { MdSearch } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import NegMember from "./NegMember";
 import {
   NegMemberListGroup,
-  NegMemberListGroupItem,
   NegMemberCard,
   NegIconButton,
 } from "./NegMemberElements";
@@ -50,25 +46,6 @@ const NegListGroup = ({
             >
               <NegIconButton onClick={onNew}>{addIcon}</NegIconButton>
             </OverlayTrigger>
-
-            {/* <IconButton
-              icon={addIcon}
-              tooltip="زيادة منصة للمفاوضات"
-              placement="bottom"
-              onNew={onNew}
-            /> */}
-            {/* <IconButton
-              icon={<RiEdit2Fill />}
-              tooltip="تعديل منصة للمفاوضات"
-              placement="bottom"
-              onAction={() => onAction("editGroup")}
-            />
-            <IconButton
-              icon={<MdDelete />}
-              tooltip="إلغاء منصة للمفاوضات"
-              placement="bottom"
-              onAction={() => onAction("delGroup")}
-            /> */}
           </span>
         </div>
       </Card.Header>

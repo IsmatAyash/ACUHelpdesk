@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Badge,
-  ButtonGroup,
-} from "react-bootstrap";
+import { Row, Col, ListGroup, Badge, ButtonGroup } from "react-bootstrap";
 import IconButton from "./IconButton";
-import { Container } from "react-bootstrap";
 import { MdDelete } from "react-icons/md";
 import { RiEdit2Fill } from "react-icons/ri";
 
@@ -28,23 +20,23 @@ const NegNeg = ({ negs, onItemSelect, onAction }) => {
   return (
     <>
       {negs &&
-        negs.map(({ id, subject, status, createdAt }) => (
+        negs.map(({ id, title, status, createdAt }, index) => (
           <ListGroup.Item
             as="li"
             className="py-1"
             action
-            variant={id % 2 === 0 ? "light" : "secondary"}
+            variant={index % 2 === 0 ? "light" : "secondary"}
             key={id}
             onClick={() => onItemSelect(id)}
           >
             <Row className="my-1 text-right">
               <Col sm={10}>
-                <h6 className="mb-1">{subject}</h6>
+                <h6 className="mb-1">{title}</h6>
                 <Badge
                   variant={statusColor(status)}
                   style={{ float: "right", marginRight: 0 }}
                 >
-                  {status}
+                  {status}-{id}
                 </Badge>
                 <small className="text-muted" style={{ float: "left" }}>
                   {new Date(createdAt).toLocaleString("ar-LB", {
@@ -58,16 +50,15 @@ const NegNeg = ({ negs, onItemSelect, onAction }) => {
                     icon={<RiEdit2Fill style={{ color: "black" }} />}
                     tooltip="تعديل منصة للمفاوضات"
                     placement="top"
-                    onAction={() => onAction("editGroup", id)}
+                    onAction={() => onAction("editGroup", id, status)}
                   />
                   <IconButton
                     icon={<MdDelete style={{ color: "red" }} />}
                     tooltip="إلغاء منصة للمفاوضات"
                     placement="top"
-                    onAction={() => onAction("delGroup", id)}
+                    onAction={() => onAction("delGroup", id, status)}
                   />
                 </ButtonGroup>
-                {/* <Image width="15px" src="/images/flags/lb.svg" roundedCircle /> */}
               </Col>
             </Row>
           </ListGroup.Item>
