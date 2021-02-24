@@ -43,7 +43,7 @@ namespace ACUHelpdesk.Controllers
                                      NegCreatedBy = r.User.FirstName + " " + r.User.LastName,
                                      Members = r.NegotiationMembers.Select(m => new 
                                      { 
-                                         MemberId = m.Id, 
+                                         MemberId = m.UserId, 
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName, 
                                          Avatar = string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
                                          m.MemberStatus, 
@@ -81,7 +81,7 @@ namespace ACUHelpdesk.Controllers
                                      NegCreatedBy = r.User.FirstName + " " + r.User.LastName,
                                      Members = r.NegotiationMembers.Select(m => new
                                      {
-                                         MemberId = m.Id,
+                                         MemberId = m.UserId,
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName,
                                          Avatar = string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
                                          m.MemberStatus,

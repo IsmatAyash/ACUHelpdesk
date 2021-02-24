@@ -8,27 +8,25 @@ import RenderSelect from "../common/Form/RenderSelect";
 import { useTranslation } from "react-i18next";
 import { getProducts } from "../../services/productService";
 import { userService } from "../../services/userService";
-import { postNegotiation } from "../../services/negService";
 import Container from "./DropdownContainer";
 import Schema from "./negnewschema";
 import { toast } from "react-toastify";
 import "./BootStrap.css";
 
-const initialValues = {
-  negName: "",
-  negSubject: "",
-  negPassCode: "",
-};
-
 const NegNew = props => {
-  const { onClose, lng, show, doSubmit, user } = props;
+  const { onClose, lng, show, doSubmit, user, data } = props;
   const [prods, setProds] = useState([]);
   const [membs, setMembs] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [members, setMembers] = useState([]);
+  const [products, setProducts] = useState(data.products);
+  const [members, setMembers] = useState(data.members);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState(initialValues);
+  const [neg, setNeg] = useState(data);
+  const [formData, setFormData] = useState({
+    negName: data.title,
+    negSubject: data.subject,
+    negPassCode: "",
+  });
 
   const { t } = useTranslation();
 
@@ -41,7 +39,6 @@ const NegNew = props => {
   ];
 
   const handleProducts = (currentNode, selectedNodes) => {
-    console.log("currentNode", currentNode);
     const nodes = [...selectedNodes];
     setProducts(nodes);
   };
@@ -71,14 +68,23 @@ const NegNew = props => {
       }
     }
     getHSD();
+    // if (neg.id !== 0) {
+    //   const pp = [...prods];
+    //   products.forEach(item => {
+    //     setChecked(pp, item.productId);
+    //   });
+    //   setProds(pp);
+    // }
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
     async function getMembers() {
       try {
-        const items = await userService.getMembers();
-        const mapped = _.chain(items.data)
+        let { data: items } = await userService.getMembers();
+        console.log("members before mapping", items);
+        if (neg.id !== 0) items = updateMembs(items);
+        const mapped = _.chain(items)
           .groupBy(c => c.country)
           .map((children, country) => ({ label: country, children }))
           .value();
@@ -88,9 +94,13 @@ const NegNew = props => {
       }
     }
     getMembers();
+    // if (neg.id !== 0) {
+    //   const mm = [...membs];
+    //   members.forEach(item => {
+    //     setChecked(mm, item.memberId);
+    //   });
+    // }
   }, []);
-
-  const { negName, negSubject, negPassCode } = formData;
 
   const loading = () => {
     return (
@@ -105,10 +115,26 @@ const NegNew = props => {
     );
   };
 
-  console.log("formData", formData);
+  const updateMembs = mm => {
+    console.log("inside updateMembs");
+    const memberIds = members.map(m => m.memberId);
+    console.log("memberIds", memberIds);
+    for (let i = 0; i < mm.length; i++) {
+      if (memberIds.IndexOf(mm[i].value) !== -1) {
+        mm[i] = { ...mm[i], checked: true };
+      }
+    }
+    console.log("items after updating", mm);
+    return mm;
+  };
+
+  const { negName, negSubject, negPassCode } = formData;
+  console.log("Prods, Membs", prods, membs);
+  console.log("Products, Members", products, members);
 
   return (
     <>
+      <div>Passed</div>
       <Modal
         {...props}
         size="lg"
@@ -164,18 +190,14 @@ const NegNew = props => {
             </Form.Row>
             <Form.Row>
               <Form.Group>
-                {isLoading ? (
-                  loading()
-                ) : (
-                  <Container
-                    data={prods}
-                    onChange={handleProducts}
-                    className="bootstrap-demo"
-                    texts={{
-                      placeholder: t("negnew.productsplaceholder"),
-                    }}
-                  />
-                )}
+                <Container
+                  data={prods}
+                  onChange={handleProducts}
+                  className="bootstrap-demo"
+                  texts={{
+                    placeholder: t("negnew.productsplaceholder"),
+                  }}
+                />
               </Form.Group>
             </Form.Row>
             <Form.Row>

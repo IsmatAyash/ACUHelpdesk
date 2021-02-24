@@ -14,6 +14,12 @@ export const postNegotiation = params => {
   return http.post(apiEndpoint, params);
 };
 
+export const updateNegotiation = neg => {
+  const body = { ...neg };
+  delete body.id;
+  return http.put(negUrl(neg.id), body);
+};
+
 export function deleteNegotiation(negId) {
   return http.delete(negUrl(negId));
 }

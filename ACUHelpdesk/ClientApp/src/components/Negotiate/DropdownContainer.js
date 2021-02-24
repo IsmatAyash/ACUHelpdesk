@@ -8,7 +8,7 @@ export default class Container extends Component {
     this.state = { data: props.data };
   }
 
-  componentWillReceiveProps = nextProps => {
+  UNSAFE_componentWillReceiveProps = nextProps => {
     if (!isEqual(nextProps.data, this.state.data)) {
       this.setState({ data: nextProps.data });
     }

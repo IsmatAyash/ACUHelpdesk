@@ -24,7 +24,7 @@ const NegMember = ({ members, lastMsg, lng }) => {
                   <h5 className="mb-1">{memberName}</h5>
                   <Image
                     style={{ width: "20px", height: "20px" }}
-                    src={`/Images/flags/${flag.toLowerCase()}.svg`}
+                    src={`/Images/flags/${flag?.toLowerCase()}.svg`}
                     roundedCircle
                   />
                 </div>

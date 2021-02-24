@@ -44,7 +44,10 @@ const NegListGroup = ({
               placement={placement}
               overlay={<Tooltip id={`tooltip-${placement}`}>{tooltip}</Tooltip>}
             >
-              <NegIconButton onClick={onNew}>{addIcon}</NegIconButton>
+              {/* <NegIconButton onClick={onNew}>{addIcon}</NegIconButton> */}
+              <NegIconButton onClick={() => onAction("newGroup")}>
+                {addIcon}
+              </NegIconButton>
             </OverlayTrigger>
           </span>
         </div>

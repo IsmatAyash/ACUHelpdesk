@@ -26,7 +26,7 @@ const NegNeg = ({ negs, onItemSelect, onAction }) => {
             className="py-1"
             action
             variant={index % 2 === 0 ? "light" : "secondary"}
-            key={id}
+            key={index}
             onClick={() => onItemSelect(id)}
           >
             <Row className="my-1 text-right">

@@ -1,36 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
 import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
 import { MdGroupAdd, MdAddCircle } from "react-icons/md";
-import {
-  Container,
-  Col,
-  Card,
-  Button,
-  Form,
-  Row,
-  Badge,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import { Col, Card, Button, Form } from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
-import { useTranslation } from "react-i18next";
 import NegListGroup from "./NegListGroup";
 import {
   getNegotiations,
   deleteNegotiation,
   postNegotiation,
+  updateNegotiation,
 } from "../../services/negService";
 import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
 import ConfirmDialog from "../common/ConfirmDialog";
 import { toast } from "react-toastify";
-import { userService } from "./../../services/userService";
+import { getProducts } from "./../../services/productService";
+import { userService } from "../../services/userService";
 
 const Negotiate = () => {
   const { user } = useContext(UserContext);
-  const [data, setData] = useState([]);
   const [negs, setNegs] = useState([]);
+  const [prods, setProds] = useState([]);
+  const [membs, setMembs] = useState([]);
   const [neg, setNeg] = useState({});
   const [members, setMembers] = useState([]);
   const [negHeader, setNegHeader] = useState({});
@@ -42,20 +34,48 @@ const Negotiate = () => {
   const handleShow = () => setShow(true);
 
   const lng = localStorage.getItem("i18nextLng");
-  const { t } = useTranslation();
 
-  const lngAlign = lng === "ar" ? " text-right" : " text-left";
-
-  const handleAction = (action, id, status) => {
-    if (action === "delGroup") {
-      setNegIdToDel({ id, status });
-      setShowConfirm(true);
-    } else {
-      console.log("editing here");
+  const handleAction = async (action, id, status) => {
+    switch (action) {
+      case "editGroup":
+        if (status !== "Completed") {
+          setNeg(negs.filter(n => n.id === id)[0]);
+          setShow(true);
+        } else {
+          toast.warning("لا يمكن تعديل المفاوضات المبرمة");
+        }
+        break;
+      case "delGroup": {
+        setNegIdToDel({ id, status });
+        setShowConfirm(true);
+        break;
+      }
+      default: {
+        try {
+          const { data: prods } = await getProducts();
+          setProds(prods);
+          const { data: membs } = await userService.getMembers();
+          setMembers(membs);
+          setNeg({
+            id: 0,
+            negName: "",
+            negSubject: "",
+            negPassCode: "",
+            products: prods,
+            members: membs,
+          });
+          setShow(true);
+        } catch (ex) {
+          toast.error("لم تتم قرأة السلع والأعضاء بنجاح!!");
+        }
+        break;
+      }
     }
+    console.log("neg populated to pass to form", neg);
   };
 
   const handleNegDelete = async () => {
+    // optimistic deletion
     const originalNegs = negs;
     const filteredNegs = originalNegs.filter(n => n.id !== negIdToDel.id);
     setNegs(filteredNegs);
@@ -65,7 +85,7 @@ const Negotiate = () => {
       toast.error("لقد تم محو المفاوضات المعنية");
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
-        toast.error("لم تتم عمليالة محو بنجاح");
+        toast.error("لم تتم عملية المحو بنجاح");
 
       setNegs({ negs: originalNegs });
     }
@@ -86,7 +106,6 @@ const Negotiate = () => {
     let isSubscribed = true;
     async function getNegs() {
       const { data } = await getNegotiations();
-      console.log("data after getting negs inside useeffect", data);
       if (isSubscribed) setNegs(data.map(d => mapToViewModel(d)));
     }
     getNegs();
@@ -112,12 +131,8 @@ const Negotiate = () => {
     };
   };
 
-  const handleSubmit = async (
-    e,
-    { negSubject, negName },
-    products,
-    members
-  ) => {
+  const handleSubmit = async (e, formData, products, members) => {
+    const { negSubject, negName } = formData;
     e.preventDefault();
     const negotiation = {
       negSubject,
@@ -130,15 +145,22 @@ const Negotiate = () => {
     };
 
     try {
-      const { data: neg } = await postNegotiation(negotiation);
-      setNeg(neg);
-      toast.success("لقد تم حفظ هذه المفاوضات بنجاح");
+      if (neg.id !== 0) {
+        const { data: neg } = await updateNegotiation(negotiation);
+        setNeg(neg);
+        toast.success("لقد تم تعديل هذه المفاوضات بنجاح");
+      } else {
+        const { data: neg } = await postNegotiation(negotiation);
+        setNeg(neg);
+        toast.success("لقد تم تعريف هذه المفاوضات بنجاح");
+      }
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         // setErrors({ ...errors, message: ex.response.data.message });
         toast.error(`Something has failed ,${ex.response.data.message}`);
       }
     }
+    setNeg({});
     setShow(false);
   };
 
@@ -151,6 +173,7 @@ const Negotiate = () => {
           user={user}
           lng={lng}
           show
+          data={neg}
         />
       )}
       {showConfirm && (
@@ -177,7 +200,7 @@ const Negotiate = () => {
             lng={lng}
             onItemSelect={handleItemSelect}
             onAction={handleAction}
-            onNew={handleShow}
+            // onNew={handleShow}
             onClose={handleClose}
             show={show}
             addIcon={<MdAddCircle />}
