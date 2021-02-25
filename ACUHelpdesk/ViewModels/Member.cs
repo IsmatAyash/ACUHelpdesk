@@ -7,10 +7,11 @@ namespace ACUHelpdesk.ViewModels
 {
     public class Member
     {
-        public int value { get; set; }
-        public string className { get; set; }
-        public string tagClassName { get; set; }
-        public string label { get; set; }
-        public string country { get; set; }
+        public int Value { get; set; }
+        public string ClassName { get; set; }
+        public string TagClassName { get; set; }
+        public string Label { get; set; }
+        public string NameAR { get; set; }
+        public bool Checked { get; set; }
     }
 }

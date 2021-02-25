@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using System.Collections;
 
 namespace ACUHelpdesk.Services
 {
@@ -23,7 +24,8 @@ namespace ACUHelpdesk.Services
     {
         AuthResponse Auth(AuthRequest model);
         IEnumerable<User> GetAll();
-        IEnumerable<Member> GetMembers();
+        IEnumerable GetMembers(int? negId);
+        IEnumerable GetMembersAntd();
         User GetById(int id);
         User Register(AddUserRequest model, string origin);
         void VerifyEmail(string passcode);
@@ -70,18 +72,69 @@ namespace ACUHelpdesk.Services
             return _context.Users.Include(r => r.Role).Include(c => c.Country).ToList();
         }
 
-        public IEnumerable<Member> GetMembers()
+        public IEnumerable GetMembers(int? negId)
         {
-            return _context.Users
-                           .Include(c => c.Country)
-                           .Select(x => new Member
-                           {
-                               value = x.Id,
-                               label = x.FirstName + " " + x.LastName,
-                               className = "flag " + x.Country.Alpha2,
-                               tagClassName = "flag " + x.Country.Alpha2,
-                               country = x.Country.NameAR
-                           }).ToList();
+            var users = _context.Users
+                                .Include(c => c.Country)
+                                .Select(x => new Member
+                                { 
+                                    NameAR = x.Country.NameAR,
+                                    Label = x.FirstName + " " + x.LastName,
+                                    Value = x.Id,
+                                    ClassName = "flag " + x.Country.Alpha2,
+                                    TagClassName = "flag " + x.Country.Alpha2,
+                                    Checked = false,
+                                }).ToList();
+            if (negId != null)
+            {
+                var checkedUsers = _context.NegotiationMembers.Where(n => n.NegotiationId == negId).Select(x => x.UserId).ToArray();
+                int index = -1;
+                foreach (var nm in checkedUsers)
+                {
+                    index = users.FindIndex(obj => obj.Value == nm.Value);
+                    if (index != -1)
+                        users[index].Checked = true;
+                }
+            }
+
+            var members = users.AsEnumerable().GroupBy(m => m.NameAR)
+                                .Select(u => new
+                                {
+                                    label = u.Key,
+                                    children = u.Select(x => new
+                                    {
+                                        x.ClassName,
+                                        x.TagClassName,
+                                        x.Label,
+                                        x.Value,
+                                        x.Checked,
+                                    }).ToList()
+                                }).ToList();
+
+            return members;
+
+        }
+
+        public IEnumerable GetMembersAntd()
+        {
+            var members = _context.Users
+                            .Include(c => c.Country)
+                            .AsEnumerable()
+                            .GroupBy(c => c.CountryId)
+                            .Select(u => new
+                            {
+                                title = u.Select(c => c.Country.NameAR),
+                                value = u.Key.ToString(),
+                                key = u.Key.ToString(),
+                                children = u.Select(ch => new
+                                {
+                                    title = ch.FirstName + ' ' + ch.LastName,
+                                    value = u.Key.ToString() + "-" + ch.Id.ToString(),
+                                    key = u.Key.ToString() + "-" + ch.Id.ToString(),
+                                })
+                            })
+                            .ToList();
+            return members;
         }
 
         public User GetById(int id)

@@ -38,11 +38,19 @@ namespace ACUHelpdesk.Controllers
             return Ok(users);
         }
 
-        [HttpGet("members")]
-        public IActionResult GetMembers()
+        [HttpGet("members/{negId}")]
+        public IActionResult GetMembers(int negId)
         {
 
-            var users = _userService.GetMembers();
+            var users = _userService.GetMembers(negId);
+            return Ok(users);
+        }
+
+        [HttpGet("members-antd")]
+        public IActionResult GetMembersAntd()
+        {
+
+            var users = _userService.GetMembersAntd();
             return Ok(users);
         }
 

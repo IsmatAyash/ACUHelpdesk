@@ -105,30 +105,36 @@ namespace ACUHelpdesk.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNegotiation(int id, Negotiation negotiation)
         {
-            if (id != negotiation.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(negotiation).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NegotiationExists(id))
+                if (negotiation == null)
+                {
+                    return BadRequest(new { message = "Negotiation data sent to server was null" });
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Invalid model object" });
+                }
+                var negEntity = _context.Negotiations.FirstOrDefaultAsync(n => n.Id == id);
+                if (negEntity == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                var members = _context.NegotiationMembers.Where(m => m.NegotiationId == id);
+                _context.NegotiationMembers.RemoveRange(members);
+                var products = _context.NegotiationProducts.Where(p => p.NegotiationId == id);
+                _context.NegotiationProducts.RemoveRange(products);
+
+                _context.Entry(negotiation).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // POST: api/Negotiation

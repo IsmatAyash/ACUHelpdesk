@@ -59,6 +59,6 @@ function resetPassword({ passcode, password, confirmPassword }) {
   });
 }
 
-function getMembers() {
-  return http.get(`${baseUrl}/members`);
+function getMembers(negId) {
+  return http.get(`${baseUrl}/members/${negId}`);
 }

@@ -134,15 +134,19 @@ const Negotiate = () => {
   const handleSubmit = async (e, formData, products, members) => {
     const { negSubject, negName } = formData;
     e.preventDefault();
-    const negotiation = {
+      const negotiation = {
+      id: neg.id,
       negSubject,
       negName,
+      negCreatedAt: neg.id === 0 ? new Date.now : neg.createdAt,
       userId: user.userId,
       negotiationProducts: products.map(product => ({
         productId: product.value,
       })),
       negotiationMembers: members.map(member => ({ userId: member.value })),
-    };
+      };
+
+      console.log('data to be updated',negotiation)
 
     try {
       if (neg.id !== 0) {

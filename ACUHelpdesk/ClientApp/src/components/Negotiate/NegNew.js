@@ -11,6 +11,7 @@ import { userService } from "../../services/userService";
 import Container from "./DropdownContainer";
 import Schema from "./negnewschema";
 import { toast } from "react-toastify";
+import { TreeSelect } from "antd";
 import "./BootStrap.css";
 
 const NegNew = props => {
@@ -68,38 +69,23 @@ const NegNew = props => {
       }
     }
     getHSD();
-    // if (neg.id !== 0) {
-    //   const pp = [...prods];
-    //   products.forEach(item => {
-    //     setChecked(pp, item.productId);
-    //   });
-    //   setProds(pp);
-    // }
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
     async function getMembers() {
       try {
-        let { data: items } = await userService.getMembers();
-        console.log("members before mapping", items);
-        if (neg.id !== 0) items = updateMembs(items);
-        const mapped = _.chain(items)
-          .groupBy(c => c.country)
-          .map((children, country) => ({ label: country, children }))
-          .value();
-        setMembs(mapped);
+        const { data: items } = await userService.getMembers(neg.id);
+        // const mapped = _.chain(items)
+        //   .groupBy(c => c.country)
+        //   .map((children, country) => ({ label: country, children }))
+        //   .value();
+        setMembs(items);
       } catch (ex) {
         toast.error("لم تتم العملية بنجاح!!");
       }
     }
     getMembers();
-    // if (neg.id !== 0) {
-    //   const mm = [...membs];
-    //   members.forEach(item => {
-    //     setChecked(mm, item.memberId);
-    //   });
-    // }
   }, []);
 
   const loading = () => {
@@ -115,22 +101,9 @@ const NegNew = props => {
     );
   };
 
-  const updateMembs = mm => {
-    console.log("inside updateMembs");
-    const memberIds = members.map(m => m.memberId);
-    console.log("memberIds", memberIds);
-    for (let i = 0; i < mm.length; i++) {
-      if (memberIds.IndexOf(mm[i].value) !== -1) {
-        mm[i] = { ...mm[i], checked: true };
-      }
-    }
-    console.log("items after updating", mm);
-    return mm;
-  };
-
   const { negName, negSubject, negPassCode } = formData;
-  console.log("Prods, Membs", prods, membs);
-  console.log("Products, Members", products, members);
+  // console.log("Prods, Membs", prods, membs);
+  // console.log("Products, Members", products, members);
 
   return (
     <>
