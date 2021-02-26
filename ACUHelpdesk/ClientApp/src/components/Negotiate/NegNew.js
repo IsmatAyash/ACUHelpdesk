@@ -63,7 +63,7 @@ const NegNew = props => {
   useEffect(() => {
     async function getHSD() {
       try {
-        const { data: prods } = await getProducts();
+        const { data: prods } = await getProducts(neg.id);
         setProds(prods);
       } catch (ex) {
         toast.error("لم يتم قرأة السلع بنجاح!!");

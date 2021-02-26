@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ACUHelpdesk.Models;
+using ACUHelpdesk.ViewModels;
 
 namespace ACUHelpdesk.Controllers
 {
@@ -41,18 +42,48 @@ namespace ACUHelpdesk.Controllers
             return Ok(products);
         }
 
-        // GET: api/Product/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        // GET: pass a negotiation id to get products with checked true or false
+        [HttpGet("{negId}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProduct(int? negId)
         {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null)
+            var products = await _context.Products
+                                   .Where(p => (p.Tier == 2 || p.Tier == 3) && p.ProductDescriptionAR != null && !String.IsNullOrEmpty(p.ProductDescriptionAR))
+                                   .Select(x => new Products
+                                   {
+                                       Label = x.ProductCode + " " + x.ProductDescriptionAR,
+                                       Value = x.Id,
+                                       Checked = false,
+                                       ParentID = x.ParentID,
+                                       ProductCode = x.ProductCode,
+                                       Tier = x.Tier
+                                   }).ToListAsync();
+            if (negId != null)
             {
-                return NotFound();
+                var checkedProds = _context.NegotiationProducts.Where(p => p.NegotiationId == negId).ToArray();
+                int index = -1;
+                foreach (var np in checkedProds)
+                {
+                    index = products.FindIndex(obj => obj.Value == np.ProductId);
+                    if (index != -1)
+                        products[index].Checked = true;
+                }
             }
+            var prods = products.Where(p => p.Tier == 2)
+                     .Select(x => new
+                     {
+                         Label = x.Label,
+                         Value = x.Value,
+                         Children = products
+                                    .Where(c => c.ParentID == x.Value && c.Tier == 3)
+                                        .Select(y => new
+                                        {
+                                            Label = y.Label,
+                                            Value = y.Value,
+                                            Checked = y.Checked
+                                        }).ToList()
+                     }).ToList();
 
-            return product;
+            return Ok(prods);
         }
 
         // PUT: api/Product/5
