@@ -56,7 +56,7 @@ export const NegMemberCard = styled(Card)`
 export const NegMemberListGroup = styled(ListGroup)`
   text-align: ${({ lng }) => (lng === "ar" ? `right;` : `left;`)};
   overflow-y: auto;
-  height: 72vh;
+  height: 75vh;
   padding: 0;
   margin: 0;
   width: 100%;

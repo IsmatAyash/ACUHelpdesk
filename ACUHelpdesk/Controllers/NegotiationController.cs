@@ -115,21 +115,26 @@ namespace ACUHelpdesk.Controllers
                 {
                     return BadRequest(new { message = "Invalid model object" });
                 }
-                var negEntity = _context.Negotiations.FirstOrDefaultAsync(n => n.Id == id);
+                var negEntity = await _context.Negotiations
+                                        .Include(m => m.NegotiationMembers)
+                                        .Include(p => p.NegotiationProducts)
+                                        .SingleOrDefaultAsync(n => n.Id == id);
                 if (negEntity == null)
                 {
                     return NotFound();
                 }
 
-                var members = _context.NegotiationMembers.Where(m => m.NegotiationId == id);
-                _context.NegotiationMembers.RemoveRange(members);
-                var products = _context.NegotiationProducts.Where(p => p.NegotiationId == id);
-                _context.NegotiationProducts.RemoveRange(products);
+                negEntity.UserId = negotiation.UserId;
+                negEntity.NegName = negotiation.NegName;
+                negEntity.NegSubject = negotiation.NegSubject;
+                negEntity.NegCreatedAt = negotiation.NegCreatedAt;
+                negEntity.NegInitiatedAt = negotiation.NegInitiatedAt;
+                negEntity.NegotiationProducts = negotiation.NegotiationProducts;
+                negEntity.NegotiationMembers = negotiation.NegotiationMembers;
 
-                _context.Entry(negotiation).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                return NoContent();
+                return Ok();
             }
             catch (Exception ex)
             {

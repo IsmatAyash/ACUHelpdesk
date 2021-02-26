@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
 import { MdGroupAdd, MdAddCircle } from "react-icons/md";
-import { Col, Card, Button, Form } from "react-bootstrap";
+import { Col, Card, Button, Form, Spinner } from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
 import NegListGroup from "./NegListGroup";
 import {
@@ -15,23 +15,19 @@ import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
 import ConfirmDialog from "../common/ConfirmDialog";
 import { toast } from "react-toastify";
-import { getProducts } from "./../../services/productService";
-import { userService } from "../../services/userService";
 
 const Negotiate = () => {
   const { user } = useContext(UserContext);
   const [negs, setNegs] = useState([]);
-  const [prods, setProds] = useState([]);
-  const [membs, setMembs] = useState([]);
   const [neg, setNeg] = useState({});
   const [members, setMembers] = useState([]);
   const [negHeader, setNegHeader] = useState({});
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [negIdToDel, setNegIdToDel] = useState({});
+  const [isloading, setIsloading] = useState(true);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const lng = localStorage.getItem("i18nextLng");
 
@@ -51,23 +47,15 @@ const Negotiate = () => {
         break;
       }
       default: {
-        try {
-          const { data: prods } = await getProducts();
-          setProds(prods);
-          const { data: membs } = await userService.getMembers();
-          setMembers(membs);
           setNeg({
             id: 0,
             negName: "",
             negSubject: "",
             negPassCode: "",
-            products: prods,
-            members: membs,
+            products: [],
+            members: [],
           });
           setShow(true);
-        } catch (ex) {
-          toast.error("لم تتم قرأة السلع والأعضاء بنجاح!!");
-        }
         break;
       }
     }
@@ -106,6 +94,7 @@ const Negotiate = () => {
     let isSubscribed = true;
     async function getNegs() {
       const { data } = await getNegotiations();
+      setIsloading(false);
       if (isSubscribed) setNegs(data.map(d => mapToViewModel(d)));
     }
     getNegs();
@@ -127,31 +116,34 @@ const Negotiate = () => {
       initiatedAt: neg.negInitiatedAt,
       products: neg.products,
       members: neg.members,
-      createdBy: neg.negCreatedBy,
+      createdBy: neg.negCreatedBy || user.fullName,
     };
   };
 
   const handleSubmit = async (e, formData, products, members) => {
     const { negSubject, negName } = formData;
+    const currDate = new Date();
     e.preventDefault();
-      const negotiation = {
+    const negotiation = {
       id: neg.id,
       negSubject,
       negName,
-      negCreatedAt: neg.id === 0 ? new Date.now : neg.createdAt,
+      negCreatedAt: neg.id === 0 ? currDate : neg.createdAt,
+      negInitiatedAt: neg.id === 0 ? currDate : neg.intiatedAt,
       userId: user.userId,
       negotiationProducts: products.map(product => ({
         productId: product.value,
       })),
       negotiationMembers: members.map(member => ({ userId: member.value })),
-      };
-
-      console.log('data to be updated',negotiation)
+    };
 
     try {
       if (neg.id !== 0) {
-        const { data: neg } = await updateNegotiation(negotiation);
-        setNeg(neg);
+        await updateNegotiation(negotiation);
+        setIsloading(true);
+        const { data } = await getNegotiations();
+        setIsloading(false);
+        setNegs(data.map(d => mapToViewModel(d)));
         toast.success("لقد تم تعديل هذه المفاوضات بنجاح");
       } else {
         const { data: neg } = await postNegotiation(negotiation);
@@ -167,6 +159,14 @@ const Negotiate = () => {
     setNeg({});
     setShow(false);
   };
+
+  // const updateNegs = neg => {
+  //   let negscopy = [...negs];
+  //   negscopy = negscopy.filter(n => n.id !== neg.id);
+  //   negscopy = [...negscopy, mapToViewModel(neg)];
+  //   setNegs(negscopy);
+  //   populateMembers(neg);
+  // };
 
   return (
     <NegContainer fluid>
@@ -200,19 +200,29 @@ const Negotiate = () => {
         style={{ textAlign: lng === "ar" ? "text-right" : "text-left" }}
       >
         <NegMemberCol md={3}>
-          <NegListGroup
-            lng={lng}
-            onItemSelect={handleItemSelect}
-            onAction={handleAction}
-            // onNew={handleShow}
-            onClose={handleClose}
-            show={show}
-            addIcon={<MdAddCircle />}
-            data={negs}
-            mem={false}
-            placement="bottom"
-            tooltip="زيادة منصة للمفاوضات"
-          />
+          {isloading ? (
+            <div
+              className="d-flex justify-content-center align-items-center w-100"
+              style={{ height: "80vh" }}
+            >
+              <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+            </div>
+          ) : (
+            <NegListGroup
+              lng={lng}
+              onItemSelect={handleItemSelect}
+              onAction={handleAction}
+              onClose={handleClose}
+              show={show}
+              addIcon={<MdAddCircle />}
+              data={negs}
+              memb={false}
+              placement="bottom"
+              tooltip="زيادة منصة للمفاوضات"
+            />
+          )}
         </NegMemberCol>
         <NegMemberCol md={6}>
           <Card style={{ height: "91vh" }}>
@@ -267,7 +277,7 @@ const Negotiate = () => {
             lng={lng}
             addIcon={<MdGroupAdd />}
             data={members}
-            mem={true}
+            memb={true}
           />
         </NegMemberCol>
       </NegRow>

@@ -27,6 +27,7 @@ const NegNew = props => {
     negName: data.title,
     negSubject: data.subject,
     negPassCode: "",
+    negCreatedBy: data.createdBy,
   });
 
   const { t } = useTranslation();
@@ -102,8 +103,6 @@ const NegNew = props => {
   };
 
   const { negName, negSubject, negPassCode } = formData;
-  // console.log("Prods, Membs", prods, membs);
-  // console.log("Products, Members", products, members);
 
   return (
     <>

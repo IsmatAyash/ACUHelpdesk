@@ -19,15 +19,13 @@ import NegNeg from "./NegNeg";
 
 const NegListGroup = ({
   lng,
-  onNew,
   addIcon,
   data,
-  mem,
+  memb,
   onItemSelect,
   onAction,
   placement,
   tooltip,
-  user,
 }) => {
   const { t } = useTranslation();
 
@@ -44,7 +42,6 @@ const NegListGroup = ({
               placement={placement}
               overlay={<Tooltip id={`tooltip-${placement}`}>{tooltip}</Tooltip>}
             >
-              {/* <NegIconButton onClick={onNew}>{addIcon}</NegIconButton> */}
               <NegIconButton onClick={() => onAction("newGroup")}>
                 {addIcon}
               </NegIconButton>
@@ -63,8 +60,8 @@ const NegListGroup = ({
           className={lngAlign}
         />
       </div>
-      <Card.Body className="p-0">
-        {mem ? (
+      <Card.Body className="p-0 m-0">
+        {memb ? (
           <NegMemberListGroup as="ul" lng={lng}>
             <NegMember members={data} lng={lng} lastMsg="مرحبا يا أحلى عالم" />
           </NegMemberListGroup>

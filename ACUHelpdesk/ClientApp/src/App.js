@@ -24,6 +24,7 @@ import MainHeader from "./components/MainHeader/index";
 import FormalMeetings from "./components/Meetings/FormalMeetings";
 import UpcomingMeetings from "./components/Meetings/UpcomingMeetings";
 import CreatePasscode from "./components/Settings/CreatePasscode";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-dropdown-tree-select/dist/styles.css";
@@ -78,7 +79,7 @@ function App() {
                 path="/meetings/upcomingmeetings"
                 component={UpcomingMeetings}
               />
-              <Route path="/negotiation" component={Negotiate} />
+              <ProtectedRoute path="/negotiation" component={Negotiate} />
               <Route path="/products" component={Products} />
               <Route path="/verify-email" component={VerifyEmail} />
               <Route path="/not-found" component={NotFound} />

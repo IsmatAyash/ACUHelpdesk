@@ -14,6 +14,7 @@ namespace ACUHelpdesk.Models
         public int Id { get; set; }
         public string NegName { get; set; }
         public string NegSubject { get; set; }
+        [DefaultValue(false)]
         public string NegStatus { get; set; }
         public DateTime? NegCreatedAt { get; set; }
         public DateTime? NegInitiatedAt { get; set; }

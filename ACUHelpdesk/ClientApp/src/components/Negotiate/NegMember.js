@@ -42,13 +42,3 @@ const NegMember = ({ members, lastMsg, lng }) => {
 };
 
 export default NegMember;
-
-// {
-//       <NegMember
-//         name={member.name}
-//         lastMsg={member.lastmsg}
-//         avatar={member.image}
-//         lng={lng}
-//         online={member.online}
-//       />
-// }
