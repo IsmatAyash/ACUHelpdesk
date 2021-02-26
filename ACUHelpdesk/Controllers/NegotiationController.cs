@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ACUHelpdesk.Models;
+using ACUHelpdesk.Services;
 
 namespace ACUHelpdesk.Controllers
 {
@@ -14,10 +15,13 @@ namespace ACUHelpdesk.Controllers
     public class NegotiationController : ControllerBase
     {
         private readonly ACUContext _context;
+        private readonly IEmailService _emailService;
 
-        public NegotiationController(ACUContext context)
+
+        public NegotiationController(ACUContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: api/Negotiation
@@ -44,8 +48,10 @@ namespace ACUHelpdesk.Controllers
                                      Members = r.NegotiationMembers.Select(m => new 
                                      { 
                                          MemberId = m.UserId, 
-                                         MemberName = m.User.FirstName + ' ' + m.User.LastName, 
-                                         Avatar = string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
+                                         MemberName = m.User.FirstName + ' ' + m.User.LastName,
+                                         Avatar = String.IsNullOrEmpty(m.User.Avatar)
+                                                  ? "/images/avatarPlaceholder.png"
+                                                  : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
                                          m.MemberStatus, 
                                          m.isLeader, 
                                          m.OnlineStatus,
@@ -83,7 +89,9 @@ namespace ACUHelpdesk.Controllers
                                      {
                                          MemberId = m.UserId,
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName,
-                                         Avatar = string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
+                                         Avatar = String.IsNullOrEmpty(m.User.Avatar) 
+                                                  ? "/images/avatarPlaceholder.png"
+                                                  : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
                                          m.MemberStatus,
                                          m.isLeader,
                                          m.OnlineStatus,
@@ -164,6 +172,8 @@ namespace ACUHelpdesk.Controllers
                 return BadRequest(new { message = ex.Message });
             }
 
+            sendNegPasscodeEmail(negotiation.NegSubject, negotiation.NegName, "PassCode", "ismat.ayash@icloud.com" , Request.Headers["origin"]);
+
             return CreatedAtAction(nameof(GetNegotiation), new { id = negotiation.Id }, negotiation);
         }
 
@@ -183,9 +193,28 @@ namespace ACUHelpdesk.Controllers
             return NoContent();
         }
 
+        private void sendNegPasscodeEmail(string subject, string title, string passcode, string emails, string origin)
+        {
+            var acceptUrl = $"{origin}/accept-negotiation";
+            var rejectUrl = $"{origin}/reject-negotiation";
+            string message;
+            message = $@"<p>تفضلوا بقبول أو رفض الحوار تحت العنوان {title} حول {subject} </p>
+            <p>في حال قبول الدعوى للحوار، أدخل كلمة السر المرفقة لتفعيل هذه الدعوة </p>
+            <p><code>{passcode}</code></p>
+            <pre><a href=""{acceptUrl}""><h3>قبول الدعوة</h3></a> <a href=""{rejectUrl}""><h3>رفض الدعوة</h3></a></pre>";
+
+            _emailService.Send(
+                to: emails,
+                subject: "منصة الحوار عبر ACUHelpdesk",
+                html: $@"<h2>كلمة السر الخاصة بهذا الحوار</h2>
+                         {message}"
+            );
+        }
+
         private bool NegotiationExists(int id)
         {
             return _context.Negotiations.Any(e => e.Id == id);
         }
+
     }
 }

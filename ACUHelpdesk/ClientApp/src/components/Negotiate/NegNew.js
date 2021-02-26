@@ -15,19 +15,18 @@ import { TreeSelect } from "antd";
 import "./BootStrap.css";
 
 const NegNew = props => {
-  const { onClose, lng, show, doSubmit, user, data } = props;
+  const { onClose, lng, show, doSubmit, user, neg } = props;
   const [prods, setProds] = useState([]);
   const [membs, setMembs] = useState([]);
-  const [products, setProducts] = useState(data.products);
-  const [members, setMembers] = useState(data.members);
+  const [products, setProducts] = useState(neg.products || []);
+  const [members, setMembers] = useState(neg.members || []);
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [neg, setNeg] = useState(data);
+  // const [neg, setNeg] = useState(data);
   const [formData, setFormData] = useState({
-    negName: data.title,
-    negSubject: data.subject,
+    negName: neg.title || "",
+    negSubject: neg.subject || "",
     negPassCode: "",
-    negCreatedBy: data.createdBy,
+    negCreatedBy: neg.createdBy || "",
   });
 
   const { t } = useTranslation();
@@ -70,7 +69,6 @@ const NegNew = props => {
       }
     }
     getHSD();
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -88,19 +86,6 @@ const NegNew = props => {
     }
     getMembers();
   }, []);
-
-  const loading = () => {
-    return (
-      <>
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Loading...
-      </>
-    );
-  };
 
   const { negName, negSubject, negPassCode } = formData;
 

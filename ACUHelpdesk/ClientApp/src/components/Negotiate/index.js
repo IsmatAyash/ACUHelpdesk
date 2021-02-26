@@ -9,6 +9,7 @@ import {
   deleteNegotiation,
   postNegotiation,
   updateNegotiation,
+  getNegotiation,
 } from "../../services/negService";
 import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
@@ -26,6 +27,7 @@ const Negotiate = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [negIdToDel, setNegIdToDel] = useState({});
   const [isloading, setIsloading] = useState(true);
+  const [mode, setMode] = useState("");
 
   const handleClose = () => setShow(false);
 
@@ -47,19 +49,11 @@ const Negotiate = () => {
         break;
       }
       default: {
-          setNeg({
-            id: 0,
-            negName: "",
-            negSubject: "",
-            negPassCode: "",
-            products: [],
-            members: [],
-          });
-          setShow(true);
+        setNeg({ id: 0 });
+        setShow(true);
         break;
       }
     }
-    console.log("neg populated to pass to form", neg);
   };
 
   const handleNegDelete = async () => {
@@ -102,9 +96,22 @@ const Negotiate = () => {
   }, []);
 
   useEffect(() => {
-    setNegs([...negs, mapToViewModel(neg)]);
+    let isSubscribed = true;
+    if (mode === "add") {
+      if (isSubscribed) setNegs([...negs, neg]);
+    } else {
+      if (isSubscribed) updateNegs(neg);
+    }
     populateMembers(neg);
-  }, [neg]);
+    return () => (isSubscribed = false);
+  }, [mode]);
+
+  const updateNegs = ng => {
+    let negscopy = [...negs];
+    negscopy = negscopy.filter(n => n.id !== ng.id);
+    negscopy = [...negscopy, ng];
+    setNegs(negscopy);
+  };
 
   const mapToViewModel = neg => {
     return {
@@ -114,8 +121,8 @@ const Negotiate = () => {
       status: neg.negStatus,
       createdAt: neg.negCreatedAt,
       initiatedAt: neg.negInitiatedAt,
-      products: neg.products,
-      members: neg.members,
+      products: neg.products || neg.negotiationProducts,
+      members: neg.members || neg.negotiationMembers,
       createdBy: neg.negCreatedBy || user.fullName,
     };
   };
@@ -140,14 +147,15 @@ const Negotiate = () => {
     try {
       if (neg.id !== 0) {
         await updateNegotiation(negotiation);
-        setIsloading(true);
-        const { data } = await getNegotiations();
-        setIsloading(false);
-        setNegs(data.map(d => mapToViewModel(d)));
+        const { data: updatedNeg } = await getNegotiation(neg.id);
+        setNeg(mapToViewModel(updatedNeg[0]));
+        setMode("edit");
         toast.success("لقد تم تعديل هذه المفاوضات بنجاح");
       } else {
-        const { data: neg } = await postNegotiation(negotiation);
-        setNeg(neg);
+        const { data: newNeg } = await postNegotiation(negotiation);
+        const { data } = await getNegotiation(newNeg.id);
+        setNeg(mapToViewModel(data[0]));
+        setMode("add");
         toast.success("لقد تم تعريف هذه المفاوضات بنجاح");
       }
     } catch (ex) {
@@ -156,17 +164,10 @@ const Negotiate = () => {
         toast.error(`Something has failed ,${ex.response.data.message}`);
       }
     }
+
     setNeg({});
     setShow(false);
   };
-
-  // const updateNegs = neg => {
-  //   let negscopy = [...negs];
-  //   negscopy = negscopy.filter(n => n.id !== neg.id);
-  //   negscopy = [...negscopy, mapToViewModel(neg)];
-  //   setNegs(negscopy);
-  //   populateMembers(neg);
-  // };
 
   return (
     <NegContainer fluid>
@@ -177,7 +178,7 @@ const Negotiate = () => {
           user={user}
           lng={lng}
           show
-          data={neg}
+          neg={neg}
         />
       )}
       {showConfirm && (

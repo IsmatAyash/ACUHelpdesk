@@ -23,3 +23,7 @@ export const updateNegotiation = neg => {
 export function deleteNegotiation(negId) {
   return http.delete(negUrl(negId));
 }
+
+export function getNegotiation(negId) {
+  return http.get(negUrl(negId));
+}
