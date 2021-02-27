@@ -43,10 +43,10 @@ namespace ACUHelpdesk.Models
                 new Role { Id = 1, Name = "Admin" },
                 new Role { Id = 2, Name = "User" });
 
-            modelBuilder.Entity<Product>().HasData(
-                new Product { Id = 1, NomenclatureCode = "HS", Tier = 2, ProductCode = "0101", ProductDescriptionAR = "خيول وحمير", ParentID = null, ParentCode = "" },
-                new Product { Id = 2, NomenclatureCode = "HS", Tier = 3, ProductCode = "010101", ProductDescriptionAR = "خيول وحمير 2", ParentID = 1, ParentCode = "0101" },
-                new Product { Id = 3, NomenclatureCode = "HS", Tier = 3, ProductCode = "010102", ProductDescriptionAR = "خيول وحمير 1", ParentID = 1, ParentCode = "0101" });
+            //modelBuilder.Entity<Product>().HasData(
+            //    new Product { Id = 1, NomenclatureCode = "HS", Tier = 2, ProductCode = "0101", ProductDescriptionAR = "خيول وحمير", ParentID = null, ParentCode = "" },
+            //    new Product { Id = 2, NomenclatureCode = "HS", Tier = 3, ProductCode = "010101", ProductDescriptionAR = "خيول وحمير 2", ParentID = 1, ParentCode = "0101" },
+            //    new Product { Id = 3, NomenclatureCode = "HS", Tier = 3, ProductCode = "010102", ProductDescriptionAR = "خيول وحمير 1", ParentID = 1, ParentCode = "0101" });
 
 
             modelBuilder.Entity<Country>().HasData(
@@ -99,95 +99,95 @@ namespace ACUHelpdesk.Models
                     Avatar = "layale.jpg"
                 });
 
-            modelBuilder.Entity<Negotiation>().HasData(
-                new Negotiation
-                {
-                    Id = 1,
-                    NegName = "منصة التفاوض لبنان الأردن",
-                    NegSubject = "التعريفة الجمركية الموح",
-                    NegStatus = "Active",
-                    NegCreatedAt = new DateTime(2021, 2, 14),
-                    UserId = 1
-                },
-                new Negotiation 
-                {
-                    Id = 2,
-                    NegName = "آليات التعويض والتضامن",
-                    NegSubject = "منصة التفاوض لبنان الأردن",
-                    NegStatus = "Pending",
-                    NegCreatedAt = new DateTime(2021, 1, 20),
-                    UserId = 1
-                });
+            //modelBuilder.Entity<Negotiation>().HasData(
+            //    new Negotiation
+            //    {
+            //        Id = 1,
+            //        NegName = "منصة التفاوض لبنان الأردن",
+            //        NegSubject = "التعريفة الجمركية الموح",
+            //        NegStatus = "Active",
+            //        NegCreatedAt = new DateTime(2021, 2, 14),
+            //        UserId = 1
+            //    },
+            //    new Negotiation 
+            //    {
+            //        Id = 2,
+            //        NegName = "آليات التعويض والتضامن",
+            //        NegSubject = "منصة التفاوض لبنان الأردن",
+            //        NegStatus = "Pending",
+            //        NegCreatedAt = new DateTime(2021, 1, 20),
+            //        UserId = 1
+            //    });
 
-            modelBuilder.Entity<NegotiationMember>().HasData(
-                new NegotiationMember
-                {
-                    Id = 1,
-                    MemberStatus = "Active",
-                    ActionAt = new DateTime(2021, 2, 14),
-                    UserId = 1,
-                    NegotiationId = 1,
-                    isLeader = true,
-                    OnlineStatus = true
-                },
-                new NegotiationMember
-                {
-                    Id = 2,
-                    MemberStatus = "Active",
-                    ActionAt = new DateTime(2021, 2, 14),
-                    UserId = 2,
-                    NegotiationId = 1,
-                    isLeader = false,
-                    OnlineStatus = true
-                });
+            //modelBuilder.Entity<NegotiationMember>().HasData(
+            //    new NegotiationMember
+            //    {
+            //        Id = 1,
+            //        MemberStatus = "Active",
+            //        ActionAt = new DateTime(2021, 2, 14),
+            //        UserId = 1,
+            //        NegotiationId = 1,
+            //        isLeader = true,
+            //        OnlineStatus = true
+            //    },
+            //    new NegotiationMember
+            //    {
+            //        Id = 2,
+            //        MemberStatus = "Active",
+            //        ActionAt = new DateTime(2021, 2, 14),
+            //        UserId = 2,
+            //        NegotiationId = 1,
+            //        isLeader = false,
+            //        OnlineStatus = true
+            //    });
 
-            modelBuilder.Entity<NegotiationProduct>().HasData(
-                new NegotiationProduct
-                {
-                    Id = 1,
-                    ProductId = 2,
-                    NegotiationId = 1,
-                    Tariff = (decimal)12.12
-                },
-                new NegotiationProduct
-                {
-                    Id = 2,
-                    ProductId = 3,
-                    NegotiationId = 1,
-                    Tariff = (decimal)11.10
-                });
+            //modelBuilder.Entity<NegotiationProduct>().HasData(
+            //    new NegotiationProduct
+            //    {
+            //        Id = 1,
+            //        ProductId = 2,
+            //        NegotiationId = 1,
+            //        Tariff = (decimal)12.12
+            //    },
+            //    new NegotiationProduct
+            //    {
+            //        Id = 2,
+            //        ProductId = 3,
+            //        NegotiationId = 1,
+            //        Tariff = (decimal)11.10
+            //    });
 
 
-            modelBuilder.Entity<NegotiationMember>().HasData(
-                new NegotiationMember
-                {
-                    Id = 3,
-                    MemberStatus = "Active",
-                    ActionAt = new DateTime(2021, 2, 14),
-                    UserId = 1,
-                    NegotiationId = 2,
-                    isLeader = true,
-                    OnlineStatus = true,
-                },
-                new NegotiationMember
-                {
-                    Id = 4,
-                    MemberStatus = "Active",
-                    ActionAt = new DateTime(2021, 2, 14),
-                    UserId = 2,
-                    NegotiationId = 2,
-                    isLeader = false,
-                    OnlineStatus = false
-                });
+            //modelBuilder.Entity<NegotiationMember>().HasData(
+            //    new NegotiationMember
+            //    {
+            //        Id = 3,
+            //        MemberStatus = "Active",
+            //        ActionAt = new DateTime(2021, 2, 14),
+            //        UserId = 1,
+            //        NegotiationId = 2,
+            //        isLeader = true,
+            //        OnlineStatus = true,
+            //    },
+            //    new NegotiationMember
+            //    {
+            //        Id = 4,
+            //        MemberStatus = "Active",
+            //        ActionAt = new DateTime(2021, 2, 14),
+            //        UserId = 2,
+            //        NegotiationId = 2,
+            //        isLeader = false,
+            //        OnlineStatus = false
+            //    });
 
-            modelBuilder.Entity<NegotiationProduct>().HasData(
-                new NegotiationProduct
-                {
-                    Id = 3,
-                    ProductId = 3,
-                    NegotiationId = 2,
-                    Tariff = (decimal)10.23
-                });
+            //modelBuilder.Entity<NegotiationProduct>().HasData(
+            //    new NegotiationProduct
+            //    {
+            //        Id = 3,
+            //        ProductId = 3,
+            //        NegotiationId = 2,
+            //        Tariff = (decimal)10.23
+            //    });
 
         }
     }

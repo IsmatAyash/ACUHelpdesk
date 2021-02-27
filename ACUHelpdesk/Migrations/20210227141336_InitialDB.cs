@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ACUHelpdesk.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,12 +68,12 @@ namespace ACUHelpdesk.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     PassCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PassCodeExpires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PassCodeExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NegPassCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NegPassCodeExpires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NegPassCodeExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
-                    ActivationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ActivationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,8 +101,8 @@ namespace ACUHelpdesk.Migrations
                     NegName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NegSubject = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NegStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NegCreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NegInitiatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NegCreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NegInitiatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -154,9 +154,10 @@ namespace ACUHelpdesk.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MemberStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ActionAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ActionAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     isLeader = table.Column<bool>(type: "bit", nullable: false),
                     OnlineStatus = table.Column<bool>(type: "bit", nullable: false),
+                    Notified = table.Column<bool>(type: "bit", nullable: false),
                     NegotiationId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -218,9 +219,10 @@ namespace ACUHelpdesk.Migrations
                     { 17, "SM", "SOM", "Somalia", "الصومال" },
                     { 16, "SA", "SAU", "Saudi Arabia", "السعودية" },
                     { 15, "QA", "QAT", "Qatar", "قطر" },
+                    { 14, "PL", "PSE", "Palestine", "فلسطين" },
                     { 13, "OM", "OMN", "Oman", "عمان" },
                     { 12, "MA", "MAR", "Morocco", "المغرب" },
-                    { 14, "PL", "PSE", "Palestine", "فلسطين" },
+                    { 11, "MR", "MRT", "Mauritania", "موريتانيا" },
                     { 10, "LY", "LBY", "Libya", "ليبيا" },
                     { 9, "LB", "LBN", "Lebanon", "لبنان" },
                     { 8, "KW", "KWT", "Kuwait", "الكويت" },
@@ -229,18 +231,7 @@ namespace ACUHelpdesk.Migrations
                     { 5, "EG", "EGY", "Egypt", "مصر" },
                     { 4, "DJ", "DJI", "Djibouti", "جيبوتي" },
                     { 3, "KM", "COM", "Comoros", "جزر القمر" },
-                    { 2, "BH", "BHR", "Bahrain", "البحرين " },
-                    { 11, "MR", "MRT", "Mauritania", "موريتانيا" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Product",
-                columns: new[] { "Id", "NomenclatureCode", "ParentCode", "ParentID", "ProductCode", "ProductDescription", "ProductDescriptionAR", "Tier" },
-                values: new object[,]
-                {
-                    { 1, "HS", "", null, "0101", null, "خيول وحمير", 2 },
-                    { 2, "HS", "0101", 1, "010101", null, "خيول وحمير 2", 3 },
-                    { 3, "HS", "0101", 1, "010102", null, "خيول وحمير 1", 3 }
+                    { 2, "BH", "BHR", "Bahrain", "البحرين " }
                 });
 
             migrationBuilder.InsertData(
@@ -255,43 +246,12 @@ namespace ACUHelpdesk.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "Ismat", "Ayash", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEJMGdicwUrVEwAY15mX/PLFQEQjXADW0hunoGIoEUuy2OErYeembW+k1eU2AS5ceqQ==", 1 });
+                values: new object[] { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEDx62uXyklI+Mu5bsSMdboc9TmwpMsdr2rmogsZ842S/aj7DNHbE0GiuoD2gkm3PNQ==", 1 });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "layale.jpg", 7, "layale@gmail.com", "Layale", "Bassil", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "AQAAAAEAACcQAAAAEE1MjRJLInp5ckLAKJUYIBS4UxHfN31bMe3Z3XwTpHpY1mQEt5UKB5Y3adeotngIkg==", 1 });
-
-            migrationBuilder.InsertData(
-                table: "Negotiation",
-                columns: new[] { "Id", "NegCreatedAt", "NegInitiatedAt", "NegName", "NegStatus", "NegSubject", "UserId" },
-                values: new object[] { 1, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "منصة التفاوض لبنان الأردن", "Active", "التعريفة الجمركية الموح", 1 });
-
-            migrationBuilder.InsertData(
-                table: "Negotiation",
-                columns: new[] { "Id", "NegCreatedAt", "NegInitiatedAt", "NegName", "NegStatus", "NegSubject", "UserId" },
-                values: new object[] { 2, new DateTime(2021, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "آليات التعويض والتضامن", "Pending", "منصة التفاوض لبنان الأردن", 1 });
-
-            migrationBuilder.InsertData(
-                table: "NegotiationMember",
-                columns: new[] { "Id", "ActionAt", "MemberStatus", "NegotiationId", "OnlineStatus", "UserId", "isLeader" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Active", 1, true, 1, true },
-                    { 2, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Active", 1, true, 2, false },
-                    { 3, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Active", 2, true, 1, true },
-                    { 4, new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Active", 2, false, 2, false }
-                });
-
-            migrationBuilder.InsertData(
-                table: "NegotiationProduct",
-                columns: new[] { "Id", "NegotiationId", "ProductId", "Tariff" },
-                values: new object[,]
-                {
-                    { 1, 1, 2, 12.12m },
-                    { 2, 1, 3, 11.1m },
-                    { 3, 2, 3, 10.23m }
-                });
+                values: new object[] { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAEMI9yxoemFVgDT8n8wYXJWrkcbhEBPLVIgdDsyNclm0Bo757EnpzBzRR32f1BCBxXw==", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Negotiation_UserId",

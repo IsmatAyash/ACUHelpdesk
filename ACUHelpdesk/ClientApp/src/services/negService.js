@@ -27,3 +27,7 @@ export function deleteNegotiation(negId) {
 export function getNegotiation(negId) {
   return http.get(negUrl(negId));
 }
+
+export function postInvitation(obj) {
+  return http.post(`${apiEndpoint}/invitation`, { obj });
+}

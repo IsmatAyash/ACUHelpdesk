@@ -1,15 +1,33 @@
 import React from "react";
-import { Row, Col, Image, ListGroup } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Button,
+  ButtonGroup,
+} from "react-bootstrap";
 import { OnlineIcon } from "./NegMemberElements";
+import { FaRegCheckCircle, FaRegWindowClose } from "react-icons/fa";
+import IconButton from "./IconButton";
 
-const image = require("../../images/avatarPlaceholder.png");
-
-const NegMember = ({ members, lastMsg, lng }) => {
+const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
   return (
     <React.Fragment>
       {members &&
         members.map(
-          ({ memberId, memberName, avatar, onlineStatus, flag }, index) => (
+          (
+            {
+              id,
+              memberId,
+              memberName,
+              avatar,
+              onlineStatus,
+              memberStatus,
+              flag,
+            },
+            index
+          ) => (
             <ListGroup.Item
               as="li"
               className="py-1"
@@ -28,7 +46,7 @@ const NegMember = ({ members, lastMsg, lng }) => {
                     //   e.target.src = "/images/avatarPlaceholder.png";
                     // }}
                   />
-                  <OnlineIcon online={onlineStatus} lng={lng} />
+                  <OnlineIcon online={memberStatus} lng={lng} />
                 </Col>
                 <Col sm={10}>
                   <div className="d-flex w-100 justify-content-between">
@@ -40,7 +58,56 @@ const NegMember = ({ members, lastMsg, lng }) => {
                     />
                   </div>
                   <div className="d-flex w-100 justify-content-between">
-                    <small className="text-wrap text-muted">{lastMsg}</small>
+                    {memberStatus !== "Pending" ? (
+                      <small className="text-wrap text-muted">
+                        {memberStatus === "Rejected" ? (
+                          <h5> رفض المشاركة</h5>
+                        ) : (
+                          lastMsg
+                        )}
+                      </small>
+                    ) : (
+                      <ButtonGroup className="text-left">
+                        <IconButton
+                          icon={
+                            <FaRegCheckCircle
+                              style={{ color: "var(--success)" }}
+                            />
+                          }
+                          tooltip="قبول الدعوة"
+                          placement="bottom"
+                          onAction={() => onInvitation(id, "Accepted")}
+                        />
+                        <IconButton
+                          icon={
+                            <FaRegWindowClose
+                              style={{ color: "var(--danger)" }}
+                            />
+                          }
+                          tooltip="رفض الدعوة"
+                          placement="bottom"
+                          onAction={() => onInvitation(id, "Rejected")}
+                        />
+
+                        {/* <Button
+                          variant="outline-success"
+                          size="sm"
+                          className="ml-2"
+                          onClick={() => onInvitation(id, "Accepted")}
+                        >
+                          <FaRegCheckCircle className="ml-1" />
+                          قبول
+                        </Button>
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => onInvitation(id, "Rejected")}
+                        >
+                          <FaRegWindowClose className="ml-1" />
+                          رفض
+                        </Button> */}
+                      </ButtonGroup>
+                    )}
                     <small className="text-muted">3 days ago</small>
                   </div>
                 </Col>

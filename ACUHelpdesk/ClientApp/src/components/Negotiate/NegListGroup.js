@@ -26,6 +26,7 @@ const NegListGroup = ({
   onAction,
   placement,
   tooltip,
+  onInvitation,
 }) => {
   const { t } = useTranslation();
 
@@ -63,7 +64,12 @@ const NegListGroup = ({
       <Card.Body className="p-0 m-0">
         {memb ? (
           <NegMemberListGroup as="ul" lng={lng}>
-            <NegMember members={data} lng={lng} lastMsg="مرحبا يا أحلى عالم" />
+            <NegMember
+              members={data}
+              lng={lng}
+              lastMsg="مرحبا يا أحلى عالم"
+              onInvitation={onInvitation}
+            />
           </NegMemberListGroup>
         ) : (
           <NegMemberListGroup as="ul" lng={lng}>

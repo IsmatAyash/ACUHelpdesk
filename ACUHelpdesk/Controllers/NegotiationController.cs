@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ACUHelpdesk.Models;
 using ACUHelpdesk.Services;
+using ACUHelpdesk.Helpers;
+using ACUHelpdesk.ViewModels;
 
 namespace ACUHelpdesk.Controllers
 {
@@ -47,6 +49,7 @@ namespace ACUHelpdesk.Controllers
                                      NegCreatedBy = r.User.FirstName + " " + r.User.LastName,
                                      Members = r.NegotiationMembers.Select(m => new 
                                      { 
+                                         Id = m.Id,
                                          MemberId = m.UserId, 
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName,
                                          Avatar = String.IsNullOrEmpty(m.User.Avatar)
@@ -162,6 +165,13 @@ namespace ACUHelpdesk.Controllers
 
             try
             {
+                var members = negotiation.NegotiationMembers.Where(nm => nm.Notified == false).Join(_context.Users, n => n.UserId, u => u.Id, (n, u) => new { n.Id, u.Email }).ToArray();
+                foreach (var member in members)
+                {
+                    sendNegInvitationEmail(negotiation.NegSubject, negotiation.NegName, member.Id, member.Email, Request.Headers["origin"]);
+                }
+
+                negotiation.NegotiationMembers.ToList().ForEach(nm => { nm.Notified = true; nm.MemberStatus = "Pending"; nm.isLeader = nm.UserId == negotiation.User.Id; });
                 negotiation.NegStatus = "Pending";
                 negotiation.NegCreatedAt = DateTime.Now;
                 await _context.Negotiations.AddAsync(negotiation);
@@ -172,10 +182,37 @@ namespace ACUHelpdesk.Controllers
                 return BadRequest(new { message = ex.Message });
             }
 
-            sendNegPasscodeEmail(negotiation.NegSubject, negotiation.NegName, "PassCode", "ismat.ayash@icloud.com" , Request.Headers["origin"]);
 
             return CreatedAtAction(nameof(GetNegotiation), new { id = negotiation.Id }, negotiation);
+
         }
+
+        [HttpPost("invitation")]
+        public void Invitation(NegInvitationRequest model)
+        {
+            var member = _context.NegotiationMembers.SingleOrDefault(x => x.Id == model.MemberId);
+
+            if (member == null) throw new AppException("Request failed");
+
+            member.MemberStatus = model.Selection;
+
+            _context.NegotiationMembers.Update(member);
+            _context.SaveChanges();
+        }
+
+        [HttpPost("reject-negotiation")]
+        public void RejectNegotiation(int memberid)
+        {
+            var member = _context.NegotiationMembers.SingleOrDefault(x => x.Id == memberid);
+
+            if (member == null) throw new AppException("Request failed");
+
+            member.MemberStatus = "Rejected";
+
+            _context.NegotiationMembers.Update(member);
+            _context.SaveChanges();
+        }
+
 
         // DELETE: api/Negotiation/5
         [HttpDelete("{id}")]
@@ -193,14 +230,13 @@ namespace ACUHelpdesk.Controllers
             return NoContent();
         }
 
-        private void sendNegPasscodeEmail(string subject, string title, string passcode, string emails, string origin)
+        private void sendNegInvitationEmail(string subject, string title, int memberId, string emails, string origin)
         {
-            var acceptUrl = $"{origin}/accept-negotiation";
-            var rejectUrl = $"{origin}/reject-negotiation";
+            var acceptUrl = $"{origin}/invitation?memberId={memberId}&selection=Accept";
+            var rejectUrl = $"{origin}/invitation?memberId={memberId}&selection=Reject";
             string message;
             message = $@"<p>تفضلوا بقبول أو رفض الحوار تحت العنوان {title} حول {subject} </p>
-            <p>في حال قبول الدعوى للحوار، أدخل كلمة السر المرفقة لتفعيل هذه الدعوة </p>
-            <p><code>{passcode}</code></p>
+            <p>في حال قبول الدعوى للحوار، سوف يتم تفعيلها مباشرة كما ويمكن تفعيلها كذلك من خلال صفحة المفاوضات بعد الدخول الناجح إلى التطبيق </p>
             <pre><a href=""{acceptUrl}""><h3>قبول الدعوة</h3></a> <a href=""{rejectUrl}""><h3>رفض الدعوة</h3></a></pre>";
 
             _emailService.Send(

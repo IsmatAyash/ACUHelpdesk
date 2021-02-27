@@ -11,23 +11,23 @@ namespace ACUHelpdesk.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NegotiationMemberController : ControllerBase
+    public class MemberController : ControllerBase
     {
         private readonly ACUContext _context;
 
-        public NegotiationMemberController(ACUContext context)
+        public MemberController(ACUContext context)
         {
             _context = context;
         }
 
-        // GET: api/NegotiationMember
+        // GET: api/Member
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NegotiationMember>>> GetNegotiationMembers()
         {
             return await _context.NegotiationMembers.ToListAsync();
         }
 
-        // GET: api/NegotiationMember/5
+        // GET: api/Member/5
         [HttpGet("{id}")]
         public async Task<ActionResult<NegotiationMember>> GetNegotiationMember(int id)
         {
@@ -41,38 +41,44 @@ namespace ACUHelpdesk.Controllers
             return negotiationMember;
         }
 
-        // PUT: api/NegotiationMember/5
+        // PUT: api/Member/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNegotiationMember(int id, NegotiationMember negotiationMember)
+        public async Task<IActionResult> PutNegotiationMember(int id, NegotiationMember member)
         {
-            if (id != negotiationMember.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(negotiationMember).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NegotiationMemberExists(id))
+                if (member == null)
+                {
+                    return BadRequest(new { message = "Member data sent to server was null" });
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Invalid model object" });
+                }
+                var negMember = await _context.NegotiationMembers
+                                        .SingleOrDefaultAsync(n => n.Id == id);
+                if (negMember == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                negMember.MemberStatus = member.MemberStatus;
+                negMember.ActionAt = member.ActionAt;
+                negMember.isLeader = member.isLeader;
+                negMember.OnlineStatus = member.OnlineStatus;
+
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        // POST: api/NegotiationMember
+        // POST: api/Member
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<NegotiationMember>> PostNegotiationMember(NegotiationMember negotiationMember)
@@ -83,7 +89,7 @@ namespace ACUHelpdesk.Controllers
             return CreatedAtAction("GetNegotiationMember", new { id = negotiationMember.Id }, negotiationMember);
         }
 
-        // DELETE: api/NegotiationMember/5
+        // DELETE: api/Member/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNegotiationMember(int id)
         {

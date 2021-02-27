@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import queryString from "query-string";
-import { userService } from "../../services/userService";
+import { postInvitation } from "../../services/negService";
 import { toast } from "react-toastify";
 import { Card } from "react-bootstrap";
 
-const VerifyEmail = ({ history }) => {
+const Invitation = ({ history }) => {
   const EmailStatus = {
     Verifying: "Verifying",
     Failed: "Failed",
@@ -15,11 +15,10 @@ const VerifyEmail = ({ history }) => {
   const [emailStatus, setEmailStatus] = useState(EmailStatus.Verifying);
 
   useEffect(() => {
-    const { passcode } = queryString.parse(location.search);
-    console.log(passcode);
+    const { memberId, selection } = queryString.parse(location.search);
     async function verify() {
       try {
-        await userService.verifyEmail(passcode);
+        await postInvitation({ memberId, selection });
         toast.success("Verification successful, you can now login.");
         history.push("login");
       } catch (ex) {
@@ -55,4 +54,4 @@ const VerifyEmail = ({ history }) => {
   );
 };
 
-export default VerifyEmail;
+export default Invitation;

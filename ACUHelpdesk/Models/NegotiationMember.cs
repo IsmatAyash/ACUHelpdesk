@@ -23,6 +23,8 @@ namespace ACUHelpdesk.Models
         [DefaultValue(false)]
         public bool OnlineStatus { get; set; }
 
+        public bool Notified { get; set; }
+
         [ForeignKey("Negotiation")]
         public int NegotiationId { get; set; }
         public virtual Negotiation Negotiation { get; set; }

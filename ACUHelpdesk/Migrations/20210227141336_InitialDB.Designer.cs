@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACUHelpdesk.Migrations
 {
     [DbContext(typeof(ACUContext))]
-    [Migration("20210221110833_Notnullupd")]
-    partial class Notnullupd
+    [Migration("20210227141336_InitialDB")]
+    partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -253,26 +253,6 @@ namespace ACUHelpdesk.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Negotiation");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NegCreatedAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NegName = "منصة التفاوض لبنان الأردن",
-                            NegStatus = "Active",
-                            NegSubject = "التعريفة الجمركية الموح",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NegCreatedAt = new DateTime(2021, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NegName = "آليات التعويض والتضامن",
-                            NegStatus = "Pending",
-                            NegSubject = "منصة التفاوض لبنان الأردن",
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationDiscussion", b =>
@@ -328,6 +308,9 @@ namespace ACUHelpdesk.Migrations
                     b.Property<int>("NegotiationId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Notified")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("OnlineStatus")
                         .HasColumnType("bit");
 
@@ -344,48 +327,6 @@ namespace ACUHelpdesk.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("NegotiationMember");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberStatus = "Active",
-                            NegotiationId = 1,
-                            OnlineStatus = true,
-                            UserId = 1,
-                            isLeader = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberStatus = "Active",
-                            NegotiationId = 1,
-                            OnlineStatus = true,
-                            UserId = 2,
-                            isLeader = false
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberStatus = "Active",
-                            NegotiationId = 2,
-                            OnlineStatus = true,
-                            UserId = 1,
-                            isLeader = true
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ActionAt = new DateTime(2021, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MemberStatus = "Active",
-                            NegotiationId = 2,
-                            OnlineStatus = false,
-                            UserId = 2,
-                            isLeader = false
-                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationProduct", b =>
@@ -411,29 +352,6 @@ namespace ACUHelpdesk.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("NegotiationProduct");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NegotiationId = 1,
-                            ProductId = 2,
-                            Tariff = 12.12m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NegotiationId = 1,
-                            ProductId = 3,
-                            Tariff = 11.1m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NegotiationId = 2,
-                            ProductId = 3,
-                            Tariff = 10.23m
-                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.Product", b =>
@@ -467,37 +385,6 @@ namespace ACUHelpdesk.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Product");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NomenclatureCode = "HS",
-                            ParentCode = "",
-                            ProductCode = "0101",
-                            ProductDescriptionAR = "خيول وحمير",
-                            Tier = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NomenclatureCode = "HS",
-                            ParentCode = "0101",
-                            ParentID = 1,
-                            ProductCode = "010101",
-                            ProductDescriptionAR = "خيول وحمير 2",
-                            Tier = 3
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NomenclatureCode = "HS",
-                            ParentCode = "0101",
-                            ParentID = 1,
-                            ProductCode = "010102",
-                            ProductDescriptionAR = "خيول وحمير 1",
-                            Tier = 3
-                        });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.Role", b =>
@@ -591,7 +478,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "ismat.ayash@gmail.com",
                             FirstName = "عصمت",
                             LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAENGbcmSv1pnFjqB4PsDiek/4kQMqrI4oz7CUJW1//OfuIqsgdGYy2cOXkRNPL9i2EA==",
+                            Password = "AQAAAAEAACcQAAAAEDx62uXyklI+Mu5bsSMdboc9TmwpMsdr2rmogsZ842S/aj7DNHbE0GiuoD2gkm3PNQ==",
                             RoleId = 1
                         },
                         new
@@ -603,7 +490,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "layale@gmail.com",
                             FirstName = "ليال",
                             LastName = "باسيل",
-                            Password = "AQAAAAEAACcQAAAAENum+ytpNIgyl9ctgnlql8YVJoYRFEGw8ZkjsHddmhd2hStAatcT49Pg0LQ7+f9jwA==",
+                            Password = "AQAAAAEAACcQAAAAEMI9yxoemFVgDT8n8wYXJWrkcbhEBPLVIgdDsyNclm0Bo757EnpzBzRR32f1BCBxXw==",
                             RoleId = 1
                         });
                 });

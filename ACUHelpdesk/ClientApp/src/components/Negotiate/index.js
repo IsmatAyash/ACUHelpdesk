@@ -11,6 +11,7 @@ import {
   updateNegotiation,
   getNegotiation,
 } from "../../services/negService";
+import { updateMember } from "../../services/memberService";
 import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
@@ -169,6 +170,24 @@ const Negotiate = () => {
     setShow(false);
   };
 
+  const handleInvitation = async (id, answer) => {
+    try {
+      const membscopy = [...members];
+      let member = membscopy.filter(m => m.id === id);
+      member = { ...member[0], memberStatus: answer };
+      await updateMember(member);
+      const membs = [...members];
+      const index = membs.findIndex(x => x.id === id);
+      membs[index] = { ...membs[index], memberStatus: answer };
+      setMembers(membs);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        // setErrors({ ...errors, message: ex.response.data.message });
+        toast.error(`لم يتم التعديل ,${ex.response.data.message}`);
+      }
+    }
+  };
+
   return (
     <NegContainer fluid>
       {show && (
@@ -279,6 +298,7 @@ const Negotiate = () => {
             addIcon={<MdGroupAdd />}
             data={members}
             memb={true}
+            onInvitation={handleInvitation}
           />
         </NegMemberCol>
       </NegRow>

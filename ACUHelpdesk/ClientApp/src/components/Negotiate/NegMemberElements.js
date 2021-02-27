@@ -73,10 +73,9 @@ export const OnlineIcon = styled.span`
   ${({ lng }) => (lng === "ar" ? `right: 0.4em;` : `left: 0.4em;`)}
   border: 1px solid white;
   ${({ online }) =>
-    online
-      ? `background-color: #4cd137;`
-      : `background-color: #c23616 !important;
-  `}
+    (online === "Accepted" && `background-color: #4cd137;`) ||
+    (online === "Rejected" && `background-color: #c23616 !important;`) ||
+    `background-color: gray !important;`}
 `;
 
 export const NegIconButton = styled.i`

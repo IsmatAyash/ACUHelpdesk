@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import {
   Badge,
@@ -11,6 +11,7 @@ import {
   Button,
 } from "react-bootstrap";
 import { MdInfoOutline, MdPlayCircleOutline } from "react-icons/md";
+import { UserContext } from "../../services/UserContext";
 
 const BadgeTag = styled(Badge)`
   padding: 6px;
@@ -26,6 +27,7 @@ const BadgeTag = styled(Badge)`
 `;
 
 const DisHeader = ({ negHeader }) => {
+  console.log("negHeader", negHeader);
   const {
     title,
     subject,
@@ -34,6 +36,7 @@ const DisHeader = ({ negHeader }) => {
     products,
     status,
   } = negHeader;
+  const { user } = useContext(UserContext);
   return (
     <Container style={{ minHeight: "12vh" }}>
       <Row
@@ -78,7 +81,12 @@ const DisHeader = ({ negHeader }) => {
             ))}
         </Col>
         <Col sm={4} className="px-0 mx-0">
-          <Button size="sm" className="ml-1" variant="outline-success">
+          <Button
+            size="sm"
+            className="ml-1"
+            variant="outline-success"
+            disabled={user.fullName !== createdBy}
+          >
             <MdPlayCircleOutline className="ml-1" />
             {status === "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
           </Button>

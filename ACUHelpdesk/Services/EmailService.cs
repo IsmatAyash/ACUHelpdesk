@@ -22,9 +22,11 @@ namespace ACUHelpdesk.Services
 
         public void Send(string to, string subject, string html, string from = null)
         {
+            var tos = to.Split(',');
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_appSettings.EmailFrom));
-            email.To.Add(MailboxAddress.Parse(to));
+            for(var i = 0; i < tos.Length; i++)
+                email.To.Add(MailboxAddress.Parse(tos[i]));
             email.Subject = subject;
             email.Body = new TextPart(TextFormat.Html) { Text = html };
 
