@@ -1,44 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { postInvitation } from "../../services/negService";
 import { toast } from "react-toastify";
-import { Card } from "react-bootstrap";
+import { Card, Row } from "react-bootstrap";
 
 const Invitation = ({ history }) => {
-  const EmailStatus = {
+  const MemberStatus = {
     Verifying: "Verifying",
     Failed: "Failed",
   };
   const location = useLocation();
 
-  const [emailStatus, setEmailStatus] = useState(EmailStatus.Verifying);
+  const [memberStatus, setMemberStatus] = useState(MemberStatus.Verifying);
 
   useEffect(() => {
-    const { memberId, selection } = queryString.parse(location.search);
+    const { Id, selection } = queryString.parse(location.search);
     async function verify() {
       try {
-        await postInvitation({ memberId, selection });
-        toast.success("Verification successful, you can now login.");
+        await postInvitation({ Id, selection });
+        toast.success(
+          "لقد تم قبول الدعوة وتفعلها، يمكن المشاركة بالحوار مباشرة"
+        );
         history.push("login");
       } catch (ex) {
-        setEmailStatus(EmailStatus.Failed);
+        setMemberStatus(MemberStatus.Failed);
       }
     }
     // remove token from url to prevent http referer leakage
     history.replace(location.pathname);
     verify();
-  }, [history, location.pathname, location.search, EmailStatus.Failed]);
+  }, [history, location.pathname, location.search, memberStatus.Failed]);
 
   function getBody() {
-    switch (emailStatus) {
-      case EmailStatus.Verifying:
-        return <div>Verifying...</div>;
-      case EmailStatus.Failed:
+    switch (memberStatus) {
+      case MemberStatus.Verifying:
+        return <div>يتم معالجة الرد...</div>;
+      case MemberStatus.Failed:
         return (
           <div>
-            Verification failed, you can also verify your account using the{" "}
-            <Link to="forgot-password">forgot password</Link> page.
+            لم يتم قبول وتفعيل الدعوة بنجاح، يمكن التفيل من خلال صفحة المفاوضات
+            بعد الدخول الناجح إلى التطبيق
           </div>
         );
       default:
@@ -47,10 +49,16 @@ const Invitation = ({ history }) => {
   }
 
   return (
-    <Card className="text-right">
-      <Card.Header>Verify Email</Card.Header>
-      <Card.Body>{getBody()}</Card.Body>
-    </Card>
+    <Row className="text-right justify-content-center align-items-center">
+      <Card>
+        <Card.Header>
+          <h4>
+            دعوة إلى حوار من خلال منصة تسهيل مفاوضات الإتحاد الجمركي العربي
+          </h4>
+        </Card.Header>
+        <Card.Body>{getBody()}</Card.Body>
+      </Card>
+    </Row>
   );
 };
 

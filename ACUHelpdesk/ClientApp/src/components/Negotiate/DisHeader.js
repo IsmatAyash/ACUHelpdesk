@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import {
   Badge,
@@ -7,11 +7,11 @@ import {
   Container,
   Row,
   Col,
-  ButtonGroup,
   Button,
 } from "react-bootstrap";
 import { MdInfoOutline, MdPlayCircleOutline } from "react-icons/md";
 import { UserContext } from "../../services/UserContext";
+import NegInfo from "./NegInfo";
 
 const BadgeTag = styled(Badge)`
   padding: 6px;
@@ -26,9 +26,11 @@ const BadgeTag = styled(Badge)`
   }
 `;
 
-const DisHeader = ({ negHeader }) => {
-  console.log("negHeader", negHeader);
+const DisHeader = ({ negHeader, onInitiateClose }) => {
+  const [infoShow, setInfoShow] = useState(false);
+  console.log("inside DisHeader", negHeader);
   const {
+    id,
     title,
     subject,
     createdBy,
@@ -85,16 +87,26 @@ const DisHeader = ({ negHeader }) => {
             size="sm"
             className="ml-1"
             variant="outline-success"
-            disabled={user.fullName !== createdBy}
+            disabled={
+              user.fullName !== createdBy ||
+              status === "Completed" ||
+              status === "Cancelled"
+            }
+            onClick={() => onInitiateClose(id, status)}
           >
             <MdPlayCircleOutline className="ml-1" />
-            {status === "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
+            {status !== "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
           </Button>
-          <Button size="sm" variant="outline-info">
+          <Button
+            size="sm"
+            variant="outline-info"
+            onClick={() => setInfoShow(true)}
+          >
             <MdInfoOutline className="ml-1" />
             معلومات
           </Button>
         </Col>
+        <NegInfo show={infoShow} onHide={() => setInfoShow(false)} />
       </Row>
     </Container>
   );

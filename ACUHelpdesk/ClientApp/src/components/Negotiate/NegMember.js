@@ -1,17 +1,22 @@
-import React from "react";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Button,
-  ButtonGroup,
-} from "react-bootstrap";
+import React, { useContext } from "react";
+import { Row, Col, Image, ListGroup, ButtonGroup } from "react-bootstrap";
 import { OnlineIcon } from "./NegMemberElements";
 import { FaRegCheckCircle, FaRegWindowClose } from "react-icons/fa";
 import IconButton from "./IconButton";
+import { UserContext } from "./../../services/UserContext";
 
 const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
+  console.log("members in negMember", members);
+  const { user } = useContext(UserContext);
+
+  const formatStatus = (actionat, memberstatus) => {
+    return actionat
+      ? `${memberstatus} ${Math.floor(
+          Math.abs(new Date() - new Date(actionat)) / (1000 * 60 * 60 * 24)
+        )} days ago`
+      : memberstatus;
+  };
+
   return (
     <React.Fragment>
       {members &&
@@ -25,6 +30,7 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
               onlineStatus,
               memberStatus,
               flag,
+              actionAt,
             },
             index
           ) => (
@@ -67,48 +73,34 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
                         )}
                       </small>
                     ) : (
-                      <ButtonGroup className="text-left">
-                        <IconButton
-                          icon={
-                            <FaRegCheckCircle
-                              style={{ color: "var(--success)" }}
-                            />
-                          }
-                          tooltip="قبول الدعوة"
-                          placement="bottom"
-                          onAction={() => onInvitation(id, "Accepted")}
-                        />
-                        <IconButton
-                          icon={
-                            <FaRegWindowClose
-                              style={{ color: "var(--danger)" }}
-                            />
-                          }
-                          tooltip="رفض الدعوة"
-                          placement="bottom"
-                          onAction={() => onInvitation(id, "Rejected")}
-                        />
-
-                        {/* <Button
-                          variant="outline-success"
-                          size="sm"
-                          className="ml-2"
-                          onClick={() => onInvitation(id, "Accepted")}
-                        >
-                          <FaRegCheckCircle className="ml-1" />
-                          قبول
-                        </Button>
-                        <Button
-                          variant="outline-danger"
-                          size="sm"
-                          onClick={() => onInvitation(id, "Rejected")}
-                        >
-                          <FaRegWindowClose className="ml-1" />
-                          رفض
-                        </Button> */}
-                      </ButtonGroup>
+                      memberId === user.userId && (
+                        <ButtonGroup className="text-left">
+                          <IconButton
+                            icon={
+                              <FaRegCheckCircle
+                                style={{ color: "var(--success)" }}
+                              />
+                            }
+                            tooltip="قبول الدعوة"
+                            placement="bottom"
+                            onAction={() => onInvitation(id, "Accepted")}
+                          />
+                          <IconButton
+                            icon={
+                              <FaRegWindowClose
+                                style={{ color: "var(--danger)" }}
+                              />
+                            }
+                            tooltip="رفض الدعوة"
+                            placement="bottom"
+                            onAction={() => onInvitation(id, "Rejected")}
+                          />
+                        </ButtonGroup>
+                      )
                     )}
-                    <small className="text-muted">3 days ago</small>
+                    <small className="text-muted">
+                      {formatStatus(actionAt, memberStatus)}
+                    </small>
                   </div>
                 </Col>
               </Row>

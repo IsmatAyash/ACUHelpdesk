@@ -31,7 +31,7 @@ namespace ACUHelpdesk.Controllers
         public async Task<ActionResult<IEnumerable<Negotiation>>> GetNegotiations()
         {
             var negotiations = await _context.Negotiations
-                                 .Include(u => u.User)
+                                 .Include(u => u.NegCreatedBy)
                                  .ThenInclude(c => c.Country)
                                  .Include(p => p.NegotiationProducts)
                                  .ThenInclude(p => p.Product)
@@ -46,7 +46,7 @@ namespace ACUHelpdesk.Controllers
                                      r.NegCreatedAt,
                                      r.NegName,
                                      r.NegInitiatedAt,
-                                     NegCreatedBy = r.User.FirstName + " " + r.User.LastName,
+                                     NegCreatedBy = r.NegCreatedBy.FirstName + " " + r.NegCreatedBy.LastName,
                                      Members = r.NegotiationMembers.Select(m => new 
                                      { 
                                          Id = m.Id,
@@ -58,6 +58,7 @@ namespace ACUHelpdesk.Controllers
                                          m.MemberStatus, 
                                          m.isLeader, 
                                          m.OnlineStatus,
+                                         m.ActionAt,
                                          Flag = m.User.Country.Alpha2
                                      }),
                                      Products = r.NegotiationProducts.Select(p => new {ProductId = p.Id, p.Product.ProductDescriptionAR, p.Product.ProductCode})
@@ -72,7 +73,7 @@ namespace ACUHelpdesk.Controllers
         {
             var negotiation = await _context.Negotiations
                                  .Where(n => n.Id == id)
-                                 .Include(u => u.User)
+                                 .Include(u => u.NegCreatedBy)
                                  .ThenInclude(c => c.Country)
                                  .Include(p => p.NegotiationProducts)
                                  .ThenInclude(p => p.Product)
@@ -87,9 +88,10 @@ namespace ACUHelpdesk.Controllers
                                      r.NegCreatedAt,
                                      r.NegName,
                                      r.NegInitiatedAt,
-                                     NegCreatedBy = r.User.FirstName + " " + r.User.LastName,
+                                     NegCreatedBy = r.NegCreatedBy.FirstName + " " + r.NegCreatedBy.LastName,
                                      Members = r.NegotiationMembers.Select(m => new
                                      {
+                                         Id = m.Id,
                                          MemberId = m.UserId,
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName,
                                          Avatar = String.IsNullOrEmpty(m.User.Avatar) 
@@ -98,6 +100,7 @@ namespace ACUHelpdesk.Controllers
                                          m.MemberStatus,
                                          m.isLeader,
                                          m.OnlineStatus,
+                                         m.ActionAt,
                                          Flag = m.User.Country.Alpha2
                                      }),
                                      Products = r.NegotiationProducts.Select(p => new { ProductId = p.Id, p.Product.ProductDescriptionAR, p.Product.ProductCode })
@@ -140,6 +143,7 @@ namespace ACUHelpdesk.Controllers
                 negEntity.NegSubject = negotiation.NegSubject;
                 negEntity.NegCreatedAt = negotiation.NegCreatedAt;
                 negEntity.NegInitiatedAt = negotiation.NegInitiatedAt;
+                negEntity.NegStatus = negotiation.NegStatus;
                 negEntity.NegotiationProducts = negotiation.NegotiationProducts;
                 negEntity.NegotiationMembers = negotiation.NegotiationMembers;
 
@@ -147,11 +151,45 @@ namespace ACUHelpdesk.Controllers
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpPut("initiate/{id}")]
+        public async Task<IActionResult> UpdateStatusInitiatedAt(int id, Negotiation model)
+        {
+            try
+            {
+                if (model == null)
+                {
+                    return BadRequest(new { message = "Member data sent to server was null" });
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Invalid model object" });
+                }
+                var negotiation = await _context.Negotiations
+                                        .SingleOrDefaultAsync(n => n.Id == id);
+                if (negotiation == null)
+                {
+                    return NotFound();
+                }
+
+                negotiation.NegInitiatedAt = model.NegInitiatedAt;
+                negotiation.NegStatus = "Active";
+
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
         // POST: api/Negotiation
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -165,17 +203,24 @@ namespace ACUHelpdesk.Controllers
 
             try
             {
-                var members = negotiation.NegotiationMembers.Where(nm => nm.Notified == false).Join(_context.Users, n => n.UserId, u => u.Id, (n, u) => new { n.Id, u.Email }).ToArray();
+                negotiation.NegotiationMembers.ToList().ForEach(nm => 
+                                { 
+                                    nm.MemberStatus = nm.UserId == negotiation.UserId ? "Accepted"  : "Pending";
+                                    nm.isLeader = nm.UserId == negotiation.UserId;
+                                });
+                negotiation.NegStatus = "Pending";
+                negotiation.NegCreatedAt = DateTime.Now;
+                await _context.Negotiations.AddAsync(negotiation);
+                await _context.SaveChangesAsync();
+
+                var members = negotiation.NegotiationMembers
+                         .Where(nm => nm.Notified == false).Join(_context.Users, n => n.UserId, u => u.Id, (n, u) => new { n.Id, u.Email })
+                         .ToArray();
                 foreach (var member in members)
                 {
                     sendNegInvitationEmail(negotiation.NegSubject, negotiation.NegName, member.Id, member.Email, Request.Headers["origin"]);
                 }
 
-                negotiation.NegotiationMembers.ToList().ForEach(nm => { nm.Notified = true; nm.MemberStatus = "Pending"; nm.isLeader = nm.UserId == negotiation.User.Id; });
-                negotiation.NegStatus = "Pending";
-                negotiation.NegCreatedAt = DateTime.Now;
-                await _context.Negotiations.AddAsync(negotiation);
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -190,29 +235,16 @@ namespace ACUHelpdesk.Controllers
         [HttpPost("invitation")]
         public void Invitation(NegInvitationRequest model)
         {
-            var member = _context.NegotiationMembers.SingleOrDefault(x => x.Id == model.MemberId);
+            var member = _context.NegotiationMembers.SingleOrDefault(x => x.Id == model.Id);
 
             if (member == null) throw new AppException("Request failed");
 
             member.MemberStatus = model.Selection;
+            member.Notified = true;
 
             _context.NegotiationMembers.Update(member);
             _context.SaveChanges();
         }
-
-        [HttpPost("reject-negotiation")]
-        public void RejectNegotiation(int memberid)
-        {
-            var member = _context.NegotiationMembers.SingleOrDefault(x => x.Id == memberid);
-
-            if (member == null) throw new AppException("Request failed");
-
-            member.MemberStatus = "Rejected";
-
-            _context.NegotiationMembers.Update(member);
-            _context.SaveChanges();
-        }
-
 
         // DELETE: api/Negotiation/5
         [HttpDelete("{id}")]
@@ -230,10 +262,10 @@ namespace ACUHelpdesk.Controllers
             return NoContent();
         }
 
-        private void sendNegInvitationEmail(string subject, string title, int memberId, string emails, string origin)
+        private void sendNegInvitationEmail(string subject, string title, int Id, string emails, string origin)
         {
-            var acceptUrl = $"{origin}/invitation?memberId={memberId}&selection=Accept";
-            var rejectUrl = $"{origin}/invitation?memberId={memberId}&selection=Reject";
+            var acceptUrl = $"{origin}/invitation?Id={Id}&selection=Accept";
+            var rejectUrl = $"{origin}/invitation?Id={Id}&selection=Reject";
             string message;
             message = $@"<p>تفضلوا بقبول أو رفض الحوار تحت العنوان {title} حول {subject} </p>
             <p>في حال قبول الدعوى للحوار، سوف يتم تفعيلها مباشرة كما ويمكن تفعيلها كذلك من خلال صفحة المفاوضات بعد الدخول الناجح إلى التطبيق </p>

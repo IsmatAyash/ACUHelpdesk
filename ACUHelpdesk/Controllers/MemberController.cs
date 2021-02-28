@@ -67,12 +67,13 @@ namespace ACUHelpdesk.Controllers
                 negMember.ActionAt = member.ActionAt;
                 negMember.isLeader = member.isLeader;
                 negMember.OnlineStatus = member.OnlineStatus;
+                negMember.Notified = true;
 
                 await _context.SaveChangesAsync();
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, "Internal server error");
             }

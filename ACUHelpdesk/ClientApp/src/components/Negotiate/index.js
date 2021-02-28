@@ -15,6 +15,8 @@ import { updateMember } from "../../services/memberService";
 import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
+import NegClose from "./NegClose";
+
 import ConfirmDialog from "../common/ConfirmDialog";
 import { toast } from "react-toastify";
 
@@ -26,6 +28,7 @@ const Negotiate = () => {
   const [negHeader, setNegHeader] = useState({});
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [closeShow, setCloseShow] = useState(false);
   const [negIdToDel, setNegIdToDel] = useState({});
   const [isloading, setIsloading] = useState(true);
   const [mode, setMode] = useState("");
@@ -62,6 +65,7 @@ const Negotiate = () => {
     const originalNegs = negs;
     const filteredNegs = originalNegs.filter(n => n.id !== negIdToDel.id);
     setNegs(filteredNegs);
+    setMembers(filteredNegs.members);
 
     try {
       await deleteNegotiation(negIdToDel.id);
@@ -70,7 +74,8 @@ const Negotiate = () => {
       if (ex.response && ex.response.status === 404)
         toast.error("لم تتم عملية المحو بنجاح");
 
-      setNegs({ negs: originalNegs });
+      setNegs(originalNegs);
+      setMembers(originalNegs.members);
     }
     setShowConfirm(false);
   };
@@ -147,11 +152,7 @@ const Negotiate = () => {
 
     try {
       if (neg.id !== 0) {
-        await updateNegotiation(negotiation);
-        const { data: updatedNeg } = await getNegotiation(neg.id);
-        setNeg(mapToViewModel(updatedNeg[0]));
-        setMode("edit");
-        toast.success("لقد تم تعديل هذه المفاوضات بنجاح");
+        doUpdate(negotiation, false);
       } else {
         const { data: newNeg } = await postNegotiation(negotiation);
         const { data } = await getNegotiation(newNeg.id);
@@ -170,6 +171,15 @@ const Negotiate = () => {
     setShow(false);
   };
 
+  const doUpdate = async (negotiation, initiate) => {
+    await updateNegotiation(negotiation, initiate);
+    const { data: updatedNeg } = await getNegotiation(negotiation.id);
+    setNeg(mapToViewModel(updatedNeg[0]));
+    setMode("edit");
+    if (initiate) toast.success("لقد تم إطلاق المفاوضات بنجاح، بالتوفيق");
+    else toast.success("لقد تم تعديل هذه المفاوضات بنجاح");
+  };
+
   const handleInvitation = async (id, answer) => {
     try {
       const membscopy = [...members];
@@ -178,13 +188,35 @@ const Negotiate = () => {
       await updateMember(member);
       const membs = [...members];
       const index = membs.findIndex(x => x.id === id);
-      membs[index] = { ...membs[index], memberStatus: answer };
+      membs[index] = {
+        ...membs[index],
+        memberStatus: answer,
+        actionAt: new Date(),
+      };
       setMembers(membs);
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        // setErrors({ ...errors, message: ex.response.data.message });
         toast.error(`لم يتم التعديل ,${ex.response.data.message}`);
       }
+    }
+  };
+
+  const handleInitiateClose = (id, status) => {
+    switch (status) {
+      case "Pending": {
+        const negotiation = {
+          id: id,
+          negInitiatedAt: new Date(),
+          negStatus: "Active",
+        };
+        doUpdate(negotiation, true);
+        break;
+      }
+      case "Active":
+        setCloseShow(true);
+        break;
+      default:
+        break;
     }
   };
 
@@ -214,6 +246,7 @@ const Negotiate = () => {
           showConfirm
         />
       )}
+      <NegClose show={closeShow} onHide={() => setCloseShow(false)} />
 
       <NegRow
         className="justify-content-between"
@@ -236,18 +269,22 @@ const Negotiate = () => {
               onAction={handleAction}
               onClose={handleClose}
               show={show}
-              addIcon={<MdAddCircle />}
+              addIcon={<MdAddCircle style={{ fontSize: "16px" }} />}
               data={negs}
               memb={false}
               placement="bottom"
               tooltip="زيادة منصة للمفاوضات"
+              title="ألمفاوضات"
             />
           )}
         </NegMemberCol>
         <NegMemberCol md={6}>
           <Card style={{ height: "91vh" }}>
             <Card.Header className="d-flex text-right p-0 m-0" as="h6">
-              <DisHeader negHeader={negHeader} />
+              <DisHeader
+                negHeader={negHeader}
+                onInitiateClose={handleInitiateClose}
+              />
             </Card.Header>
             <Card.Body style={{ overflowY: "auto", textAlign: "right" }}>
               <Card.Text style={{ float: "left" }}>
@@ -295,10 +332,11 @@ const Negotiate = () => {
         <NegMemberCol lng={lng} md={3}>
           <NegListGroup
             lng={lng}
-            addIcon={<MdGroupAdd />}
+            // addIcon={<MdGroupAdd />}
             data={members}
             memb={true}
             onInvitation={handleInvitation}
+            title="الأعضاء المشاركين"
           />
         </NegMemberCol>
       </NegRow>

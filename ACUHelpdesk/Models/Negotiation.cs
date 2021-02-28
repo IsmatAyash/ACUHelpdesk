@@ -20,7 +20,7 @@ namespace ACUHelpdesk.Models
         public DateTime? NegInitiatedAt { get; set; }
         [ForeignKey("User")]
         public int UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual User NegCreatedBy { get; set; }
         public virtual ICollection<NegotiationMember> NegotiationMembers { get; set; }
         public virtual ICollection<NegotiationProduct> NegotiationProducts { get; set; }
     }

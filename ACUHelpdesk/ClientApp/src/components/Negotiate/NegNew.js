@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 import { MdSave, MdCancel, MdFingerprint } from "react-icons/md";
 import { validateProperty } from "../common/Form/validation";
-import _ from "lodash";
 import RenderInput from "./../common/Form/RenderInput";
 import RenderSelect from "../common/Form/RenderSelect";
 import { useTranslation } from "react-i18next";
@@ -11,7 +10,6 @@ import { userService } from "../../services/userService";
 import Container from "./DropdownContainer";
 import Schema from "./negnewschema";
 import { toast } from "react-toastify";
-import { TreeSelect } from "antd";
 import "./BootStrap.css";
 
 const NegNew = props => {
@@ -69,7 +67,7 @@ const NegNew = props => {
       }
     }
     getHSD();
-  }, []);
+  }, [neg.id]);
 
   useEffect(() => {
     async function getMembers() {

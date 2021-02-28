@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACUHelpdesk.Migrations
 {
     [DbContext(typeof(ACUContext))]
-    [Migration("20210227141336_InitialDB")]
+    [Migration("20210228075451_InitialDB")]
     partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -342,6 +342,9 @@ namespace ACUHelpdesk.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("Tariff")
                         .HasColumnType("decimal(18,2)");
 
@@ -478,7 +481,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "ismat.ayash@gmail.com",
                             FirstName = "عصمت",
                             LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAEDx62uXyklI+Mu5bsSMdboc9TmwpMsdr2rmogsZ842S/aj7DNHbE0GiuoD2gkm3PNQ==",
+                            Password = "AQAAAAEAACcQAAAAEOVQrrCPbmeGSgyix1j4eHNmLMsCfG5GXVdPrVeJlN42efks55KahBe8cTUtwuPWVA==",
                             RoleId = 1
                         },
                         new
@@ -490,20 +493,44 @@ namespace ACUHelpdesk.Migrations
                             Email = "layale@gmail.com",
                             FirstName = "ليال",
                             LastName = "باسيل",
-                            Password = "AQAAAAEAACcQAAAAEMI9yxoemFVgDT8n8wYXJWrkcbhEBPLVIgdDsyNclm0Bo757EnpzBzRR32f1BCBxXw==",
+                            Password = "AQAAAAEAACcQAAAAEDQIROK6W833BSOhOt1LJrEY7iTrY/eKs3615GAfwx/BNj6eq+DjzDqqOFdH3JoG0Q==",
                             RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Active = true,
+                            Avatar = "",
+                            CountryId = 12,
+                            Email = "alexy.ayash@gmail.com",
+                            FirstName = "أليكسي",
+                            LastName = "العياش",
+                            Password = "AQAAAAEAACcQAAAAEL+eEJUNUYVAxjEyCa54FnkRhLg0o981DKMlTp2Bglc1HBSJd0u98jDRa3aSP9tiXg==",
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Active = true,
+                            Avatar = "",
+                            CountryId = 1,
+                            Email = "oayyash@bankofbeirut.com",
+                            FirstName = "وردة",
+                            LastName = "الجزائرية",
+                            Password = "AQAAAAEAACcQAAAAEAbNe1RRR9GD4UxiJtHAI9Y3EmL9LHmIpgKIP4gIWBX6+vDoT3xnmzgA8oJkUFnbQw==",
+                            RoleId = 2
                         });
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.Negotiation", b =>
                 {
-                    b.HasOne("ACUHelpdesk.Models.User", "User")
+                    b.HasOne("ACUHelpdesk.Models.User", "NegCreatedBy")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("NegCreatedBy");
                 });
 
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationDiscussion", b =>

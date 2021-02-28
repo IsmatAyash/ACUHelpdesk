@@ -185,6 +185,7 @@ namespace ACUHelpdesk.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Tariff = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     NegotiationId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -246,12 +247,13 @@ namespace ACUHelpdesk.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEDx62uXyklI+Mu5bsSMdboc9TmwpMsdr2rmogsZ842S/aj7DNHbE0GiuoD2gkm3PNQ==", 1 });
-
-            migrationBuilder.InsertData(
-                table: "User",
-                columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[] { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAEMI9yxoemFVgDT8n8wYXJWrkcbhEBPLVIgdDsyNclm0Bo757EnpzBzRR32f1BCBxXw==", 1 });
+                values: new object[,]
+                {
+                    { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEOVQrrCPbmeGSgyix1j4eHNmLMsCfG5GXVdPrVeJlN42efks55KahBe8cTUtwuPWVA==", 1 },
+                    { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAEDQIROK6W833BSOhOt1LJrEY7iTrY/eKs3615GAfwx/BNj6eq+DjzDqqOFdH3JoG0Q==", 1 },
+                    { 3, null, true, "", 12, "alexy.ayash@gmail.com", "أليكسي", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEL+eEJUNUYVAxjEyCa54FnkRhLg0o981DKMlTp2Bglc1HBSJd0u98jDRa3aSP9tiXg==", 2 },
+                    { 4, null, true, "", 1, "oayyash@bankofbeirut.com", "وردة", "الجزائرية", null, null, null, null, "AQAAAAEAACcQAAAAEAbNe1RRR9GD4UxiJtHAI9Y3EmL9LHmIpgKIP4gIWBX6+vDoT3xnmzgA8oJkUFnbQw==", 2 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Negotiation_UserId",

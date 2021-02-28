@@ -25,7 +25,9 @@ namespace ACUHelpdesk.Controllers
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            response.AvatarSrc = string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, response.Avatar);
+            response.AvatarSrc = string.IsNullOrEmpty(response.Avatar)
+                                 ? "/images/avatarPlaceholder.png"
+                                 : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, response.Avatar);
 
             return Ok(response);
         }

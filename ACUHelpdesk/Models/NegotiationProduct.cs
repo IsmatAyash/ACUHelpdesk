@@ -12,6 +12,7 @@ namespace ACUHelpdesk.Models
         [Key]
         public int Id { get; set; }
         public Nullable<decimal> Tariff { get; set; }
+        public string Remarks { get; set; }
         [ForeignKey("Product")]
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }

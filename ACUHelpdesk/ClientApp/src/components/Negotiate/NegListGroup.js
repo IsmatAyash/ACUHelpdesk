@@ -27,6 +27,7 @@ const NegListGroup = ({
   placement,
   tooltip,
   onInvitation,
+  title,
 }) => {
   const { t } = useTranslation();
 
@@ -37,6 +38,7 @@ const NegListGroup = ({
       <Card.Header>
         <div className="d-flex justify-content-between">
           <Image src="/images/ismat.jpg" width="40px" roundedCircle />
+          <h5 className="text-center mt-3">{title}</h5>
           <span>
             <OverlayTrigger
               key={placement}

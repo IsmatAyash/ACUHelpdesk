@@ -9,7 +9,7 @@ namespace ACUHelpdesk.ViewModels
     public class NegInvitationRequest
     {
         [Required]
-        public int MemberId { get; set; }
+        public int Id { get; set; }
         public string Selection { get; set; }
     }
 }

@@ -97,6 +97,30 @@ namespace ACUHelpdesk.Models
                     Password = Crypto.HashPassword("admin"),
                     Active = true,
                     Avatar = "layale.jpg"
+                },
+                new User
+                {
+                    Id = 3,
+                    RoleId = 2,
+                    CountryId = 12,
+                    Email = "alexy.ayash@gmail.com",
+                    FirstName = "أليكسي",
+                    LastName = "العياش",
+                    Password = Crypto.HashPassword("aa291009"),
+                    Active = true,
+                    Avatar = ""
+                },
+                new User
+                {
+                    Id = 4,
+                    RoleId = 2,
+                    CountryId = 1,
+                    Email = "oayyash@bankofbeirut.com",
+                    FirstName = "وردة",
+                    LastName = "الجزائرية",
+                    Password = Crypto.HashPassword("oam007"),
+                    Active = true,
+                    Avatar = ""
                 });
 
             //modelBuilder.Entity<Negotiation>().HasData(
