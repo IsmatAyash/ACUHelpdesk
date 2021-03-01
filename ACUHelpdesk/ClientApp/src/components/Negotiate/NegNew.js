@@ -25,6 +25,7 @@ const NegNew = props => {
     negSubject: neg.subject || "",
     negPassCode: "",
     negCreatedBy: neg.createdBy || "",
+    negStatus: neg.negStatus || "Pending",
   });
 
   const { t } = useTranslation();

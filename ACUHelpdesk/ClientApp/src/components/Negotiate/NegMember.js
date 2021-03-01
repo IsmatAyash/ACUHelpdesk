@@ -6,7 +6,6 @@ import IconButton from "./IconButton";
 import { UserContext } from "./../../services/UserContext";
 
 const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
-  console.log("members in negMember", members);
   const { user } = useContext(UserContext);
 
   const formatStatus = (actionat, memberstatus) => {

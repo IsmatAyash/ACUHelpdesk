@@ -83,6 +83,7 @@ const Negotiate = () => {
   const handleItemSelect = id => {
     const filtered = negs.filter(n => n.id === id)[0];
     populateMembers(filtered);
+    setNeg(filtered);
   };
 
   const populateMembers = n => {
@@ -134,13 +135,14 @@ const Negotiate = () => {
   };
 
   const handleSubmit = async (e, formData, products, members) => {
-    const { negSubject, negName } = formData;
+    const { negSubject, negName, negStatus } = formData;
     const currDate = new Date();
     e.preventDefault();
     const negotiation = {
       id: neg.id,
       negSubject,
       negName,
+      negStatus,
       negCreatedAt: neg.id === 0 ? currDate : neg.createdAt,
       negInitiatedAt: neg.id === 0 ? currDate : neg.intiatedAt,
       userId: user.userId,
@@ -246,7 +248,13 @@ const Negotiate = () => {
           showConfirm
         />
       )}
-      <NegClose show={closeShow} onHide={() => setCloseShow(false)} />
+      {closeShow && (
+        <NegClose
+          negId={neg.id}
+          show={closeShow}
+          onHide={() => setCloseShow(false)}
+        />
+      )}
 
       <NegRow
         className="justify-content-between"

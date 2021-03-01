@@ -29,47 +29,61 @@ namespace ACUHelpdesk.Controllers
 
         // GET: api/NegotiationProduct/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<NegotiationProduct>> GetNegotiationProduct(int id)
+        public async Task<ActionResult<IEnumerable<NegotiationProduct>>> GetNegotiationProducts(int id)
         {
-            var negotiationProduct = await _context.NegotiationProducts.FindAsync(id);
-
-            if (negotiationProduct == null)
-            {
-                return NotFound();
-            }
-
-            return negotiationProduct;
+            var negProds = await _context.NegotiationProducts
+                                         .Include(p => p.Product)
+                                         .Where(np => np.NegotiationId == id)
+                                         .Select(x => new
+                                         {
+                                             x.Id,
+                                             x.Product.ProductDescriptionAR,
+                                             x.Tariff,
+                                             x.Remarks,
+                                             x.ProductId
+                                         }).ToListAsync();
+            return Ok(negProds);
         }
 
         // PUT: api/NegotiationProduct/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutNegotiationProduct(int id, NegotiationProduct negotiationProduct)
+        public async Task<IActionResult> PutNegotiationProduct(int id, List<NegotiationProduct> model)
         {
-            if (id != negotiationProduct.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(negotiationProduct).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NegotiationProductExists(id))
+                if (model == null)
+                {
+                    return BadRequest(new { message = "Member data sent to server was null" });
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Invalid model object" });
+                }
+                var negotiationProducts = await _context.NegotiationProducts.Where(np => np.Id == id).ToListAsync();
+                if (negotiationProducts == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                var index = -1;
+                foreach(var pp in model)
+                {
+                    index = negotiationProducts.FindIndex(np => np.Id == pp.Id);
+                    if (index > 0)
+                    {
+                        negotiationProducts[index].Tariff = pp.Tariff;
+                        negotiationProducts[index].Remarks = pp.Remarks;
+                    }
+                }
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // POST: api/NegotiationProduct

@@ -28,7 +28,6 @@ const BadgeTag = styled(Badge)`
 
 const DisHeader = ({ negHeader, onInitiateClose }) => {
   const [infoShow, setInfoShow] = useState(false);
-  console.log("inside DisHeader", negHeader);
   const {
     id,
     title,
