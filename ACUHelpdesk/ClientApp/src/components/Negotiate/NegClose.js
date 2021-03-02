@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Table, ButtonGroup } from "react-bootstrap";
 import { MdSave, MdCancel, MdEdit, MdClose } from "react-icons/md";
+import { toast } from "react-toastify";
 import {
   getNegProducts,
   updateNegProducts,
 } from "../../services/negprodService";
 
 const NegClose = props => {
-  console.log("props in negClose", props);
   const [prods, setProds] = useState([]);
   const [inEditMode, setInEditMode] = useState({
     status: false,
@@ -23,8 +23,6 @@ const NegClose = props => {
     getNegProds();
   }, []);
 
-  console.log("read products", prods);
-
   const onEdit = ({ id, currentCol }) => {
     setInEditMode({
       status: true,
@@ -33,9 +31,14 @@ const NegClose = props => {
     setCols(currentCol);
   };
 
-  const handleUpdate = () => {
-    updateNegProducts(props.negId, prods);
-    getNegProducts();
+  const handleUpdate = async () => {
+    try {
+      await updateNegProducts(props.negId, prods);
+      toast.success("لقد تم تعديل التعرفة بنجاح");
+      getNegProducts();
+    } catch (ex) {
+      toast.error("Data not saved, something went wrong");
+    }
   };
 
   const onSave = ({ id, newCol }) => {
@@ -46,7 +49,6 @@ const NegClose = props => {
     setProds(prodscopy);
     onCancel();
   };
-  console.log("prods to post i nthe end", prods);
 
   const onCancel = () => {
     // reset the inEditMode state value

@@ -29,13 +29,18 @@ namespace ACUHelpdesk.Models
             modelBuilder.Entity<NegotiationDiscussion>().ToTable("NegotiationDiscussion");
 
             modelBuilder.Entity<NegotiationProduct>()
-                        .HasOne(np => np.Negotiation)
+                        .HasOne(n => n.Negotiation)
                         .WithMany(np => np.NegotiationProducts)
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NegotiationMember>()
-                        .HasOne(nm => nm.Negotiation)
+                        .HasOne(n => n.Negotiation)
                         .WithMany(nm => nm.NegotiationMembers)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<NegotiationDiscussion>()
+                        .HasOne(n => n.Negotiation)
+                        .WithMany(nd => nd.NegotiationDiscussions)
                         .OnDelete(DeleteBehavior.Cascade);
 
 

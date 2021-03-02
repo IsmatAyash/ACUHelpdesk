@@ -16,7 +16,7 @@ import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
 import NegClose from "./NegClose";
-
+import Message from "./Message";
 import ConfirmDialog from "../common/ConfirmDialog";
 import { toast } from "react-toastify";
 
@@ -25,6 +25,7 @@ const Negotiate = () => {
   const [negs, setNegs] = useState([]);
   const [neg, setNeg] = useState({});
   const [members, setMembers] = useState([]);
+  const [discussions, setDiscussions] = useState([]);
   const [negHeader, setNegHeader] = useState({});
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -32,6 +33,7 @@ const Negotiate = () => {
   const [negIdToDel, setNegIdToDel] = useState({});
   const [isloading, setIsloading] = useState(true);
   const [mode, setMode] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleClose = () => setShow(false);
 
@@ -88,9 +90,9 @@ const Negotiate = () => {
 
   const populateMembers = n => {
     setMembers(n.members);
-    setNegHeader(n);
+    // setNegHeader(n);
+    setDiscussions(n.discussions);
   };
-  console.log("negHeader inside index in populateMembers", negHeader);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -131,6 +133,7 @@ const Negotiate = () => {
       initiatedAt: neg.negInitiatedAt,
       products: neg.products || neg.negotiationProducts,
       members: neg.members || neg.negotiationMembers,
+      discussions: neg.discussions || neg.negotiationDiscussions,
       createdBy: neg.negCreatedBy || user.fullName,
     };
   };
@@ -327,21 +330,11 @@ const Negotiate = () => {
               />
             </Card.Header>
             <Card.Body style={{ overflowY: "auto", textAlign: "right" }}>
-              <Card.Text style={{ float: "left" }}>
-                تحديد الدولة التي ستطلق عملية تفاوضية: مثلا لبنان: يتم تحديد
-                المتفاوض الرئيسي للدولة المعنية من خلال كتاب رسمي اما للجامعة
-                والاسكوا ليتم مده بكلة سر تمكنه من الدخول
-              </Card.Text>
-              <Card.Text style={{ float: "right" }}>
-                تحديد الدولة التي ستطلق عملية تفاوضية: مثلا لبنان: يتم تحديد
-                المتفاوض الرئيسي للدولة المعنية من خلال كتاب رسمي اما للجامعة
-                والاسكوا ليتم مده بكلة سر تمكنه من الدخول
-              </Card.Text>
-              <Card.Text style={{ float: "left" }}>
-                تحديد الدولة التي ستطلق عملية تفاوضية: مثلا لبنان: يتم تحديد
-                المتفاوض الرئيسي للدولة المعنية من خلال كتاب رسمي اما للجامعة
-                والاسكوا ليتم مده بكلة سر تمكنه من الدخول
-              </Card.Text>
+              <Message type="sent" />
+              <Message type="replies" />
+              <Message type="replies" />
+              <Message type="replies" />
+              <Message type="sent" />
             </Card.Body>
             <Card.Footer className="text-muted">
               <Form>
@@ -357,10 +350,23 @@ const Negotiate = () => {
                     </Button>
                   </Col>
                   <Col sm={9}>
-                    <Form.Control placeholder="مضمون الرسالة" />
+                    <Form.Control
+                      type="hidden"
+                      name="negotiationId"
+                      value={neg.id}
+                    ></Form.Control>
+                    <Form.Control
+                      placeholder="مضمون الرسالة"
+                      name="message"
+                      value={message}
+                    />
                   </Col>
                   <Col sm={1}>
-                    <Button variant="light" className="cid-text-direction-rtl">
+                    <Button
+                      variant="light"
+                      className="cid-text-direction-rtl"
+                      type="submit"
+                    >
                       <IoPaperPlane size="medium" />
                     </Button>
                   </Col>

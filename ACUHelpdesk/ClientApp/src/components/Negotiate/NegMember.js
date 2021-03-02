@@ -13,7 +13,7 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
       ? `${memberstatus} ${Math.floor(
           Math.abs(new Date() - new Date(actionat)) / (1000 * 60 * 60 * 24)
         )} days ago`
-      : `على المشارك قبول المشاركة أو رفضها   ${memberstatus}`;
+      : memberstatus;
   };
 
   return (

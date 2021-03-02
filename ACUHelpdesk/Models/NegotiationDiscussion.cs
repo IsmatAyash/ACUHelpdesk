@@ -11,6 +11,7 @@ namespace ACUHelpdesk.Models
     {
         [Key]
         public int Id { get; set; }
+        public int NegotiationId { get; set; }
         public virtual Negotiation Negotiation { get; set; }
         public virtual User Sender { get; set; }
         public string Message { get; set; }

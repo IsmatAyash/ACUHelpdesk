@@ -23,6 +23,7 @@ namespace ACUHelpdesk.Models
         public virtual User NegCreatedBy { get; set; }
         public virtual ICollection<NegotiationMember> NegotiationMembers { get; set; }
         public virtual ICollection<NegotiationProduct> NegotiationProducts { get; set; }
+        public virtual ICollection<NegotiationDiscussion> NegotiationDiscussions { get; set; }
     }
 
 }

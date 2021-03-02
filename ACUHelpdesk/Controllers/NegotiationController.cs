@@ -37,6 +37,8 @@ namespace ACUHelpdesk.Controllers
                                  .ThenInclude(p => p.Product)
                                  .Include(nm => nm.NegotiationMembers)
                                  .ThenInclude(m => m.User)
+                                 .Include(d => d.NegotiationDiscussions)
+                                 .ThenInclude(s => s.Sender)
                                  .AsNoTracking()
                                  .Select(r => new 
                                  { 
@@ -63,7 +65,8 @@ namespace ACUHelpdesk.Controllers
                                          m.NegotiationId,
                                          Flag = m.User.Country.Alpha2
                                      }),
-                                     Products = r.NegotiationProducts.Select(p => new {p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode})
+                                     Products = r.NegotiationProducts.Select(p => new {p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode}),
+                                     Discussions = r.NegotiationDiscussions.Select(d => new { d.Id, d.NegotiationId, d.Message, d.SentAt, SenderId = d.Sender.Id, SenderName = d.Sender.FirstName + " " + d.Sender.LastName})
                                  }).ToListAsync();
 
             return Ok(negotiations);
@@ -81,6 +84,8 @@ namespace ACUHelpdesk.Controllers
                                  .ThenInclude(p => p.Product)
                                  .Include(nm => nm.NegotiationMembers)
                                  .ThenInclude(m => m.User)
+                                 .Include(nd => nd.NegotiationDiscussions)
+                                 .ThenInclude(s => s.Sender)
                                  .AsNoTracking()
                                  .Select(r => new
                                  {
@@ -107,7 +112,8 @@ namespace ACUHelpdesk.Controllers
                                          m.NegotiationId,
                                          Flag = m.User.Country.Alpha2
                                      }),
-                                     Products = r.NegotiationProducts.Select(p => new { p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode })
+                                     Products = r.NegotiationProducts.Select(p => new { p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode }),
+                                     Discussions = r.NegotiationDiscussions.Select(d => new { d.Id, d.NegotiationId, d.Message, d.SentAt, SenderId = d.Sender.Id, SenderName = d.Sender.FirstName + " " + d.Sender.LastName })
                                  }).ToListAsync();
 
             if (negotiation == null)
