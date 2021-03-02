@@ -90,6 +90,7 @@ const Negotiate = () => {
     setMembers(n.members);
     setNegHeader(n);
   };
+  console.log("negHeader inside index in populateMembers", negHeader);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -134,7 +135,41 @@ const Negotiate = () => {
     };
   };
 
-  const handleSubmit = async (e, formData, products, members) => {
+  const mapProductToModel = products => {
+    const pp = [...products];
+    return neg.id === 0
+      ? pp.map(p => ({
+          productId: p.value,
+        }))
+      : pp.map(p => ({
+          id: p.id,
+          productId: p.productId,
+          tariff: p.tariff,
+          remarks: p.remarks,
+          negotiationId: p.negotiationId,
+        }));
+  };
+
+  const mapMemberToModel = members => {
+    const mm = [...members];
+    return neg.id === 0
+      ? mm.map(m => ({
+          userId: m.value,
+          memberStatus: "Pending",
+        }))
+      : mm.map(m => ({
+          id: m.id,
+          userId: m.userId,
+          isLeader: m.isLeader,
+          actionAt: m.actionAt,
+          memberStatus: m.memberStatus,
+          onlineStatus: m.onlineStatus,
+          notified: m.notified,
+          negotiationId: m.negotiationId,
+        }));
+  };
+
+  const handleSubmit = async (e, formData, modelProd, modelMemb) => {
     const { negSubject, negName, negStatus } = formData;
     const currDate = new Date();
     e.preventDefault();
@@ -146,10 +181,8 @@ const Negotiate = () => {
       negCreatedAt: neg.id === 0 ? currDate : neg.createdAt,
       negInitiatedAt: neg.id === 0 ? currDate : neg.intiatedAt,
       userId: user.userId,
-      negotiationProducts: products.map(product => ({
-        productId: product.value,
-      })),
-      negotiationMembers: members.map(member => ({ userId: member.value })),
+      negotiationProducts: mapProductToModel(modelProd),
+      negotiationMembers: mapMemberToModel(modelMemb),
     };
 
     try {
@@ -169,7 +202,6 @@ const Negotiate = () => {
       }
     }
 
-    setNeg({});
     setShow(false);
   };
 
@@ -290,7 +322,7 @@ const Negotiate = () => {
           <Card style={{ height: "91vh" }}>
             <Card.Header className="d-flex text-right p-0 m-0" as="h6">
               <DisHeader
-                negHeader={negHeader}
+                negHeader={neg}
                 onInitiateClose={handleInitiateClose}
               />
             </Card.Header>

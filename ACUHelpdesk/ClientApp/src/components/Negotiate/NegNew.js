@@ -19,7 +19,6 @@ const NegNew = props => {
   const [products, setProducts] = useState(neg.products || []);
   const [members, setMembers] = useState(neg.members || []);
   const [errors, setErrors] = useState({});
-  // const [neg, setNeg] = useState(data);
   const [formData, setFormData] = useState({
     negName: neg.title || "",
     negSubject: neg.subject || "",
@@ -39,13 +38,33 @@ const NegNew = props => {
   ];
 
   const handleProducts = (currentNode, selectedNodes) => {
-    const nodes = [...selectedNodes];
-    setProducts(nodes);
+    if (neg.id === 0) {
+      const nodes = [...selectedNodes];
+      setProducts(nodes);
+    } else {
+      const node = { ...currentNode };
+      let ppCopy = [...products];
+      if (node.checked)
+        ppCopy = [...ppCopy, { productId: node.value, negotiationId: neg.id }];
+      else ppCopy = ppCopy.filter(pp => pp.productId !== node.value);
+
+      setProducts(ppCopy);
+    }
   };
 
   const handleMembers = (currentNode, selectedNodes) => {
-    const nodes = [...selectedNodes];
-    setMembers(nodes);
+    if (neg.id === 0) {
+      const nodes = [...selectedNodes];
+      setMembers(nodes);
+    } else {
+      const node = { ...currentNode };
+      let mmCopy = [...members];
+      if (node.checked)
+        mmCopy = [...mmCopy, { userId: node.value, negotiationId: neg.id }];
+      else mmCopy = mmCopy.filter(mm => mm.userId !== node.value);
+
+      setMembers(mmCopy);
+    }
   };
 
   const handleChange = e => {

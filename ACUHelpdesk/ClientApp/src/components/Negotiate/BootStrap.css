@@ -43,6 +43,12 @@
   margin-bottom: 0rem !important;
 }
 
+.bootstrap-demo .tag-remove {
+  font-size: 100%;
+  padding-right: 5px;
+  font-weight: bold;
+}
+
 .flag .node-label::before,
 .flag .tag::before {
   content: " ";

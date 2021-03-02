@@ -49,8 +49,8 @@ namespace ACUHelpdesk.Controllers
                                      NegCreatedBy = r.NegCreatedBy.FirstName + " " + r.NegCreatedBy.LastName,
                                      Members = r.NegotiationMembers.Select(m => new 
                                      { 
-                                         Id = m.Id,
-                                         MemberId = m.UserId, 
+                                         m.Id,
+                                         m.UserId, 
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName,
                                          Avatar = String.IsNullOrEmpty(m.User.Avatar)
                                                   ? "/images/avatarPlaceholder.png"
@@ -59,9 +59,11 @@ namespace ACUHelpdesk.Controllers
                                          m.isLeader, 
                                          m.OnlineStatus,
                                          m.ActionAt,
+                                         m.Notified,
+                                         m.NegotiationId,
                                          Flag = m.User.Country.Alpha2
                                      }),
-                                     Products = r.NegotiationProducts.Select(p => new {ProductId = p.Id, p.Product.ProductDescriptionAR, p.Product.ProductCode})
+                                     Products = r.NegotiationProducts.Select(p => new {p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode})
                                  }).ToListAsync();
 
             return Ok(negotiations);
@@ -91,19 +93,21 @@ namespace ACUHelpdesk.Controllers
                                      NegCreatedBy = r.NegCreatedBy.FirstName + " " + r.NegCreatedBy.LastName,
                                      Members = r.NegotiationMembers.Select(m => new
                                      {
-                                         Id = m.Id,
-                                         MemberId = m.UserId,
+                                         m.Id,
+                                         m.UserId,
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName,
-                                         Avatar = String.IsNullOrEmpty(m.User.Avatar) 
+                                         Avatar = String.IsNullOrEmpty(m.User.Avatar)
                                                   ? "/images/avatarPlaceholder.png"
                                                   : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
                                          m.MemberStatus,
                                          m.isLeader,
                                          m.OnlineStatus,
                                          m.ActionAt,
+                                         m.Notified,
+                                         m.NegotiationId,
                                          Flag = m.User.Country.Alpha2
                                      }),
-                                     Products = r.NegotiationProducts.Select(p => new { ProductId = p.Id, p.Product.ProductDescriptionAR, p.Product.ProductCode })
+                                     Products = r.NegotiationProducts.Select(p => new { p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode })
                                  }).ToListAsync();
 
             if (negotiation == null)
@@ -129,6 +133,7 @@ namespace ACUHelpdesk.Controllers
                 {
                     return BadRequest(new { message = "Invalid model object" });
                 }
+
                 var negEntity = await _context.Negotiations
                                         .Include(m => m.NegotiationMembers)
                                         .Include(p => p.NegotiationProducts)
@@ -138,12 +143,8 @@ namespace ACUHelpdesk.Controllers
                     return NotFound();
                 }
 
-                negEntity.UserId = negotiation.UserId;
                 negEntity.NegName = negotiation.NegName;
                 negEntity.NegSubject = negotiation.NegSubject;
-                negEntity.NegCreatedAt = negotiation.NegCreatedAt;
-                negEntity.NegInitiatedAt = negotiation.NegInitiatedAt;
-                negEntity.NegStatus = negotiation.NegStatus;
                 negEntity.NegotiationProducts = negotiation.NegotiationProducts;
                 negEntity.NegotiationMembers = negotiation.NegotiationMembers;
 

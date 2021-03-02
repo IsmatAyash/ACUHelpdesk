@@ -13,7 +13,7 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
       ? `${memberstatus} ${Math.floor(
           Math.abs(new Date() - new Date(actionat)) / (1000 * 60 * 60 * 24)
         )} days ago`
-      : memberstatus;
+      : `على المشارك قبول المشاركة أو رفضها   ${memberstatus}`;
   };
 
   return (
@@ -38,7 +38,7 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
               className="py-1"
               action
               variant={index % 2 === 0 ? "light" : "secondary"}
-              key={memberId}
+              key={id}
             >
               <Row className="my-1">
                 <Col sm={2}>
@@ -57,7 +57,7 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
                   <div className="d-flex w-100 justify-content-between">
                     <h5 className="mb-1">{memberName}</h5>
                     <Image
-                      style={{ width: "20px", height: "20px" }}
+                      style={{ width: 20, height: 20 }}
                       src={`/Images/flags/${flag?.toLowerCase()}.svg`}
                       roundedCircle
                     />

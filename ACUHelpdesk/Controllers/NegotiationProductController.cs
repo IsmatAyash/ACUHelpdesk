@@ -60,7 +60,7 @@ namespace ACUHelpdesk.Controllers
                 {
                     return BadRequest(new { message = "Invalid model object" });
                 }
-                var negotiationProducts = await _context.NegotiationProducts.Where(np => np.Id == id).ToListAsync();
+                var negotiationProducts = await _context.NegotiationProducts.Where(np => np.NegotiationId == id).ToListAsync();
                 if (negotiationProducts == null)
                 {
                     return NotFound();
@@ -70,7 +70,7 @@ namespace ACUHelpdesk.Controllers
                 foreach(var pp in model)
                 {
                     index = negotiationProducts.FindIndex(np => np.Id == pp.Id);
-                    if (index > 0)
+                    if (index != -1)
                     {
                         negotiationProducts[index].Tariff = pp.Tariff;
                         negotiationProducts[index].Remarks = pp.Remarks;

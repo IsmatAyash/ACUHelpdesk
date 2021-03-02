@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   Badge,
@@ -38,6 +38,8 @@ const DisHeader = ({ negHeader, onInitiateClose }) => {
     status,
   } = negHeader;
   const { user } = useContext(UserContext);
+
+  useEffect(() => {}, [status]);
   return (
     <Container style={{ minHeight: "12vh" }}>
       <Row
@@ -94,7 +96,7 @@ const DisHeader = ({ negHeader, onInitiateClose }) => {
             onClick={() => onInitiateClose(id, status)}
           >
             <MdPlayCircleOutline className="ml-1" />
-            {status !== "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
+            {status === "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
           </Button>
           <Button
             size="sm"
