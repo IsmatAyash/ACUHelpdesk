@@ -2,13 +2,18 @@ import http from "./httpService";
 
 const apiEndpoint = "/negotiation";
 const apiInitiate = `${apiEndpoint}/initiate`;
+const apiNegs = `${apiEndpoint}/negs`;
 
 function negUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export const getNegotiations = async () => {
-  return await http.get(apiEndpoint);
+// export const getNegotiations = async () => {
+//   return await http.get(apiEndpoint);
+// };
+
+export const getNegotiations = async userId => {
+  return await http.get(`${apiNegs}/${userId}`);
 };
 
 export const postNegotiation = params => {

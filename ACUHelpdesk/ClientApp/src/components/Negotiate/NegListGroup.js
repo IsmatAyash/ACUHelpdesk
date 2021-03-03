@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Card,
   Image,
@@ -10,6 +10,7 @@ import {
 import { MdSearch } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import NegMember from "./NegMember";
+import { UserContext } from "../../services/UserContext";
 import {
   NegMemberListGroup,
   NegMemberCard,
@@ -28,8 +29,10 @@ const NegListGroup = ({
   tooltip,
   onInvitation,
   title,
+  imageSrc,
 }) => {
   const { t } = useTranslation();
+  const { user } = useContext(UserContext);
 
   const lngAlign = lng === "ar" ? " text-right" : " text-left";
 
@@ -37,7 +40,7 @@ const NegListGroup = ({
     <NegMemberCard border="success">
       <Card.Header>
         <div className="d-flex justify-content-between">
-          <Image src="/images/ismat.jpg" width="40px" roundedCircle />
+          <Image src={imageSrc} width="40px" roundedCircle />
           <h5 className="text-center mt-3">{title}</h5>
           <span>
             <OverlayTrigger

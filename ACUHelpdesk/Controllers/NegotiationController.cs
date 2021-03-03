@@ -27,10 +27,14 @@ namespace ACUHelpdesk.Controllers
         }
 
         // GET: api/Negotiation
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Negotiation>>> GetNegotiations()
+        [HttpGet("negs/{userId}")]
+        public async Task<ActionResult<IEnumerable<Negotiation>>> GetNegotiations(int userId)
         {
+            var createdNegs = await _context.Negotiations.Where(n => n.UserId == userId).Select(x => x.Id).ToListAsync();
+            var memberIn = await _context.NegotiationMembers.Where(nm => nm.UserId == userId).Select(x => x.NegotiationId).ToListAsync();
+            var allNegs = createdNegs.Union(memberIn).ToList();
             var negotiations = await _context.Negotiations
+                                 .Where(n => allNegs.Contains(n.Id))
                                  .Include(u => u.NegCreatedBy)
                                  .ThenInclude(c => c.Country)
                                  .Include(p => p.NegotiationProducts)
@@ -40,8 +44,8 @@ namespace ACUHelpdesk.Controllers
                                  .Include(d => d.NegotiationDiscussions)
                                  .ThenInclude(s => s.Sender)
                                  .AsNoTracking()
-                                 .Select(r => new 
-                                 { 
+                                 .Select(r => new
+                                 {
                                      r.Id,
                                      r.NegSubject,
                                      r.NegStatus,
@@ -49,30 +53,30 @@ namespace ACUHelpdesk.Controllers
                                      r.NegName,
                                      r.NegInitiatedAt,
                                      NegCreatedBy = r.NegCreatedBy.FirstName + " " + r.NegCreatedBy.LastName,
-                                     Members = r.NegotiationMembers.Select(m => new 
-                                     { 
+                                     Members = r.NegotiationMembers.Select(m => new
+                                     {
                                          m.Id,
-                                         m.UserId, 
+                                         m.UserId,
                                          MemberName = m.User.FirstName + ' ' + m.User.LastName,
                                          Avatar = String.IsNullOrEmpty(m.User.Avatar)
                                                   ? "/images/avatarPlaceholder.png"
                                                   : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, m.User.Avatar),
-                                         m.MemberStatus, 
-                                         m.isLeader, 
+                                         m.MemberStatus,
+                                         m.isLeader,
                                          m.OnlineStatus,
                                          m.ActionAt,
                                          m.Notified,
                                          m.NegotiationId,
                                          Flag = m.User.Country.Alpha2
                                      }),
-                                     Products = r.NegotiationProducts.Select(p => new {p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode}),
-                                     Discussions = r.NegotiationDiscussions.Select(d => new 
-                                     { 
-                                         d.Id, 
-                                         d.NegotiationId, 
-                                         d.Message, 
-                                         d.SentAt, 
-                                         SenderId = d.Sender.Id, 
+                                     Products = r.NegotiationProducts.Select(p => new { p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode }),
+                                     Discussions = r.NegotiationDiscussions.Select(d => new
+                                     {
+                                         d.Id,
+                                         d.NegotiationId,
+                                         d.Message,
+                                         d.SentAt,
+                                         SenderId = d.Sender.Id,
                                          SenderName = d.Sender.FirstName + " " + d.Sender.LastName,
                                          Avatar = String.IsNullOrEmpty(d.Sender.Avatar)
                                                   ? "/images/avatarPlaceholder.png"

@@ -249,10 +249,10 @@ namespace ACUHelpdesk.Migrations
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
                 values: new object[,]
                 {
-                    { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEFpPfuaRCkO3bJa2AwhBkMcZ2YAQgBULgq2kTD+h5cFEYfLVY+3RFBSEgEYYlztHrw==", 1 },
-                    { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAEB4idnkaIDnBrWlzOcrApGX4eE39chtNRzKqz/VVclW6hyRF7rLRGV2UYTOP6uxIuw==", 1 },
-                    { 3, null, true, "", 12, "alexy.ayash@gmail.com", "أليكسي", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAECOaIhiVQfqd2UtCkMMBWqOgpt+DPGa1tFwtmH46HENQNUhtMz9yCzffTeRmdWoXgQ==", 2 },
-                    { 4, null, true, "", 1, "oayyash@bankofbeirut.com", "وردة", "الجزائرية", null, null, null, null, "AQAAAAEAACcQAAAAEAV5jYyXRh0IEMetkRtjzbscWCuT0qJF5eZ2iJ3ZxCWlsnqMIv84lQwLidq8/xJFiQ==", 2 }
+                    { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEAyErJ1Zl9OzQDSucAylbMy0hT3Xa6FdxdkV+5CFsv5NrXE7tHYvD8gptCSPwr5rCA==", 1 },
+                    { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAELC7ovMCQEuFNKNk1RVo1hudzh0zumrbYNuVYMcz8A0OElgqVwL3h6eH48RLksGU3Q==", 1 },
+                    { 3, null, true, "", 12, "alexy.ayash@gmail.com", "أليكسي", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEEiP9p9e8++ztOMJnhEaLzd+zxBDWdZ9zus2ChrgMx0RVlpIndUXSIPhD0xrWszOpA==", 2 },
+                    { 4, null, true, "", 1, "oayyash@bankofbeirut.com", "وردة", "الجزائرية", null, null, null, null, "AQAAAAEAACcQAAAAEJZ5qa0TNiFKqjaZbAqorhdkWQ3p3K1gQ27PLeYc9HQJu3wbiJ6J0RllEnQInsbAkQ==", 2 }
                 });
 
             migrationBuilder.CreateIndex(

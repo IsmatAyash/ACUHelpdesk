@@ -479,7 +479,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "ismat.ayash@gmail.com",
                             FirstName = "عصمت",
                             LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAEFpPfuaRCkO3bJa2AwhBkMcZ2YAQgBULgq2kTD+h5cFEYfLVY+3RFBSEgEYYlztHrw==",
+                            Password = "AQAAAAEAACcQAAAAEAyErJ1Zl9OzQDSucAylbMy0hT3Xa6FdxdkV+5CFsv5NrXE7tHYvD8gptCSPwr5rCA==",
                             RoleId = 1
                         },
                         new
@@ -491,7 +491,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "layale@gmail.com",
                             FirstName = "ليال",
                             LastName = "باسيل",
-                            Password = "AQAAAAEAACcQAAAAEB4idnkaIDnBrWlzOcrApGX4eE39chtNRzKqz/VVclW6hyRF7rLRGV2UYTOP6uxIuw==",
+                            Password = "AQAAAAEAACcQAAAAELC7ovMCQEuFNKNk1RVo1hudzh0zumrbYNuVYMcz8A0OElgqVwL3h6eH48RLksGU3Q==",
                             RoleId = 1
                         },
                         new
@@ -503,7 +503,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "alexy.ayash@gmail.com",
                             FirstName = "أليكسي",
                             LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAECOaIhiVQfqd2UtCkMMBWqOgpt+DPGa1tFwtmH46HENQNUhtMz9yCzffTeRmdWoXgQ==",
+                            Password = "AQAAAAEAACcQAAAAEEiP9p9e8++ztOMJnhEaLzd+zxBDWdZ9zus2ChrgMx0RVlpIndUXSIPhD0xrWszOpA==",
                             RoleId = 2
                         },
                         new
@@ -515,7 +515,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "oayyash@bankofbeirut.com",
                             FirstName = "وردة",
                             LastName = "الجزائرية",
-                            Password = "AQAAAAEAACcQAAAAEAV5jYyXRh0IEMetkRtjzbscWCuT0qJF5eZ2iJ3ZxCWlsnqMIv84lQwLidq8/xJFiQ==",
+                            Password = "AQAAAAEAACcQAAAAEJZ5qa0TNiFKqjaZbAqorhdkWQ3p3K1gQ27PLeYc9HQJu3wbiJ6J0RllEnQInsbAkQ==",
                             RoleId = 2
                         });
                 });

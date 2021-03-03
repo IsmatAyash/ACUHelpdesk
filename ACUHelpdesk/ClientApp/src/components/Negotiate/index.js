@@ -101,7 +101,7 @@ const Negotiate = () => {
   useEffect(() => {
     let isSubscribed = true;
     async function getNegs() {
-      const { data } = await getNegotiations();
+      const { data } = await getNegotiations(user.userId);
       setIsloading(false);
       if (isSubscribed) setNegs(data.map(d => mapToViewModel(d)));
     }
@@ -276,7 +276,8 @@ const Negotiate = () => {
     } else {
       try {
         const { data: retMsg } = await postDiscussion(msg);
-        setDiscussions([...discussions, retMsg]);
+        console.log("returned message", retMsg);
+        setDiscussions([...discussions, { ...retMsg, avatar: user.avatarSrc }]);
         setMsg({ ...msg, message: "", messageType: "Text" });
       } catch (ex) {
         toast.error("لم يتم حفظ الرسالة الأخيرة بنجاح");
@@ -340,6 +341,7 @@ const Negotiate = () => {
               onClose={handleClose}
               show={show}
               addIcon={<MdAddCircle style={{ fontSize: 22 }} />}
+              imageSrc={user.avatarSrc}
               data={negs}
               memb={false}
               placement="bottom"
@@ -360,8 +362,7 @@ const Negotiate = () => {
               style={{
                 overflow: "auto",
                 textAlign: "right",
-                justifyContent: "flex-end",
-                paddingBottom: "5rem",
+                paddingBottom: "1rem",
               }}
             >
               {discussions &&
@@ -419,6 +420,7 @@ const Negotiate = () => {
           <NegListGroup
             lng={lng}
             // addIcon={<MdGroupAdd />}
+            imageSrc="/images/membersImage.svg"
             data={members}
             memb={true}
             onInvitation={handleInvitation}

@@ -31,14 +31,14 @@ namespace ACUHelpdesk.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<NegotiationDiscussion>> GetNegotiationDiscussion(int id)
         {
-            var negotiationDiscussion = await _context.NegotiationDiscussions.FindAsync(id);
+            var response = await _context.NegotiationDiscussions.FindAsync(id);
 
-            if (negotiationDiscussion == null)
+            if (response == null)
             {
                 return NotFound();
             }
 
-            return negotiationDiscussion;
+            return Ok(response);
         }
 
         // PUT: api/NegotiationDiscussion/5

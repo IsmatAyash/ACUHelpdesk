@@ -13,7 +13,7 @@ namespace ACUHelpdesk.Models
         public int Id { get; set; }
         public int NegotiationId { get; set; }
         public virtual Negotiation Negotiation { get; set; }
-        public int SenderId { get; set; }
+        public int? SenderId { get; set; }
         public virtual User Sender { get; set; }
         public string Message { get; set; }
         public string AttName { get; set; }
