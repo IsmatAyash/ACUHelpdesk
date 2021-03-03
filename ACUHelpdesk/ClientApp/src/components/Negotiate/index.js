@@ -3,6 +3,7 @@ import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
 import { MdGroupAdd, MdAddCircle } from "react-icons/md";
 import { Col, Card, Button, Form, Spinner } from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
+import { Discussion, DiscussionBody, MessageItem } from "./DiscussionElement";
 import NegListGroup from "./NegListGroup";
 import {
   getNegotiations,
@@ -12,6 +13,7 @@ import {
   getNegotiation,
 } from "../../services/negService";
 import { updateMember } from "../../services/memberService";
+import { postDiscussion } from "./../../services/discussionService";
 import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
@@ -19,6 +21,7 @@ import NegClose from "./NegClose";
 import Message from "./Message";
 import ConfirmDialog from "../common/ConfirmDialog";
 import { toast } from "react-toastify";
+import IconButton from "./IconButton";
 
 const Negotiate = () => {
   const { user } = useContext(UserContext);
@@ -26,14 +29,13 @@ const Negotiate = () => {
   const [neg, setNeg] = useState({});
   const [members, setMembers] = useState([]);
   const [discussions, setDiscussions] = useState([]);
-  const [negHeader, setNegHeader] = useState({});
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [closeShow, setCloseShow] = useState(false);
   const [negIdToDel, setNegIdToDel] = useState({});
   const [isloading, setIsloading] = useState(true);
   const [mode, setMode] = useState("");
-  const [message, setMessage] = useState("");
+  const [msg, setMsg] = useState({ message: "", messageType: "Text" });
 
   const handleClose = () => setShow(false);
 
@@ -84,6 +86,7 @@ const Negotiate = () => {
 
   const handleItemSelect = id => {
     const filtered = negs.filter(n => n.id === id)[0];
+    setMsg({ ...msg, negotiationId: id, senderId: user.userId });
     populateMembers(filtered);
     setNeg(filtered);
   };
@@ -92,6 +95,7 @@ const Negotiate = () => {
     setMembers(n.members);
     // setNegHeader(n);
     setDiscussions(n.discussions);
+    console.log("discussions after populate", discussions);
   };
 
   useEffect(() => {
@@ -104,6 +108,8 @@ const Negotiate = () => {
     getNegs();
     return () => (isSubscribed = false);
   }, []);
+
+  console.log("first read neg and dis", negs);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -257,6 +263,27 @@ const Negotiate = () => {
     }
   };
 
+  const onKeyUp = e => {
+    if (e.charCode === 13) {
+      handleMsgAction("Send");
+    }
+  };
+
+  const handleMsgAction = async (e, action) => {
+    e.preventDefault();
+    if (action === "Attach") {
+      console.log("Here we handle attachments");
+    } else {
+      try {
+        const { data: retMsg } = await postDiscussion(msg);
+        setDiscussions([...discussions, retMsg]);
+        setMsg({ ...msg, message: "", messageType: "Text" });
+      } catch (ex) {
+        toast.error("لم يتم حفظ الرسالة الأخيرة بنجاح");
+      }
+    }
+  };
+
   return (
     <NegContainer fluid>
       {show && (
@@ -312,7 +339,7 @@ const Negotiate = () => {
               onAction={handleAction}
               onClose={handleClose}
               show={show}
-              addIcon={<MdAddCircle style={{ fontSize: "16px" }} />}
+              addIcon={<MdAddCircle style={{ fontSize: 22 }} />}
               data={negs}
               memb={false}
               placement="bottom"
@@ -329,49 +356,62 @@ const Negotiate = () => {
                 onInitiateClose={handleInitiateClose}
               />
             </Card.Header>
-            <Card.Body style={{ overflowY: "auto", textAlign: "right" }}>
-              <Message type="sent" />
-              <Message type="replies" />
-              <Message type="replies" />
-              <Message type="replies" />
-              <Message type="sent" />
+            <Card.Body
+              style={{
+                overflow: "auto",
+                textAlign: "right",
+                justifyContent: "flex-end",
+                paddingBottom: "5rem",
+              }}
+            >
+              {discussions &&
+                discussions.map(dis => (
+                  <Message
+                    key={dis.id}
+                    type={dis.senderId === user.userId ? "sent" : "replies"}
+                    msg={dis.message}
+                    avatar={dis.avatar}
+                    sentAt={dis.sentAt}
+                  />
+                ))}
             </Card.Body>
             <Card.Footer className="text-muted">
-              <Form>
+              <Form onSubmit={e => handleMsgAction(e, "Send")}>
                 <Form.Row>
                   <Col sm={1}>
-                    <Button variant="light" disabled>
-                      <IoHappyOutline size="medium" />
-                    </Button>
+                    <IoHappyOutline style={{ fontSize: 22, marginTop: 7 }} />
                   </Col>
                   <Col sm={1}>
-                    <Button variant="light">
-                      <IoAttach size="medium" />
+                    <Button
+                      onClick={e => handleMsgAction(e, "Attach")}
+                      variant="link"
+                    >
+                      <IoAttach style={{ fontSize: 22 }} />
                     </Button>
                   </Col>
                   <Col sm={9}>
                     <Form.Control
-                      type="hidden"
-                      name="negotiationId"
-                      value={neg.id}
-                    ></Form.Control>
-                    <Form.Control
                       placeholder="مضمون الرسالة"
                       name="message"
-                      value={message}
+                      value={msg.message}
+                      onKeyUp={e => onKeyUp(e)}
+                      onChange={e =>
+                        setMsg({ ...msg, message: e.target.value })
+                      }
                     />
                   </Col>
                   <Col sm={1}>
-                    <Button
-                      variant="light"
-                      className="cid-text-direction-rtl"
-                      type="submit"
-                    >
-                      <IoPaperPlane size="medium" />
+                    <Button type="submit" variant="link">
+                      <IoPaperPlane
+                        style={{
+                          color: "green",
+                          fontSize: 22,
+                        }}
+                      />
                     </Button>
                   </Col>
                 </Form.Row>
-              </Form>{" "}
+              </Form>
             </Card.Footer>
           </Card>
         </NegMemberCol>

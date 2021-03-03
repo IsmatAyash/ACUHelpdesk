@@ -66,7 +66,18 @@ namespace ACUHelpdesk.Controllers
                                          Flag = m.User.Country.Alpha2
                                      }),
                                      Products = r.NegotiationProducts.Select(p => new {p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode}),
-                                     Discussions = r.NegotiationDiscussions.Select(d => new { d.Id, d.NegotiationId, d.Message, d.SentAt, SenderId = d.Sender.Id, SenderName = d.Sender.FirstName + " " + d.Sender.LastName})
+                                     Discussions = r.NegotiationDiscussions.Select(d => new 
+                                     { 
+                                         d.Id, 
+                                         d.NegotiationId, 
+                                         d.Message, 
+                                         d.SentAt, 
+                                         SenderId = d.Sender.Id, 
+                                         SenderName = d.Sender.FirstName + " " + d.Sender.LastName,
+                                         Avatar = String.IsNullOrEmpty(d.Sender.Avatar)
+                                                  ? "/images/avatarPlaceholder.png"
+                                                  : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, d.Sender.Avatar),
+                                     }),
                                  }).ToListAsync();
 
             return Ok(negotiations);
@@ -113,7 +124,18 @@ namespace ACUHelpdesk.Controllers
                                          Flag = m.User.Country.Alpha2
                                      }),
                                      Products = r.NegotiationProducts.Select(p => new { p.Id, p.ProductId, p.Tariff, p.Remarks, p.NegotiationId, p.Product.ProductDescriptionAR, p.Product.ProductCode }),
-                                     Discussions = r.NegotiationDiscussions.Select(d => new { d.Id, d.NegotiationId, d.Message, d.SentAt, SenderId = d.Sender.Id, SenderName = d.Sender.FirstName + " " + d.Sender.LastName })
+                                     Discussions = r.NegotiationDiscussions.Select(d => new
+                                     {
+                                         d.Id,
+                                         d.NegotiationId,
+                                         d.Message,
+                                         d.SentAt,
+                                         SenderId = d.Sender.Id,
+                                         SenderName = d.Sender.FirstName + " " + d.Sender.LastName,
+                                         Avatar = String.IsNullOrEmpty(d.Sender.Avatar)
+                                                  ? "/images/avatarPlaceholder.png"
+                                                  : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, d.Sender.Avatar),
+                                     }),
                                  }).ToListAsync();
 
             if (negotiation == null)

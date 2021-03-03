@@ -122,13 +122,13 @@ namespace ACUHelpdesk.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NegotiationId = table.Column<int>(type: "int", nullable: true),
+                    NegotiationId = table.Column<int>(type: "int", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AttName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AttPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SentAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MessageType = table.Column<int>(type: "int", nullable: false)
+                    MessageType = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -138,7 +138,7 @@ namespace ACUHelpdesk.Migrations
                         column: x => x.NegotiationId,
                         principalTable: "Negotiation",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_NegotiationDiscussion_User_SenderId",
                         column: x => x.SenderId,
@@ -249,10 +249,10 @@ namespace ACUHelpdesk.Migrations
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
                 values: new object[,]
                 {
-                    { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEOVQrrCPbmeGSgyix1j4eHNmLMsCfG5GXVdPrVeJlN42efks55KahBe8cTUtwuPWVA==", 1 },
-                    { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAEDQIROK6W833BSOhOt1LJrEY7iTrY/eKs3615GAfwx/BNj6eq+DjzDqqOFdH3JoG0Q==", 1 },
-                    { 3, null, true, "", 12, "alexy.ayash@gmail.com", "أليكسي", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEL+eEJUNUYVAxjEyCa54FnkRhLg0o981DKMlTp2Bglc1HBSJd0u98jDRa3aSP9tiXg==", 2 },
-                    { 4, null, true, "", 1, "oayyash@bankofbeirut.com", "وردة", "الجزائرية", null, null, null, null, "AQAAAAEAACcQAAAAEAbNe1RRR9GD4UxiJtHAI9Y3EmL9LHmIpgKIP4gIWBX6+vDoT3xnmzgA8oJkUFnbQw==", 2 }
+                    { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEFpPfuaRCkO3bJa2AwhBkMcZ2YAQgBULgq2kTD+h5cFEYfLVY+3RFBSEgEYYlztHrw==", 1 },
+                    { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAEB4idnkaIDnBrWlzOcrApGX4eE39chtNRzKqz/VVclW6hyRF7rLRGV2UYTOP6uxIuw==", 1 },
+                    { 3, null, true, "", 12, "alexy.ayash@gmail.com", "أليكسي", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAECOaIhiVQfqd2UtCkMMBWqOgpt+DPGa1tFwtmH46HENQNUhtMz9yCzffTeRmdWoXgQ==", 2 },
+                    { 4, null, true, "", 1, "oayyash@bankofbeirut.com", "وردة", "الجزائرية", null, null, null, null, "AQAAAAEAACcQAAAAEAV5jYyXRh0IEMetkRtjzbscWCuT0qJF5eZ2iJ3ZxCWlsnqMIv84lQwLidq8/xJFiQ==", 2 }
                 });
 
             migrationBuilder.CreateIndex(

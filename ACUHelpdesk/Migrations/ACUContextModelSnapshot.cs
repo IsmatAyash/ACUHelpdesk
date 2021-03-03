@@ -269,10 +269,10 @@ namespace ACUHelpdesk.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MessageType")
-                        .HasColumnType("int");
+                    b.Property<string>("MessageType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("NegotiationId")
+                    b.Property<int>("NegotiationId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SenderId")
@@ -479,7 +479,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "ismat.ayash@gmail.com",
                             FirstName = "عصمت",
                             LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAEOVQrrCPbmeGSgyix1j4eHNmLMsCfG5GXVdPrVeJlN42efks55KahBe8cTUtwuPWVA==",
+                            Password = "AQAAAAEAACcQAAAAEFpPfuaRCkO3bJa2AwhBkMcZ2YAQgBULgq2kTD+h5cFEYfLVY+3RFBSEgEYYlztHrw==",
                             RoleId = 1
                         },
                         new
@@ -491,7 +491,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "layale@gmail.com",
                             FirstName = "ليال",
                             LastName = "باسيل",
-                            Password = "AQAAAAEAACcQAAAAEDQIROK6W833BSOhOt1LJrEY7iTrY/eKs3615GAfwx/BNj6eq+DjzDqqOFdH3JoG0Q==",
+                            Password = "AQAAAAEAACcQAAAAEB4idnkaIDnBrWlzOcrApGX4eE39chtNRzKqz/VVclW6hyRF7rLRGV2UYTOP6uxIuw==",
                             RoleId = 1
                         },
                         new
@@ -503,7 +503,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "alexy.ayash@gmail.com",
                             FirstName = "أليكسي",
                             LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAEL+eEJUNUYVAxjEyCa54FnkRhLg0o981DKMlTp2Bglc1HBSJd0u98jDRa3aSP9tiXg==",
+                            Password = "AQAAAAEAACcQAAAAECOaIhiVQfqd2UtCkMMBWqOgpt+DPGa1tFwtmH46HENQNUhtMz9yCzffTeRmdWoXgQ==",
                             RoleId = 2
                         },
                         new
@@ -515,7 +515,7 @@ namespace ACUHelpdesk.Migrations
                             Email = "oayyash@bankofbeirut.com",
                             FirstName = "وردة",
                             LastName = "الجزائرية",
-                            Password = "AQAAAAEAACcQAAAAEAbNe1RRR9GD4UxiJtHAI9Y3EmL9LHmIpgKIP4gIWBX6+vDoT3xnmzgA8oJkUFnbQw==",
+                            Password = "AQAAAAEAACcQAAAAEAV5jYyXRh0IEMetkRtjzbscWCuT0qJF5eZ2iJ3ZxCWlsnqMIv84lQwLidq8/xJFiQ==",
                             RoleId = 2
                         });
                 });
@@ -534,8 +534,10 @@ namespace ACUHelpdesk.Migrations
             modelBuilder.Entity("ACUHelpdesk.Models.NegotiationDiscussion", b =>
                 {
                     b.HasOne("ACUHelpdesk.Models.Negotiation", "Negotiation")
-                        .WithMany()
-                        .HasForeignKey("NegotiationId");
+                        .WithMany("NegotiationDiscussions")
+                        .HasForeignKey("NegotiationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACUHelpdesk.Models.User", "Sender")
                         .WithMany()
@@ -608,6 +610,8 @@ namespace ACUHelpdesk.Migrations
 
             modelBuilder.Entity("ACUHelpdesk.Models.Negotiation", b =>
                 {
+                    b.Navigation("NegotiationDiscussions");
+
                     b.Navigation("NegotiationMembers");
 
                     b.Navigation("NegotiationProducts");

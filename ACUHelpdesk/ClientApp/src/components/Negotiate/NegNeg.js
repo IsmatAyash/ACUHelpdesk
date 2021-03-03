@@ -50,19 +50,13 @@ const NegNeg = ({ negs, onItemSelect, onAction }) => {
                 {createdBy === user.fullName && (
                   <ButtonGroup className="ml-1" size="small">
                     <IconButton
-                      icon={
-                        <RiEdit2Fill
-                          style={{ color: "black", fontSize: "16px" }}
-                        />
-                      }
+                      icon={<RiEdit2Fill />}
                       tooltip="تعديل منصة للمفاوضات"
                       placement="top"
                       onAction={() => onAction("editGroup", id, status)}
                     />
                     <IconButton
-                      icon={
-                        <MdDelete style={{ color: "red", fontSize: "16px" }} />
-                      }
+                      icon={<MdDelete style={{ color: "red" }} />}
                       tooltip="إلغاء منصة للمفاوضات"
                       placement="top"
                       onAction={() => onAction("delGroup", id, status)}

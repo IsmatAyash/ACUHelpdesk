@@ -4,14 +4,16 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const NegIconButton = styled.i`
   margin-top: 0;
-  /* font-size: 25px; */
-  color: grey;
   margin-left: 10px;
   transition: 0.3s;
 
   &:hover {
     color: var(--success);
     cursor: pointer;
+  }
+
+  & > svg {
+    font-size: large;
   }
 `;
 

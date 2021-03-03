@@ -77,6 +77,7 @@ namespace ACUHelpdesk.Controllers
         [HttpPost]
         public async Task<ActionResult<NegotiationDiscussion>> PostNegotiationDiscussion(NegotiationDiscussion negotiationDiscussion)
         {
+            negotiationDiscussion.SentAt = DateTime.Now;
             _context.NegotiationDiscussions.Add(negotiationDiscussion);
             await _context.SaveChangesAsync();
 
