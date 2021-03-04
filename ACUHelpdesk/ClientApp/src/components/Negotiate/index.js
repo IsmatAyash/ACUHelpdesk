@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
-import { MdGroupAdd, MdAddCircle } from "react-icons/md";
-import { Col, Card, Button, Form, Spinner } from "react-bootstrap";
+import { MdAddCircle } from "react-icons/md";
+import { Card, Spinner } from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
 import { Discussion, DiscussionBody, MessageItem } from "./DiscussionElement";
 import NegListGroup from "./NegListGroup";
@@ -13,15 +13,13 @@ import {
   getNegotiation,
 } from "../../services/negService";
 import { updateMember } from "../../services/memberService";
-import { postDiscussion } from "./../../services/discussionService";
 import { UserContext } from "../../services/UserContext";
 import DisHeader from "./DisHeader";
 import NegNew from "./NegNew";
 import NegClose from "./NegClose";
-import Message from "./Message";
 import ConfirmDialog from "../common/ConfirmDialog";
 import { toast } from "react-toastify";
-import IconButton from "./IconButton";
+import Chat from "./Chat";
 
 const Negotiate = () => {
   const { user } = useContext(UserContext);
@@ -35,7 +33,6 @@ const Negotiate = () => {
   const [negIdToDel, setNegIdToDel] = useState({});
   const [isloading, setIsloading] = useState(true);
   const [mode, setMode] = useState("");
-  const [msg, setMsg] = useState({ message: "", messageType: "Text" });
 
   const handleClose = () => setShow(false);
 
@@ -86,16 +83,13 @@ const Negotiate = () => {
 
   const handleItemSelect = id => {
     const filtered = negs.filter(n => n.id === id)[0];
-    setMsg({ ...msg, negotiationId: id, senderId: user.userId });
     populateMembers(filtered);
     setNeg(filtered);
   };
 
   const populateMembers = n => {
     setMembers(n.members);
-    // setNegHeader(n);
     setDiscussions(n.discussions);
-    console.log("discussions after populate", discussions);
   };
 
   useEffect(() => {
@@ -108,8 +102,6 @@ const Negotiate = () => {
     getNegs();
     return () => (isSubscribed = false);
   }, []);
-
-  console.log("first read neg and dis", negs);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -263,28 +255,6 @@ const Negotiate = () => {
     }
   };
 
-  const onKeyUp = e => {
-    if (e.charCode === 13) {
-      handleMsgAction("Send");
-    }
-  };
-
-  const handleMsgAction = async (e, action) => {
-    e.preventDefault();
-    if (action === "Attach") {
-      console.log("Here we handle attachments");
-    } else {
-      try {
-        const { data: retMsg } = await postDiscussion(msg);
-        console.log("returned message", retMsg);
-        setDiscussions([...discussions, { ...retMsg, avatar: user.avatarSrc }]);
-        setMsg({ ...msg, message: "", messageType: "Text" });
-      } catch (ex) {
-        toast.error("لم يتم حفظ الرسالة الأخيرة بنجاح");
-      }
-    }
-  };
-
   return (
     <NegContainer fluid>
       {show && (
@@ -358,62 +328,7 @@ const Negotiate = () => {
                 onInitiateClose={handleInitiateClose}
               />
             </Card.Header>
-            <Card.Body
-              style={{
-                overflow: "auto",
-                textAlign: "right",
-                paddingBottom: "1rem",
-              }}
-            >
-              {discussions &&
-                discussions.map(dis => (
-                  <Message
-                    key={dis.id}
-                    type={dis.senderId === user.userId ? "sent" : "replies"}
-                    msg={dis.message}
-                    avatar={dis.avatar}
-                    sentAt={dis.sentAt}
-                  />
-                ))}
-            </Card.Body>
-            <Card.Footer className="text-muted">
-              <Form onSubmit={e => handleMsgAction(e, "Send")}>
-                <Form.Row>
-                  <Col sm={1}>
-                    <IoHappyOutline style={{ fontSize: 22, marginTop: 7 }} />
-                  </Col>
-                  <Col sm={1}>
-                    <Button
-                      onClick={e => handleMsgAction(e, "Attach")}
-                      variant="link"
-                    >
-                      <IoAttach style={{ fontSize: 22 }} />
-                    </Button>
-                  </Col>
-                  <Col sm={9}>
-                    <Form.Control
-                      placeholder="مضمون الرسالة"
-                      name="message"
-                      value={msg.message}
-                      onKeyUp={e => onKeyUp(e)}
-                      onChange={e =>
-                        setMsg({ ...msg, message: e.target.value })
-                      }
-                    />
-                  </Col>
-                  <Col sm={1}>
-                    <Button type="submit" variant="link">
-                      <IoPaperPlane
-                        style={{
-                          color: "green",
-                          fontSize: 22,
-                        }}
-                      />
-                    </Button>
-                  </Col>
-                </Form.Row>
-              </Form>
-            </Card.Footer>
+            <Chat discussions={discussions} neg={neg} />
           </Card>
         </NegMemberCol>
         <NegMemberCol lng={lng} md={3}>

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.IO;
 using Microsoft.AspNetCore.SignalR;
+using ACUHelpdesk.Hubs;
 
 namespace ACUHelpdesk
 {
@@ -28,10 +29,24 @@ namespace ACUHelpdesk
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            services.AddControllers();
+
+            services.AddSignalR();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ClientAccess", policy =>
+                {
+                    policy.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:3000")
+                        .AllowCredentials();    
+                });
+            });
+
+            //services.AddCors();
             services.AddDbContext<ACUContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("ACUConn")));
 
-            services.AddControllers();
 
             //configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -51,7 +66,6 @@ namespace ACUHelpdesk
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,10 +87,12 @@ namespace ACUHelpdesk
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-            app.UseCors(x => x
-               .AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
+
+            app.UseCors("ClientAccess");
+            //app.UseCors(x => x
+            //   .AllowAnyOrigin()
+            //   .AllowAnyMethod()
+            //   .AllowAnyHeader());
 
             // global error handler
             app.UseMiddleware<ErrorHandlerMiddleWare>();
@@ -95,12 +111,12 @@ namespace ACUHelpdesk
                 RequestPath = "/Content/Attachments"
             });
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<NegHub>("/hubs/neg");
             });
 
             app.UseSpa(spa =>
