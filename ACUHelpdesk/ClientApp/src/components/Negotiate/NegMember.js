@@ -23,7 +23,7 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
           (
             {
               id,
-              memberId,
+              userId,
               memberName,
               avatar,
               onlineStatus,
@@ -72,7 +72,7 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
                         )}
                       </small>
                     ) : (
-                      memberId === user.userId && (
+                      userId === user.userId && (
                         <ButtonGroup className="text-left">
                           <IconButton
                             icon={
@@ -106,7 +106,6 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
             </ListGroup.Item>
           )
         )}
-      ;
     </React.Fragment>
   );
 };

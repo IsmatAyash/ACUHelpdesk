@@ -11,6 +11,7 @@ import {
   postNegotiation,
   updateNegotiation,
   getNegotiation,
+  getAvatars,
 } from "../../services/negService";
 import { updateMember } from "../../services/memberService";
 import { UserContext } from "../../services/UserContext";
@@ -22,7 +23,7 @@ import { toast } from "react-toastify";
 import Chat from "./Chat";
 
 const Negotiate = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [negs, setNegs] = useState([]);
   const [neg, setNeg] = useState({ id: -1 });
   const [members, setMembers] = useState([]);
@@ -96,6 +97,8 @@ const Negotiate = () => {
     let isSubscribed = true;
     async function getNegs() {
       const { data } = await getNegotiations(user.userId);
+      const { data: avatars } = await getAvatars();
+      setUser({ ...user, avatars });
       setIsloading(false);
       if (isSubscribed) setNegs(data.map(d => mapToViewModel(d)));
     }

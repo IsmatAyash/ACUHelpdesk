@@ -7,6 +7,7 @@ import { UserContext } from "../../services/UserContext";
 import { postMessage } from "./../../services/neghubService";
 import { Col, Card, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
+import _ from "lodash";
 
 const Chat = ({ discussions, neg }) => {
   const { user } = useContext(UserContext);
@@ -29,13 +30,20 @@ const Chat = ({ discussions, neg }) => {
     let isSubscribed = true;
 
     const connection = new HubConnectionBuilder()
-      .withUrl("https://localhost:44376/hubs/neg")
+      .withUrl("https://localhost:5001/hubs/neg")
       .withAutomaticReconnect()
       .build();
 
     connection.on("ReceivedMessage", message => {
       const updatedChat = [...lastChat.current];
-      setChat([...updatedChat, { ...message, avatar: user.avatarSrc }]);
+
+      setChat([
+        ...updatedChat,
+        {
+          ...message,
+          avatar: _.find(user.avatars, { userId: message.senderId }).avatar,
+        },
+      ]);
       setMsg({ ...msg, message: "", messageType: "Text" });
     });
 
@@ -76,25 +84,6 @@ const Chat = ({ discussions, neg }) => {
       }
     }
   };
-
-  //   const sendMessage = async (e, action) => {
-  //     e.preventDefault();
-  //     if (action === "Attach") {
-  //       console.log("Here we handle attachments");
-  //     } else {
-  //       try {
-  //         const { data: retMsg } = await postDiscussion({
-  //           ...msg,
-  //           senderId: user.userId,
-  //           negotiationId: negId,
-  //         });
-  //         setChat([...chat, { ...retMsg, avatar: user.avatarSrc }]);
-  //         setMsg({ ...msg, message: "", messageType: "Text" });
-  //       } catch (ex) {
-  //         toast.error("لم يتم حفظ الرسالة الأخيرة بنجاح");
-  //       }
-  //     }
-  //   };
 
   return (
     <>

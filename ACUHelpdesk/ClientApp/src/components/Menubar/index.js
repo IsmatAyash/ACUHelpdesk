@@ -4,7 +4,15 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { UserContext } from "../../services/UserContext";
-import { FaHome } from "react-icons/fa";
+import {
+  FaHome,
+  FaHandsHelping,
+  FaUniversity,
+  FaFileContract,
+  FaTasks,
+  FaLayerGroup,
+} from "react-icons/fa";
+import { GiRoundTable } from "react-icons/gi";
 import { MdSettings } from "react-icons/md";
 import DropdownNav from "../../components/common/DropdownNav";
 import "./Menubar.css";
@@ -29,21 +37,45 @@ const Menubar = ({ onSelect }) => {
     { id: "/createpasscode", option: `${t("menubar.createpasscode")}` },
   ];
 
-  const icon = () => (
-    <>
-      <FaHome
-        style={{ marginLeft: "10px", verticalAlign: "middle", marginBottom: 5 }}
-      />
-    </>
-  );
+  const icon = idx => {
+    switch (idx) {
+      case 1:
+        return <FaHome className="ml-2 mb-1" />;
+      case 2:
+        return <FaUniversity className="ml-2 mb-1" />;
+      case 3:
+        return (
+          <>
+            <FaLayerGroup className="ml-2 mb-1" /> {t("menubar.spcomm.spcomm")}
+          </>
+        );
+      case 11:
+        return (
+          <>
+            <GiRoundTable className="ml-2 mb-1" />
+            {t("menubar.meetings.meetings")}
+          </>
+        );
+      case 10:
+        return <FaFileContract className="ml-2 mb-1" />;
+      case 14:
+        return <FaHandsHelping className="ml-2 mb-1" />;
+      case 15:
+        return <FaTasks className="ml-2 mb-1" />;
+      default:
+        break;
+    }
+  };
+
+  // `${t("menubar.spcomm.spcomm")}
 
   const navlinks = [
-    { id: 1, path: "/", label: `${t("menubar.home")}`, icon: true },
+    { id: 1, path: "/", label: `${t("menubar.home")}` },
     { id: 2, path: "/socecocab", label: `${t("menubar.socecocab")}` },
     {
       id: 3,
       path: "/spcomm",
-      label: `${t("menubar.spcomm.spcomm")}`,
+      label: icon(3),
       dditems: [
         {
           id: 4,
@@ -77,7 +109,7 @@ const Menubar = ({ onSelect }) => {
     {
       id: 11,
       path: "/meetings",
-      label: `${t("menubar.meetings.meetings")}`,
+      label: icon(11),
       dditems: [
         {
           id: 12,
@@ -101,6 +133,12 @@ const Menubar = ({ onSelect }) => {
     setExpanded(false);
   };
 
+  const borderStyle = {
+    borderLeft: "1px solid gray",
+    paddingLeft: 15,
+    paddingRight: 15,
+  };
+
   return (
     <Navbar
       collapseOnSelect
@@ -112,7 +150,7 @@ const Menubar = ({ onSelect }) => {
       style={{
         textAlign: lng === "ar" ? "right" : "left",
         fontSize: 16,
-        padding: 5,
+        padding: 0,
       }}
     >
       <Navbar.Toggle
@@ -129,8 +167,9 @@ const Menubar = ({ onSelect }) => {
                 className="nav-item nav-link ml-2"
                 to={navlink.path}
                 onClick={e => handleClick(e)}
+                style={borderStyle}
               >
-                {navlink.icon && icon()}
+                {icon(navlink.id)}
                 {navlink.label}
               </NavLink>
             ) : (
@@ -139,6 +178,7 @@ const Menubar = ({ onSelect }) => {
                 title={navlink.label}
                 id="collasible-nav-dropdown"
                 className="ml-2"
+                style={borderStyle}
               >
                 {navlink.dditems.map(dditem =>
                   dditem.option === "divider" ? (
@@ -167,7 +207,9 @@ const Menubar = ({ onSelect }) => {
                 activeClassName="bg-success"
                 to="/negotiation"
                 onClick={() => setExpanded(false)}
+                style={borderStyle}
               >
+                {icon(14)}
                 {t("menubar.negotiation")}
               </NavLink>
               <NavLink
@@ -176,7 +218,9 @@ const Menubar = ({ onSelect }) => {
                 activeClassName="bg-success"
                 to="/products"
                 onClick={() => setExpanded(false)}
+                style={borderStyle}
               >
+                {icon(15)}
                 {t("menubar.products")}
               </NavLink>
             </>

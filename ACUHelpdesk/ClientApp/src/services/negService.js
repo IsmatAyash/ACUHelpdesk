@@ -8,9 +8,9 @@ function negUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-// export const getNegotiations = async () => {
-//   return await http.get(apiEndpoint);
-// };
+export const getAvatars = async () => {
+  return await http.get(`${apiEndpoint}/avatars`);
+};
 
 export const getNegotiations = async userId => {
   return await http.get(`${apiNegs}/${userId}`);

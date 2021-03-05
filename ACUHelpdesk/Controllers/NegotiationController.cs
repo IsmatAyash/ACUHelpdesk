@@ -150,6 +150,19 @@ namespace ACUHelpdesk.Controllers
             return Ok(negotiation);
         }
 
+       [HttpGet("avatars")]
+       public async Task<ActionResult> GetAvatars()
+        {
+            var avatars = await _context.Users.Select(u => new
+            {
+                UserId = u.Id,
+                Avatar = String.IsNullOrEmpty(u.Avatar)
+                            ? "/images/avatarPlaceholder.png"
+                            : string.Format("{0}://{1}{2}/Content/Avatars/{3}", Request.Scheme, Request.Host, Request.PathBase, u.Avatar),
+            }).ToArrayAsync();
+            return Ok(avatars);
+        }
+
         // PUT: api/Negotiation/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -300,14 +313,14 @@ namespace ACUHelpdesk.Controllers
             var acceptUrl = $"{origin}/invitation?Id={Id}&selection=Accept";
             var rejectUrl = $"{origin}/invitation?Id={Id}&selection=Reject";
             string message;
-            message = $@"<p>تفضلوا بقبول أو رفض الحوار تحت العنوان {title} حول {subject} </p>
-            <p>في حال قبول الدعوى للحوار، سوف يتم تفعيلها مباشرة كما ويمكن تفعيلها كذلك من خلال صفحة المفاوضات بعد الدخول الناجح إلى التطبيق </p>
-            <pre><a href=""{acceptUrl}""><h3>قبول الدعوة</h3></a> <a href=""{rejectUrl}""><h3>رفض الدعوة</h3></a></pre>";
+            message = $@"<p>أنتم مدعوون إلى حوار تحت العنوان {title} حول {subject} </p>
+            <p>تفضلوا بقبول الدعوة أو رفضها من خلال صفحة المفاوضات بعد الدخول الناجح إلى التطبيق </p>";
+            //<pre><a href=""{acceptUrl}""><h3>قبول الدعوة</h3></a> <a href=""{rejectUrl}""><h3>رفض الدعوة</h3></a></pre>";
 
             _emailService.Send(
                 to: emails,
                 subject: "منصة الحوار عبر ACUHelpdesk",
-                html: $@"<h2>كلمة السر الخاصة بهذا الحوار</h2>
+                html: $@"<h2>دعوة خاصة بهذاالحوار</h2>
                          {message}"
             );
         }
