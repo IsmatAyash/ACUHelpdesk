@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
-import { joinNeg } from "./../../services/neghubService";
+import { joinNeg } from "../../services/neghubService";
 import Message from "./Message";
 import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
 import { UserContext } from "../../services/UserContext";
 import { postMessage } from "./../../services/neghubService";
-import { postDiscussion } from "./../../services/discussionService";
 import { Col, Card, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 
@@ -30,38 +29,29 @@ const Chat = ({ discussions, neg }) => {
     let isSubscribed = true;
 
     const connection = new HubConnectionBuilder()
-      .withUrl(`${process.env.REACT_APP_HUB_URL}/neg`)
+      .withUrl("https://localhost:44376/hubs/neg")
       .withAutomaticReconnect()
       .build();
 
-    connection.on("ReceiveMessage", message => {
+    connection.on("ReceivedMessage", message => {
       const updatedChat = [...lastChat.current];
       setChat([...updatedChat, { ...message, avatar: user.avatarSrc }]);
       setMsg({ ...msg, message: "", messageType: "Text" });
     });
 
-    connection
-      .start()
-      .then(result => {
-        console.log("Connected!");
-        connection.invoke("getConnId").then(cid => {
-          setConnId(cid);
-        });
-      })
-      .catch(e => console.log("Failed to connect!", e));
+    async function startConn() {
+      try {
+        await connection.start();
+        const cid = await connection.invoke("getConnId");
+        await joinNeg(cid, neg.id);
+        if (isSubscribed) setConnId(cid);
+      } catch (ex) {
+        console.log("Connection failed: ", ex);
+      }
+    }
+    startConn();
 
-    // async function startConn() {
-    //   try {
-    //     await connection.start();
-    //     const cid = await connection.invoke("getConnId");
-    //     if (isSubscribed) setConnId(cid);
-    //   } catch (ex) {
-    //     console.log("Connection failed: ", ex);
-    //   }
-    // }
-    // startConn();
-
-    // return () => (isSubscribed = false);
+    return () => (isSubscribed = false);
   }, []);
 
   const onKeyUp = e => {
@@ -69,8 +59,6 @@ const Chat = ({ discussions, neg }) => {
       sendMessage(e, "Send");
     }
   };
-
-  console.log("connection id", connId);
 
   const sendMessage = async (e, action) => {
     e.preventDefault();

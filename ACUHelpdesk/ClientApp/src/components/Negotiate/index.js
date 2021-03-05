@@ -24,7 +24,7 @@ import Chat from "./Chat";
 const Negotiate = () => {
   const { user } = useContext(UserContext);
   const [negs, setNegs] = useState([]);
-  const [neg, setNeg] = useState({});
+  const [neg, setNeg] = useState({ id: -1 });
   const [members, setMembers] = useState([]);
   const [discussions, setDiscussions] = useState([]);
   const [show, setShow] = useState(false);
@@ -328,13 +328,12 @@ const Negotiate = () => {
                 onInitiateClose={handleInitiateClose}
               />
             </Card.Header>
-            <Chat discussions={discussions} neg={neg} />
+            {neg.id !== -1 && <Chat discussions={discussions} neg={neg} />}
           </Card>
         </NegMemberCol>
         <NegMemberCol lng={lng} md={3}>
           <NegListGroup
             lng={lng}
-            // addIcon={<MdGroupAdd />}
             imageSrc="/images/membersImage.svg"
             data={members}
             memb={true}

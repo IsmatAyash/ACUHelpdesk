@@ -72,9 +72,11 @@ function App() {
                 render={props => <Spcomm {...props} comReps={reps} />}
               />
               <Route path="/reports" component={Reports} />
-              {/* <Route path="/meetings" component={Meetings} /> */}
-              <Route path="/meetings" component={Negotiate} />
-              {/* <Route path="/meetings/formalmeetings" component={FormalMeetings} /> */}
+              <Route path="/meetings" component={Meetings} />
+              <Route
+                path="/meetings/formalmeetings"
+                component={FormalMeetings}
+              />
               <Route path="/meetings/negotiation" component={Negotiate} />
               <Route
                 path="/meetings/upcomingmeetings"

@@ -3,6 +3,7 @@ using ACUHelpdesk.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ACUHelpdesk.Controllers
@@ -21,17 +22,17 @@ namespace ACUHelpdesk.Controllers
             _ctx = ctx;
         }
 
-        [HttpPost("[action]/{connId}/{negId})")]
+        [HttpPost("[action]/{connId}/{negId}")]
         public async Task<IActionResult> JoinNeg(string connId, string negId)
         {
             await _neg.Groups.AddToGroupAsync(connId, negId);
             return Ok();
         }
 
-        [HttpPost("[action]/{connId}/{negId})")]
-        public async Task<IActionResult> LeaveNeg(string connId, string negId)
+        [HttpPost("[action]/{connId}/{negId}")]
+        public async Task<IActionResult> LeaveNeg(string connId, string negName)
         {
-            await _neg.Groups.RemoveFromGroupAsync(connId, negId);
+            await _neg.Groups.RemoveFromGroupAsync(connId, negName);
             return Ok();
         }
 
@@ -42,10 +43,10 @@ namespace ACUHelpdesk.Controllers
             _ctx.NegotiationDiscussions.Add(message);
             await _ctx.SaveChangesAsync();
 
-            await _neg.Clients.All.SendAsync("ReceivedMessage", message);
+            //await _neg.Clients.All.SendAsync("ReceivedMessage", message);
 
-            //await _neg.Clients.Group(message.NegotiationId.ToString())
-            //                  .SendAsync("ReceivedMessage", message);
+            await _neg.Clients.Group(message.NegotiationId.ToString())
+                              .SendAsync("ReceivedMessage", message);
             return Ok();
         }
 
