@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { MdCheckCircle, MdCancel } from "react-icons/md";
 import { Modal, Button } from "react-bootstrap";
 import styled from "styled-components";

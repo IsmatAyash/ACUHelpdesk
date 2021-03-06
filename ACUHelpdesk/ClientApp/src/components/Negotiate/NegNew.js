@@ -93,17 +93,13 @@ const NegNew = props => {
     async function getMembers() {
       try {
         const { data: items } = await userService.getMembers(neg.id);
-        // const mapped = _.chain(items)
-        //   .groupBy(c => c.country)
-        //   .map((children, country) => ({ label: country, children }))
-        //   .value();
         setMembs(items);
       } catch (ex) {
         toast.error("لم تتم العملية بنجاح!!");
       }
     }
     getMembers();
-  }, []);
+  }, [neg.id]);
 
   const { negName, negSubject, negPassCode } = formData;
 

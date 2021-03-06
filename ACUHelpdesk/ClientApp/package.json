@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@microsoft/signalr": "^5.0.3",
-    "antd": "^4.12.3",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "i18next": "^19.8.7",

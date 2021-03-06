@@ -1,12 +1,8 @@
 import React from "react";
-import { Container, Row, Col, Carousel, Image } from "react-bootstrap";
+import { Container, Row, Carousel } from "react-bootstrap";
 import { intros, sections } from "./HomeData";
-import { useTranslation } from "react-i18next";
-import NewsCard from "./NewsCard";
 
 const Home = () => {
-  const { t } = useTranslation();
-
   const lng = localStorage.getItem("i18nextLng");
 
   return (
@@ -34,8 +30,8 @@ const Home = () => {
                 backgroundColor: "rgba(0,0,0,0.6)",
               }}
             >
-              <h3>{intro.label}</h3>
-              <p>{intro.text}</p>
+              <h3>{lng === "ar" ? intro.label : intro.labelEN}</h3>
+              <p>{lng === "ar" ? intro.text : intro.textEN}</p>
             </Carousel.Caption>
           </Carousel.Item>
         ))}
@@ -43,9 +39,11 @@ const Home = () => {
       {sections.map(sec => (
         <Row className="py-5" key={sec.id}>
           <Container>
-            <h1>{sec.title}</h1>
-            <p className="lead">{sec.subtitle}</p>
-            <p>{sec.text}</p>
+            <h1>{lng === "ar" ? sec.title : sec.titleEN}</h1>
+            <p className="lead">
+              {lng === "ar" ? sec.subtitle : sec.subtitleEN}
+            </p>
+            <p>{lng === "ar" ? sec.text : sec.textEN}</p>
           </Container>
         </Row>
       ))}

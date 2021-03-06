@@ -1,12 +1,5 @@
 import styled from "styled-components";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  ListGroup,
-  ListGroupItem,
-} from "react-bootstrap";
+import { Container, Row, Col, Card, ListGroup } from "react-bootstrap";
 
 export const NegContainer = styled(Container)`
   display: flex;

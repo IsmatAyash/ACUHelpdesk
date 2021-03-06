@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, ListGroup } from "react-bootstrap";
 import styled from "styled-components";
 
 const MsgListItem = styled.li`
@@ -8,9 +7,12 @@ const MsgListItem = styled.li`
   margin: 5px;
   width: calc(100% - 20px);
   font-size: 0.9em;
+  text-align: right;
 
-  &:first-child {
-    margin-top: auto;
+  > * {
+    &:first-child {
+      margin-top: auto;
+    }
   }
 `;
 
@@ -63,28 +65,12 @@ const MsgTimestamp = styled.small`
   }
 `;
 
-const MessageItem = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 0.2rem;
-  font-size: 0.9em;
-  margin-right: 0.9rem;
-  /* margin-left: 5px;
-  margin-bottom: 5px; */
-
-  &:first-child {
-    margin-top: auto;
-  }
-`;
-
 const Message = ({ type, msg, avatar, sentAt }) => {
   return (
     <>
       <MsgListItem>
-        <span>
-          <MsgImg src={avatar} alt="avatar in message" className={type} />
-          <MsgText className={type}>{msg}</MsgText>
-        </span>
+        <MsgImg src={avatar} alt="avatar in message" className={type} />
+        <MsgText className={type}>{msg}</MsgText>
         <MsgTimestamp className={type}>
           {new Date(sentAt).toLocaleString("ar-LB")}
         </MsgTimestamp>

@@ -8,6 +8,7 @@ import { postMessage } from "./../../services/neghubService";
 import { Col, Card, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import styled from "styled-components";
 
 const Chat = ({ discussions, neg }) => {
   const { user } = useContext(UserContext);
@@ -30,7 +31,7 @@ const Chat = ({ discussions, neg }) => {
     let isSubscribed = true;
 
     const connection = new HubConnectionBuilder()
-      .withUrl("https://localhost:5001/hubs/neg")
+      .withUrl(`${process.env.REACT_APP_HUB_URL}/neg`)
       .withAutomaticReconnect()
       .build();
 
@@ -60,7 +61,7 @@ const Chat = ({ discussions, neg }) => {
     startConn();
 
     return () => (isSubscribed = false);
-  }, []);
+  }, [msg, neg.id, user.avatars]);
 
   const onKeyUp = e => {
     if (e.charCode === 13) {
@@ -85,21 +86,44 @@ const Chat = ({ discussions, neg }) => {
     }
   };
 
+  const ChatBody = styled.div`
+    background: #eee;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    max-height: 60vh;
+    overflow: auto;
+    > * {
+      &:first-child {
+        margin-top: auto;
+      }
+    }
+  `;
+
   return (
     <>
       <Card.Body
-        style={{ overflow: "auto", textAlign: "right", paddingBottom: "1rem" }}
+        className="m-0 p-0"
+        style={{
+          display: "flex",
+          flexGrow: 1,
+          flexDirection: "column",
+          maxHeight: "100%",
+        }}
       >
-        {chat &&
-          chat.map(ch => (
-            <Message
-              key={ch.id}
-              type={ch.senderId === user.userId ? "sent" : "replies"}
-              msg={ch.message}
-              avatar={ch.avatar}
-              sentAt={ch.sentAt}
-            />
-          ))}
+        <ChatBody>
+          {chat &&
+            chat.map(ch => (
+              <Message
+                key={ch.id}
+                type={ch.senderId === user.userId ? "sent" : "replies"}
+                msg={ch.message}
+                avatar={ch.avatar}
+                sentAt={ch.sentAt}
+              />
+            ))}
+        </ChatBody>
       </Card.Body>
       <Card.Footer className="text-muted">
         <Form onSubmit={e => sendMessage(e, "Send")}>
@@ -119,6 +143,7 @@ const Chat = ({ discussions, neg }) => {
                 value={msg.message}
                 onKeyUp={e => onKeyUp(e)}
                 onChange={e => setMsg({ ...msg, message: e.target.value })}
+                disabled={neg.status !== "Active"}
               />
             </Col>
             <Col sm={1}>

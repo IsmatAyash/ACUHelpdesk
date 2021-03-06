@@ -38,7 +38,7 @@ const NegNeg = ({ negs, onItemSelect, onAction }) => {
                   variant={statusColor(status)}
                   style={{ float: "right", marginRight: 0 }}
                 >
-                  {status}-{id}
+                  {status}
                 </Badge>
                 <small className="text-muted" style={{ float: "left" }}>
                   {new Date(createdAt).toLocaleString("ar-LB", {

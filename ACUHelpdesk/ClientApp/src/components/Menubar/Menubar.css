@@ -4,3 +4,15 @@
   margin-right: 10px;
   margin-left: 10px;
 }
+
+.nav-links {
+  font-weight: bold;
+  border-left: 1px solid gray;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.nav-links:hover {
+  background-color: var(--success);
+  color: white;
+}

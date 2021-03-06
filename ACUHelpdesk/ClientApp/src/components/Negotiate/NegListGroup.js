@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Card,
   Image,
@@ -10,7 +10,6 @@ import {
 import { MdSearch } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import NegMember from "./NegMember";
-import { UserContext } from "../../services/UserContext";
 import {
   NegMemberListGroup,
   NegMemberCard,
@@ -32,7 +31,6 @@ const NegListGroup = ({
   imageSrc,
 }) => {
   const { t } = useTranslation();
-  const { user } = useContext(UserContext);
 
   const lngAlign = lng === "ar" ? " text-right" : " text-left";
 
@@ -55,17 +53,19 @@ const NegListGroup = ({
           </span>
         </div>
       </Card.Header>
-      <div className="d-flex p-2">
-        <Button size="sm" variant="outline-success" className="mx-1">
-          <MdSearch />
-        </Button>
-        <FormControl
-          size="sm"
-          type="text"
-          placeholder={t("menubar.search")}
-          className={lngAlign}
-        />
-      </div>
+      {!memb && (
+        <div className="d-flex p-2">
+          <Button size="sm" variant="outline-success" className="mx-1">
+            <MdSearch />
+          </Button>
+          <FormControl
+            size="sm"
+            type="text"
+            placeholder={t("menubar.search")}
+            className={lngAlign}
+          />
+        </div>
+      )}
       <Card.Body className="p-0 m-0">
         {memb ? (
           <NegMemberListGroup as="ul" lng={lng}>

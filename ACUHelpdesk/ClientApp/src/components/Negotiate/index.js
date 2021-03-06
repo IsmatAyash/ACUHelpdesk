@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { IoAttach, IoPaperPlane, IoHappyOutline } from "react-icons/io5";
+import React, { useState, useEffect, useContext } from "react";
 import { MdAddCircle } from "react-icons/md";
 import { Card, Spinner } from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
-import { Discussion, DiscussionBody, MessageItem } from "./DiscussionElement";
 import NegListGroup from "./NegListGroup";
 import {
   getNegotiations,
@@ -201,7 +199,6 @@ const Negotiate = () => {
       }
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        // setErrors({ ...errors, message: ex.response.data.message });
         toast.error(`Something has failed ,${ex.response.data.message}`);
       }
     }

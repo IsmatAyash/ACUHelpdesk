@@ -17,11 +17,6 @@ import { MdSettings } from "react-icons/md";
 import DropdownNav from "../../components/common/DropdownNav";
 import "./Menubar.css";
 
-const StyledDropDownItem = styled(NavDropdown.Item)`
-  text-align: ${({ lng }) => (lng === "ar" ? "left" : "right")};
-  text-decoration: none;
-`;
-
 const Menubar = ({ onSelect }) => {
   const { user } = useContext(UserContext);
 
@@ -37,37 +32,37 @@ const Menubar = ({ onSelect }) => {
     { id: "/createpasscode", option: `${t("menubar.createpasscode")}` },
   ];
 
+  const iconStyle = lng === "ar" ? "ml-2 mb-1" : "mr-2 mb-1";
+
   const icon = idx => {
     switch (idx) {
       case 1:
-        return <FaHome className="ml-2 mb-1" />;
+        return <FaHome className={iconStyle} />;
       case 2:
-        return <FaUniversity className="ml-2 mb-1" />;
+        return <FaUniversity className={iconStyle} />;
       case 3:
         return (
           <>
-            <FaLayerGroup className="ml-2 mb-1" /> {t("menubar.spcomm.spcomm")}
+            <FaLayerGroup className={iconStyle} /> {t("menubar.spcomm.spcomm")}
           </>
         );
       case 11:
         return (
           <>
-            <GiRoundTable className="ml-2 mb-1" />
+            <GiRoundTable className={iconStyle} />
             {t("menubar.meetings.meetings")}
           </>
         );
       case 10:
-        return <FaFileContract className="ml-2 mb-1" />;
+        return <FaFileContract className={iconStyle} />;
       case 14:
-        return <FaHandsHelping className="ml-2 mb-1" />;
+        return <FaHandsHelping className={iconStyle} />;
       case 15:
-        return <FaTasks className="ml-2 mb-1" />;
+        return <FaTasks className={iconStyle} />;
       default:
         break;
     }
   };
-
-  // `${t("menubar.spcomm.spcomm")}
 
   const navlinks = [
     { id: 1, path: "/", label: `${t("menubar.home")}` },
@@ -133,12 +128,6 @@ const Menubar = ({ onSelect }) => {
     setExpanded(false);
   };
 
-  const borderStyle = {
-    borderLeft: "1px solid gray",
-    paddingLeft: 15,
-    paddingRight: 15,
-  };
-
   return (
     <Navbar
       collapseOnSelect
@@ -164,10 +153,9 @@ const Menubar = ({ onSelect }) => {
               <NavLink
                 key={navlink.id}
                 exact
-                className="nav-item nav-link ml-2"
+                className="nav-item nav-link nav-links"
                 to={navlink.path}
                 onClick={e => handleClick(e)}
-                style={borderStyle}
               >
                 {icon(navlink.id)}
                 {navlink.label}
@@ -177,8 +165,7 @@ const Menubar = ({ onSelect }) => {
                 key={navlink.id}
                 title={navlink.label}
                 id="collasible-nav-dropdown"
-                className="ml-2"
-                style={borderStyle}
+                className="nav-links"
               >
                 {navlink.dditems.map(dditem =>
                   dditem.option === "divider" ? (
@@ -203,22 +190,20 @@ const Menubar = ({ onSelect }) => {
             <>
               <NavLink
                 exact
-                className="nav-item nav-link"
+                className="nav-item nav-link nav-links"
                 activeClassName="bg-success"
                 to="/negotiation"
                 onClick={() => setExpanded(false)}
-                style={borderStyle}
               >
                 {icon(14)}
                 {t("menubar.negotiation")}
               </NavLink>
               <NavLink
                 exact
-                className="nav-item nav-link"
+                className="nav-item nav-link nav-links"
                 activeClassName="bg-success"
                 to="/products"
                 onClick={() => setExpanded(false)}
-                style={borderStyle}
               >
                 {icon(15)}
                 {t("menubar.products")}

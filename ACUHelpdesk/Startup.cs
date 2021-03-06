@@ -39,7 +39,7 @@ namespace ACUHelpdesk
                 {
                     policy.AllowAnyHeader()
                         .AllowAnyMethod()
-                        .WithOrigins("http://localhost:3000")
+                        .WithOrigins("http://localhost:3000", "https://localhost:44376")
                         .AllowCredentials();    
                 });
             });
@@ -89,10 +89,6 @@ namespace ACUHelpdesk
             app.UseRouting();
 
             app.UseCors("ClientAccess");
-            //app.UseCors(x => x
-            //   .AllowAnyOrigin()
-            //   .AllowAnyMethod()
-            //   .AllowAnyHeader());
 
             // global error handler
             app.UseMiddleware<ErrorHandlerMiddleWare>();
