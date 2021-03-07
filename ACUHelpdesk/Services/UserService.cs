@@ -145,11 +145,15 @@ namespace ACUHelpdesk.Services
         public User Register(AddUserRequest model, string origin)
         {
             var usr = _context.Users.FirstOrDefault(x => x.Email == model.Email);
-            if (usr != null) {
-                sendAlreadyRegisteredEmail(model.Email, origin);
-                return null;
+            if (usr != null && usr.Active == true)
+            {
+               sendAlreadyRegisteredEmail(model.Email, origin);
+               return null;
+            } else if (usr != null && usr.Active == false)
+            {
+                sendActivationEmail(usr, origin);
+                return usr;
             }
-
 
             User user = new User();
             _context.Users.Add(user);
@@ -263,19 +267,20 @@ namespace ACUHelpdesk.Services
             if (!string.IsNullOrEmpty(origin))
             {
                 var verifyUrl = $"{origin}/verify-email?passcode={user.PassCode}";
-                    message = $@"<p>أرسل هذا البريد الإلكتروني بناءّ على طلبك المشاركة في منصة تسهيل مفاوضات الإتحاد الجمركي العربيACU Helpdesk account:</p>
+                    message = $@"<p>لقد أرسل هذا البريد الإلكتروني بناءّ على طلبك المشاركة في منصة تسهيل مفاوضات الإتحاد الجمركي العربي</p>
+                                 <p>إضغط على الرابط المرفق لتفعيل حسابكم وتمكنكم من المشاركة في حوار إلكتروني حول مواضيع مختلفة</p>
                                  <p><a href=""{verifyUrl}"">{verifyUrl}</a></p>";
             }
             else
             {
-                message = $@"<p>إضغط على الرابط المرفق لتفعيل حسابكم وتمكنكم من المشاركة في حوار إلكتروني حول مواضيع مختلفة     <code>/verify-email</code> api route:</p>
+                message = $@"<p>إضغط على الرابط المرفق لتفعيل حسابكم وتمكنكم من المشاركة في حوار إلكتروني حول مواضيع مختلفة<code>/verify-email</code></p>
                              <p><code>{user.PassCode}</code></p>";
             }
 
             _emailService.Send(
                 to: user.Email,
-                subject: "إشترك في منصة تسهيل مفاوضات الإتحاد الجمركي العربي ACU Helpdesk - Verify Email",
-                html: $@"<h4>أكد أن هذا البريد الإلكتروني هو بريدك </h4>
+                subject: "أكد أن هذا البريد الإلكتروني هو بريدك",
+                html: $@"<h4>منصة تسهيل مفاوضات الإتحاد الجمركي العربي </h4>
                          <p>إهلاّ وسهلاّ بكم في المنصة</p>
                          {message}"
             );

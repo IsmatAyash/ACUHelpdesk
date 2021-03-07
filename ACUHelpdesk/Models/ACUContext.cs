@@ -78,7 +78,7 @@ namespace ACUHelpdesk.Models
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    Id = 2,
+                    Id = 1,
                     RoleId = 1,
                     CountryId = 7,
                     Email = "layale@gmail.com",

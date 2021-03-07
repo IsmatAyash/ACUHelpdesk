@@ -48,6 +48,7 @@ const Login = () => {
     try {
       const usr = await userService.login(email, password);
       if (usr) setUser(usr);
+      else toast.warning("هذا الحساب لم يفعّل بعد!");
       history.push("/");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {

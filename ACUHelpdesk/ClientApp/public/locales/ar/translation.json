@@ -83,7 +83,7 @@
     "passwordplaceholder": "كلمة السر",
     "emailerrmsg": "عليك إدخال بريد إلكتروني صحيح",
     "passworderrmsg": "أدخل كلمة سر صحيحة",
-    "invalidcredentials": "معلومات الدخول غير صحيحة",
+    "invalidcredentials": "معلومات الدخول غير صحيحة أو الحساب غير مفعّل",
     "forgotpassword": "نسيت كلمةالسر",
     "register": "إضغط هنا للإشتراك"
   },
