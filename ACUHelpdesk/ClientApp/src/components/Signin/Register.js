@@ -42,8 +42,12 @@ const Register = () => {
 
   useEffect(() => {
     async function getC() {
-      const { data: countries } = await getCountries();
-      setCountries(countries);
+      try {
+        const { data: countries } = await getCountries();
+        setCountries(countries);
+      } catch (ex) {
+        toast.error("لم تتم قرأة الدول، تأكد أن السيرفر يعمل!");
+      }
     }
     getC();
   }, []);
@@ -112,7 +116,7 @@ const Register = () => {
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         setErrors({ ...errors, message: ex.response.data.message });
-        toast.error(`Something has failed ,${ex.response.data.message}`);
+        toast.error(`ERROR: ${ex.response.data.message}`);
       }
     }
   };

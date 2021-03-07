@@ -263,21 +263,20 @@ namespace ACUHelpdesk.Services
             if (!string.IsNullOrEmpty(origin))
             {
                 var verifyUrl = $"{origin}/verify-email?passcode={user.PassCode}";
-                    message = $@"<p>Please click the below link to activate your ACU Helpdesk account:</p>
+                    message = $@"<p>أرسل هذا البريد الإلكتروني بناءّ على طلبك المشاركة في منصة تسهيل مفاوضات الإتحاد الجمركي العربيACU Helpdesk account:</p>
                                  <p><a href=""{verifyUrl}"">{verifyUrl}</a></p>";
             }
             else
             {
-                message = $@"<p>Please use the below passcode to verify your email address with the 
-                             <code>/verify-email</code> api route:</p>
+                message = $@"<p>إضغط على الرابط المرفق لتفعيل حسابكم وتمكنكم من المشاركة في حوار إلكتروني حول مواضيع مختلفة     <code>/verify-email</code> api route:</p>
                              <p><code>{user.PassCode}</code></p>";
             }
 
             _emailService.Send(
                 to: user.Email,
-                subject: "Sign-up to ACU Helpdesk - Verify Email",
-                html: $@"<h4>Verify Email</h4>
-                         <p>Thanks for registering!</p>
+                subject: "إشترك في منصة تسهيل مفاوضات الإتحاد الجمركي العربي ACU Helpdesk - Verify Email",
+                html: $@"<h4>أكد أن هذا البريد الإلكتروني هو بريدك </h4>
+                         <p>إهلاّ وسهلاّ بكم في المنصة</p>
                          {message}"
             );
         }

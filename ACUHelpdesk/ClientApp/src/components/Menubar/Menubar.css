@@ -6,10 +6,10 @@
 }
 
 .nav-links {
-  font-weight: bold;
+  font-weight: 500;
   border-left: 1px solid gray;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .nav-links:hover {

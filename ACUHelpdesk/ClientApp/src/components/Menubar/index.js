@@ -153,7 +153,7 @@ const Menubar = ({ onSelect }) => {
               <NavLink
                 key={navlink.id}
                 exact
-                className="nav-item nav-link nav-links"
+                className="nav-item nav-link nav-links px-4"
                 to={navlink.path}
                 onClick={e => handleClick(e)}
               >
@@ -190,7 +190,7 @@ const Menubar = ({ onSelect }) => {
             <>
               <NavLink
                 exact
-                className="nav-item nav-link nav-links"
+                className="nav-item nav-link nav-links px-4"
                 activeClassName="bg-success"
                 to="/negotiation"
                 onClick={() => setExpanded(false)}
@@ -200,7 +200,7 @@ const Menubar = ({ onSelect }) => {
               </NavLink>
               <NavLink
                 exact
-                className="nav-item nav-link nav-links"
+                className="nav-item nav-link nav-links px-4"
                 activeClassName="bg-success"
                 to="/products"
                 onClick={() => setExpanded(false)}

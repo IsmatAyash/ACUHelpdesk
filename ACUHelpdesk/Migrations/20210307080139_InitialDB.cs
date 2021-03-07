@@ -184,7 +184,7 @@ namespace ACUHelpdesk.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Tariff = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Tariff = table.Column<decimal>(type: "decimal(10,3)", nullable: true),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     NegotiationId = table.Column<int>(type: "int", nullable: false)
@@ -247,13 +247,7 @@ namespace ACUHelpdesk.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "ActivationDate", "Active", "Avatar", "CountryId", "Email", "FirstName", "LastName", "NegPassCode", "NegPassCodeExpires", "PassCode", "PassCodeExpires", "Password", "RoleId" },
-                values: new object[,]
-                {
-                    { 1, null, true, "ismat.jpg", 9, "ismat.ayash@gmail.com", "عصمت", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEAyErJ1Zl9OzQDSucAylbMy0hT3Xa6FdxdkV+5CFsv5NrXE7tHYvD8gptCSPwr5rCA==", 1 },
-                    { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAELC7ovMCQEuFNKNk1RVo1hudzh0zumrbYNuVYMcz8A0OElgqVwL3h6eH48RLksGU3Q==", 1 },
-                    { 3, null, true, "", 12, "alexy.ayash@gmail.com", "أليكسي", "العياش", null, null, null, null, "AQAAAAEAACcQAAAAEEiP9p9e8++ztOMJnhEaLzd+zxBDWdZ9zus2ChrgMx0RVlpIndUXSIPhD0xrWszOpA==", 2 },
-                    { 4, null, true, "", 1, "oayyash@bankofbeirut.com", "وردة", "الجزائرية", null, null, null, null, "AQAAAAEAACcQAAAAEJZ5qa0TNiFKqjaZbAqorhdkWQ3p3K1gQ27PLeYc9HQJu3wbiJ6J0RllEnQInsbAkQ==", 2 }
-                });
+                values: new object[] { 2, null, true, "layale.jpg", 7, "layale@gmail.com", "ليال", "باسيل", null, null, null, null, "AQAAAAEAACcQAAAAEOuPKVbe6OsM3htyUP0AFz9mdX60xsMWMFfwHWAsyqDwmCl+zqD+uK9Zol+pGWzmvA==", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Negotiation_UserId",

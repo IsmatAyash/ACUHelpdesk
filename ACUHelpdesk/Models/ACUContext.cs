@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CryptoHelper;
-using System;
-using ACUHelpdesk.Services;
 
 namespace ACUHelpdesk.Models
 {
@@ -80,18 +78,6 @@ namespace ACUHelpdesk.Models
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    Id = 1,
-                    RoleId = 1,
-                    CountryId = 9,
-                    Email = "ismat.ayash@gmail.com",
-                    FirstName = "عصمت",
-                    LastName = "العياش",
-                    Password = Crypto.HashPassword("admin"),
-                    Active = true,
-                    Avatar = "ismat.jpg"
-                }, 
-                new User
-                {
                     Id = 2,
                     RoleId = 1,
                     CountryId = 7,
@@ -101,122 +87,7 @@ namespace ACUHelpdesk.Models
                     Password = Crypto.HashPassword("admin"),
                     Active = true,
                     Avatar = "layale.jpg"
-                },
-                new User
-                {
-                    Id = 3,
-                    RoleId = 2,
-                    CountryId = 12,
-                    Email = "alexy.ayash@gmail.com",
-                    FirstName = "أليكسي",
-                    LastName = "العياش",
-                    Password = Crypto.HashPassword("aa291009"),
-                    Active = true,
-                    Avatar = ""
-                },
-                new User
-                {
-                    Id = 4,
-                    RoleId = 2,
-                    CountryId = 1,
-                    Email = "oayyash@bankofbeirut.com",
-                    FirstName = "وردة",
-                    LastName = "الجزائرية",
-                    Password = Crypto.HashPassword("oam007"),
-                    Active = true,
-                    Avatar = ""
                 });
-
-            //modelBuilder.Entity<Negotiation>().HasData(
-            //    new Negotiation
-            //    {
-            //        Id = 1,
-            //        NegName = "منصة التفاوض لبنان الأردن",
-            //        NegSubject = "التعريفة الجمركية الموح",
-            //        NegStatus = "Active",
-            //        NegCreatedAt = new DateTime(2021, 2, 14),
-            //        UserId = 1
-            //    },
-            //    new Negotiation 
-            //    {
-            //        Id = 2,
-            //        NegName = "آليات التعويض والتضامن",
-            //        NegSubject = "منصة التفاوض لبنان الأردن",
-            //        NegStatus = "Pending",
-            //        NegCreatedAt = new DateTime(2021, 1, 20),
-            //        UserId = 1
-            //    });
-
-            //modelBuilder.Entity<NegotiationMember>().HasData(
-            //    new NegotiationMember
-            //    {
-            //        Id = 1,
-            //        MemberStatus = "Active",
-            //        ActionAt = new DateTime(2021, 2, 14),
-            //        UserId = 1,
-            //        NegotiationId = 1,
-            //        isLeader = true,
-            //        OnlineStatus = true
-            //    },
-            //    new NegotiationMember
-            //    {
-            //        Id = 2,
-            //        MemberStatus = "Active",
-            //        ActionAt = new DateTime(2021, 2, 14),
-            //        UserId = 2,
-            //        NegotiationId = 1,
-            //        isLeader = false,
-            //        OnlineStatus = true
-            //    });
-
-            //modelBuilder.Entity<NegotiationProduct>().HasData(
-            //    new NegotiationProduct
-            //    {
-            //        Id = 1,
-            //        ProductId = 2,
-            //        NegotiationId = 1,
-            //        Tariff = (decimal)12.12
-            //    },
-            //    new NegotiationProduct
-            //    {
-            //        Id = 2,
-            //        ProductId = 3,
-            //        NegotiationId = 1,
-            //        Tariff = (decimal)11.10
-            //    });
-
-
-            //modelBuilder.Entity<NegotiationMember>().HasData(
-            //    new NegotiationMember
-            //    {
-            //        Id = 3,
-            //        MemberStatus = "Active",
-            //        ActionAt = new DateTime(2021, 2, 14),
-            //        UserId = 1,
-            //        NegotiationId = 2,
-            //        isLeader = true,
-            //        OnlineStatus = true,
-            //    },
-            //    new NegotiationMember
-            //    {
-            //        Id = 4,
-            //        MemberStatus = "Active",
-            //        ActionAt = new DateTime(2021, 2, 14),
-            //        UserId = 2,
-            //        NegotiationId = 2,
-            //        isLeader = false,
-            //        OnlineStatus = false
-            //    });
-
-            //modelBuilder.Entity<NegotiationProduct>().HasData(
-            //    new NegotiationProduct
-            //    {
-            //        Id = 3,
-            //        ProductId = 3,
-            //        NegotiationId = 2,
-            //        Tariff = (decimal)10.23
-            //    });
-
         }
     }
 }

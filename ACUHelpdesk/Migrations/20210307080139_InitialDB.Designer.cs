@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACUHelpdesk.Migrations
 {
     [DbContext(typeof(ACUContext))]
-    [Migration("20210303174047_InitialDB")]
+    [Migration("20210307080139_InitialDB")]
     partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -346,7 +346,7 @@ namespace ACUHelpdesk.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Tariff")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,3)");
 
                     b.HasKey("Id");
 
@@ -474,18 +474,6 @@ namespace ACUHelpdesk.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Active = true,
-                            Avatar = "ismat.jpg",
-                            CountryId = 9,
-                            Email = "ismat.ayash@gmail.com",
-                            FirstName = "عصمت",
-                            LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAEAyErJ1Zl9OzQDSucAylbMy0hT3Xa6FdxdkV+5CFsv5NrXE7tHYvD8gptCSPwr5rCA==",
-                            RoleId = 1
-                        },
-                        new
-                        {
                             Id = 2,
                             Active = true,
                             Avatar = "layale.jpg",
@@ -493,32 +481,8 @@ namespace ACUHelpdesk.Migrations
                             Email = "layale@gmail.com",
                             FirstName = "ليال",
                             LastName = "باسيل",
-                            Password = "AQAAAAEAACcQAAAAELC7ovMCQEuFNKNk1RVo1hudzh0zumrbYNuVYMcz8A0OElgqVwL3h6eH48RLksGU3Q==",
+                            Password = "AQAAAAEAACcQAAAAEOuPKVbe6OsM3htyUP0AFz9mdX60xsMWMFfwHWAsyqDwmCl+zqD+uK9Zol+pGWzmvA==",
                             RoleId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = true,
-                            Avatar = "",
-                            CountryId = 12,
-                            Email = "alexy.ayash@gmail.com",
-                            FirstName = "أليكسي",
-                            LastName = "العياش",
-                            Password = "AQAAAAEAACcQAAAAEEiP9p9e8++ztOMJnhEaLzd+zxBDWdZ9zus2ChrgMx0RVlpIndUXSIPhD0xrWszOpA==",
-                            RoleId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Active = true,
-                            Avatar = "",
-                            CountryId = 1,
-                            Email = "oayyash@bankofbeirut.com",
-                            FirstName = "وردة",
-                            LastName = "الجزائرية",
-                            Password = "AQAAAAEAACcQAAAAEJZ5qa0TNiFKqjaZbAqorhdkWQ3p3K1gQ27PLeYc9HQJu3wbiJ6J0RllEnQInsbAkQ==",
-                            RoleId = 2
                         });
                 });
 
