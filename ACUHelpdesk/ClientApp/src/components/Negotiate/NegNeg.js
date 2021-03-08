@@ -13,7 +13,7 @@ const NegNeg = ({ negs, onItemSelect, onAction }) => {
         return "secondary";
       case "Completed":
         return "info";
-      case "Canceled":
+      case "Cancelled":
         return "danger";
       default:
         return "success";
@@ -47,7 +47,7 @@ const NegNeg = ({ negs, onItemSelect, onAction }) => {
                 </small>
               </Col>
               <Col sm={2}>
-                {createdBy === user.fullName && (
+                {createdBy === user.fullName && status !== "Completed" && (
                   <ButtonGroup className="ml-1" size="small">
                     <IconButton
                       icon={<RiEdit2Fill />}

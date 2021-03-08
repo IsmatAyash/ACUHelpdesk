@@ -167,7 +167,8 @@ namespace ACUHelpdesk.Services
             user.PassCode = randomPassCode();
             user.PassCodeExpires = DateTime.UtcNow.AddDays(1);
             user.Password = HashPassword(model.Password);
-            user.Avatar = SaveImage(model.AvatarFile);
+            if (model.AvatarFile != null)
+                 user.Avatar = SaveImage(model.AvatarFile);
             _context.SaveChanges();
 
             sendActivationEmail(user, origin);
@@ -177,7 +178,9 @@ namespace ACUHelpdesk.Services
 
         public string SaveImage(IFormFile avatarFile) 
         {
-            string avatarName = new String(Path.GetFileNameWithoutExtension(avatarFile.FileName).Take(10).ToArray()).Replace(' ','-');
+            string avatarName = avatarFile.FileName != null
+                ? new String(Path.GetFileNameWithoutExtension(avatarFile.FileName).Take(10).ToArray()).Replace(' ', '-')
+                : "anonymous";
             avatarName = avatarName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(avatarFile.FileName);
             var avatarPath = Path.Combine(_hostEnvironment.ContentRootPath, "Content/Avatars", avatarName);
             using (var fileStream = new FileStream(avatarPath, FileMode.Create))
@@ -320,13 +323,13 @@ namespace ACUHelpdesk.Services
         private void sendNegPasscodeEmail(User user)
         {
             string message;
-            message = $@"<p>Please use the below Passcode to start the requested agreed upon negotiation </p>
+            message = $@"<p>إستعل كلمة المرور المرفقة لتعريف وإطلاق المفاوضات الموافق عليها.</p>
             <p><code>{user.NegPassCode}</code></p>";
 
             _emailService.Send(
                 to: user.Email,
-                subject: "Negotiation pass code - ACU Helpdask",
-                html: $@"<h4>Negotiation Passcode</h4>
+                subject: "كلمة مرور للمفاوضات - منصة تسهيل مفاوضات الإتحاد الجمركي العربي",
+                html: $@"<h4>كلمة ألمرور</h4>
                          {message}"
             );
         }

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { UserContext } from "../../services/UserContext";
 import {

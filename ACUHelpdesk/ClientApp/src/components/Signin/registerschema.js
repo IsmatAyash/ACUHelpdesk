@@ -20,7 +20,7 @@ const Schema = () => {
         "string.empty": `${t("register.lastnameerrmsg")}`,
       }),
     email: Joi.string()
-      .email({ tlds: { allow: ["com", "net"] } })
+      .email({ tlds: { allow: ["com", "net", "org"] } })
       .required()
       .messages({
         "string.base": `${t("register.emailerrmsg")}`,

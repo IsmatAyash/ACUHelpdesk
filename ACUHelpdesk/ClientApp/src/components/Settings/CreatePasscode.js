@@ -47,10 +47,13 @@ const CreatePasscode = () => {
         fullName: usr.fullName,
         negPassCode: usr.negPassCode,
       });
-      toast.error(`${t("createpasscode.passcodegenerated")}`);
+      toast.success(`${t("createpasscode.passcodegenerated")}`);
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         setErrors({ ...errors, message: ex.response.data.message });
+        toast.dark(
+          "هذا البريد الإلكتروني ليس مؤكد، لا يمكن إرسال كلمة سر قبل تأكيد البريد الإلكتروني ✋"
+        );
       }
     }
   };

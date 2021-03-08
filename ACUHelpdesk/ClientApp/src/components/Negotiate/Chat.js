@@ -54,14 +54,15 @@ const Chat = ({ discussions, neg }) => {
         const cid = await connection.invoke("getConnId");
         await joinNeg(cid, neg.id);
         if (isSubscribed) setConnId(cid);
+        toast.success("  لقد تم وصلكم بهذه المفاوضات بنجاح.");
       } catch (ex) {
-        console.log("Connection failed: ", ex);
+        toast.error("لم تتم عملية وصلكم بهذه المفاوضات بنجاح، حاول من جديد ");
       }
     }
     startConn();
 
     return () => (isSubscribed = false);
-  }, [msg, neg.id, user.avatars]);
+  }, []);
 
   const onKeyUp = e => {
     if (e.charCode === 13) {
@@ -92,7 +93,7 @@ const Chat = ({ discussions, neg }) => {
     display: flex;
     flex-direction: column;
     padding-bottom: 1rem;
-    max-height: 60vh;
+    max-height: 69vh;
     overflow: auto;
     > * {
       &:first-child {
