@@ -23,7 +23,7 @@ namespace ACUHelpdesk.Services
     public interface IUserService
     {
         AuthResponse Auth(AuthRequest model);
-        IEnumerable<User> GetAll();
+        IEnumerable GetAll();
         IEnumerable GetMembers(int? negId);
         IEnumerable GetMembersAntd();
         User GetById(int id);
@@ -67,9 +67,23 @@ namespace ACUHelpdesk.Services
             return new AuthResponse(user, token);
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable GetAll()
         {
-            return _context.Users.Include(r => r.Role).Include(c => c.Country).ToList();
+            return _context.Users
+                           .Include(r => r.Role)
+                           .Include(c => c.Country)
+                           .Select(x => new
+                           {
+                               Id = x.Id,
+                               Name = x.FirstName + ' ' + x.LastName,
+                               Country = x.Country.NameAR,
+                               Flag = x.Country.Alpha2,
+                               Email = x.Email,
+                               NegPassCode = x.NegPassCode,
+                               Role = x.Role.Name,
+                               Avatar = x.Avatar,
+                               Active = x.Active
+                           }).ToList();
         }
 
         public IEnumerable GetMembers(int? negId)

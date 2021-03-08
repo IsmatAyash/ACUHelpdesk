@@ -29,6 +29,7 @@ import Invitation from "./components/Negotiate/Invitation";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-dropdown-tree-select/dist/styles.css";
+import Users from "./components/Signin/Users";
 
 function App() {
   const [user, setUser] = useState({});
@@ -63,8 +64,9 @@ function App() {
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
               <Route path="/profile" component={Profile} />
-              <Route path="/countries" component={Countries} />
+              <ProtectedRoute path="/countries" component={Countries} />
               <Route path="/createpasscode" component={CreatePasscode} />
+              <ProtectedRoute path="/users" component={Users} />
               <Route path="/signout" component={Signout} />
               <Route path="/socecocab" component={Socecocab} />
               <Route

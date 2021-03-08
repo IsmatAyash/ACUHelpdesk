@@ -26,7 +26,7 @@ const Menubar = ({ onSelect }) => {
 
   const [expanded, setExpanded] = useState(false);
   const adminItems = [
-    { id: "/register", option: `${t("menubar.users")}` },
+    { id: "/users", option: `${t("menubar.users")}` },
     { id: "/countries", option: `${t("menubar.countries")}` },
     { id: "/createpasscode", option: `${t("menubar.createpasscode")}` },
   ];

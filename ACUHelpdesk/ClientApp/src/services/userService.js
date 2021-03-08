@@ -14,6 +14,7 @@ export const userService = {
   resetPassword,
   negPassCode,
   getMembers,
+  getUsers,
 };
 
 async function login(email, password) {
@@ -61,4 +62,8 @@ function resetPassword({ passcode, password, confirmPassword }) {
 
 function getMembers(negId) {
   return http.get(`${baseUrl}/members/${negId}`);
+}
+
+function getUsers() {
+  return http.get(baseUrl);
 }
