@@ -7,29 +7,28 @@ export const intros = [
     labelEN: "The Article Title",
     textEN:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    img: "url(/images/banner1.jpg)",
+    img: "url(/images/banner2.jpg)",
     alt: "First slide",
     interval: 4000,
     lightBg: true,
   },
   {
     id: 1,
-    label: "اللجان المعنية بمفاوضات الاتحاد ",
+      label: "الفضاء العام",
     text:
-      "الرجاء اختيار صورة جديدة للمنصة باعتماد منشورات الاسكوا حول التكامل الإقليمي العربي",
+      "توفر هذه النافذة منصة لنشر جميع البيانات والدراسات الخاصة بتطور مفاوضات الاتحاد الجمركي العربي ومحاضر اجتماعات اللجان المختصة تحت رعاية جامعة الدول العربية. كما توفر هذه النافذة",
     labelEN: "The Article Title",
     textEN:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    img: "url(/images/banner2.jpg)",
+    img: "url(/images/banner1.jpg)",
     alt: "Second slide",
     interval: 4000,
     lightBg: true,
   },
   {
     id: 3,
-    label: "مرض فیروس كورونا",
-    text:
-      "نحن نعمل مع الشركاء لإبطاء انتشار الفیروس، ولكن كل شخص في الولایة لدیھ دور یؤدیھ لتحقیق ذلك. قد یمرض بعض الأشخاص أكثر من الآخرین. الأشخاص الذین یعانون من ّ أي ّ شخص من أي عمر عرضة للإصابة بالمرض.",
+      label: "الاسكوا حول التكامل الإقليمي",
+    text: "تهدف هذه المنصة الالكترونية الى اتاحة امكانية التفاوض عن بعد بين الدول الأعضاء من خلال نظام تبادل المعلومات والمقترحات بالإضافة الى توفير جميع البيانات والوثائق الخاصة بالمفاوضات لجميع أعضاء الفرق الوطنية المكلفة بالتفاوض",
     labelEN: "The Article Title",
     textEN:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
@@ -40,10 +39,10 @@ export const intros = [
   },
   {
     id: 4,
-    label: "مرض فیروس كورونا",
-    text:
-      "نحن نعمل مع الشركاء لإبطاء انتشار الفیروس، ولكن كل شخص في الولایة لدیھ دور یؤدیھ لتحقیق ذلك. قد یمرض بعض الأشخاص أكثر من الآخرین. الأشخاص الذین یعانون من ّ أي ّ شخص من أي عمر عرضة للإصابة بالمرض.",
-    labelEN: "The Article Title",
+      label: "الاسكوا حول التكامل الإقليمي",
+      text:
+          "تهدف هذه المنصة الالكترونية الى اتاحة امكانية التفاوض عن بعد بين الدول الأعضاء من خلال نظام تبادل المعلومات والمقترحات بالإضافة الى توفير جميع البيانات والوثائق الخاصة بالمفاوضات لجميع أعضاء الفرق الوطنية المكلفة بالتفاوض",
+      labelEN: "The Article Title",
     textEN:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     img: "url(/images/banner5.jpg)",
