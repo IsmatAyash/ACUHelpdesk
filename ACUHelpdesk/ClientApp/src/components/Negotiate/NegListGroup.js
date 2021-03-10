@@ -72,7 +72,7 @@ const NegListGroup = ({
             <NegMember
               members={data}
               lng={lng}
-              lastMsg="مرحبا يا أحلى عالم"
+              lastMsg="أخر رسالة تدون هنا"
               onInvitation={onInvitation}
             />
           </NegMemberListGroup>

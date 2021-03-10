@@ -9,11 +9,22 @@ const NegMember = ({ members, lastMsg, lng, onInvitation }) => {
   const { user } = useContext(UserContext);
 
   const formatStatus = (actionat, memberstatus) => {
+    let days = "بإنتظار القبول";
+    switch (memberstatus) {
+      case "Accepted":
+        days = "قبلت منذ";
+        break;
+      case "Rejected":
+        days = "رفضت منذ";
+        break;
+      default:
+        break;
+    }
     return actionat
-      ? `${memberstatus} ${Math.floor(
+      ? `${days} ${Math.floor(
           Math.abs(new Date() - new Date(actionat)) / (1000 * 60 * 60 * 24)
-        )} days ago`
-      : memberstatus;
+        )} ايام`
+      : days;
   };
 
   return (
