@@ -179,20 +179,27 @@ const Menubar = ({ onSelect }) => {
                 className="nav-links"
               >
                 {navlink.dditems.map(dditem =>
-                  dditem.option === "divider" ? (
-                    <NavDropdown.Divider key={dditem.id} />
-                  ) : (
-                    <NavDropdown.Item
-                      key={dditem.id}
-                      as={Link}
-                      to={navlink.path}
-                      eventKey={`${dditem.eventKey}/${dditem.option}`}
-                      style={{ textAlign: lng === "ar" ? "right" : "left" }}
-                      onClick={() => setExpanded(false)}
-                    >
-                      {dditem.option}
-                    </NavDropdown.Item>
-                  )
+                    dditem.option === "divider" ? (
+                        <NavDropdown.Divider key={dditem.id} />
+                    ) : (                            
+                            dditem.id === 4 || dditem.id === 10 ? (
+                                <NavDropdown.ItemText
+                                    style={{ textAlign: lng === "ar" ? "right" : "left" }}
+                                >
+                                    {dditem.option}
+                                </NavDropdown.ItemText>
+                            ) :
+                                <NavDropdown.Item
+                                    key={dditem.id}
+                                    as={Link}
+                                    to={navlink.path}
+                                    eventKey={`${dditem.eventKey}/${dditem.option}`}
+                                    style={{ textAlign: lng === "ar" ? "right" : "left" }}
+                                    onClick={() => setExpanded(false)}
+                                >
+                                    {dditem.option}
+                                </NavDropdown.Item>
+                    )
                 )}
               </NavDropdown>
             )
