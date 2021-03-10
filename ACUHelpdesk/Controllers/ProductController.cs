@@ -73,6 +73,7 @@ namespace ACUHelpdesk.Controllers
                      {
                          Label = x.Label,
                          Value = x.Value,
+                         Checked = x.Checked,
                          Children = products
                                     .Where(c => c.ParentID == x.Value && c.Tier == 3)
                                         .Select(y => new

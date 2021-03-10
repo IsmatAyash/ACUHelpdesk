@@ -16,6 +16,10 @@ const Users = () => {
 
   console.log("returned users", users);
 
+    //<th>كلمة مرور المفاوضات</th>
+    //<th>الصورة</th>
+    //<td>{user.negPasscode}</td>
+    //<td>{user.avatar}</td>
   return (
     <Container fluid className="my-3" style={{ minHeight: "100vh" }}>
       <Table responsive="sm" bordered>
@@ -27,7 +31,6 @@ const Users = () => {
             <th>الدولة</th>
             <th>الوضع</th>
             <th>كلمة مرور المفاوضات</th>
-            <th>الصورة</th>
             <th>الدور</th>
           </tr>
         </thead>
@@ -46,8 +49,7 @@ const Users = () => {
                 />
               </td>
               <td>{user.active ? <GiCheckMark /> : <GiCancel />}</td>
-              <td>{user.negPasscode}</td>
-              <td>{user.avatar}</td>
+              <td>{user.negPassCode}</td>
               <td>{user.role}</td>
             </tr>
           ))}

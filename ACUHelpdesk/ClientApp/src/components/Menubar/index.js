@@ -72,46 +72,58 @@ const Menubar = ({ onSelect }) => {
       label: icon(3),
       dditems: [
         {
-          id: 4,
+            id: 4,
+            option: `${t("menubar.spcomm.spcommtitle")}`,
+            eventKey: "mainreps",
+        },
+        { id: 5, option: "divider" },
+        {
+          id: 6,
           option: `${t("menubar.spcomm.maincom")}`,
           eventKey: "mainreps",
         },
         {
-          id: 5,
+          id: 7,
           option: `${t("menubar.spcomm.execcom")}`,
           eventKey: "execreps",
         },
         {
-          id: 6,
+          id: 8,
           option: `${t("menubar.spcomm.othercom")}`,
           eventKey: "othercom",
         },
-        { id: 7, option: "divider" },
+        { id: 9, option: "divider" },
         {
-          id: 8,
+            id: 10,
+            option: `${t("menubar.spcomm.customcomtitle")}`,
+            eventKey: "customreps",
+        },
+        { id: 11, option: "divider" },
+        {
+          id: 12,
           option: `${t("menubar.spcomm.customcom")}`,
           eventKey: "customreps",
         },
         {
-          id: 9,
+          id: 13,
           option: `${t("menubar.spcomm.tariffcom")}`,
           eventKey: "tariffreps",
         },
       ],
     },
-    { id: 10, path: "/reports", label: `${t("menubar.reports")}` },
+    { id: 14, path: "/reports", label: `${t("menubar.reports")}` },
     {
-      id: 11,
+      id: 15,
       path: "/meetings",
       label: icon(11),
       dditems: [
         {
-          id: 12,
+          id: 16,
           option: `${t("menubar.meetings.formalmeetings")}`,
           path: "/meetings/formalmeetings",
         },
         {
-          id: 13,
+          id: 17,
           option: `${t("menubar.meetings.upcomingmeetings")}`,
           path: "/meetings/upcomingmeetings",
         },
