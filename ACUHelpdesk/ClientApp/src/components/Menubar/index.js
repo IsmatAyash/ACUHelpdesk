@@ -45,18 +45,18 @@ const Menubar = ({ onSelect }) => {
             <FaLayerGroup className={iconStyle} /> {t("menubar.spcomm.spcomm")}
           </>
         );
-      case 11:
+      case 15:
         return (
           <>
             <GiRoundTable className={iconStyle} />
             {t("menubar.meetings.meetings")}
           </>
         );
-      case 10:
-        return <FaFileContract className={iconStyle} />;
       case 14:
+        return <FaFileContract className={iconStyle} />;
+      case 18:
         return <FaHandsHelping className={iconStyle} />;
-      case 15:
+      case 19:
         return <FaTasks className={iconStyle} />;
       default:
         break;
@@ -115,7 +115,7 @@ const Menubar = ({ onSelect }) => {
     {
       id: 15,
       path: "/meetings",
-      label: icon(11),
+      label: icon(15),
       dditems: [
         {
           id: 16,
@@ -206,7 +206,7 @@ const Menubar = ({ onSelect }) => {
                 to="/negotiation"
                 onClick={() => setExpanded(false)}
               >
-                {icon(14)}
+                {icon(18)}
                 {t("menubar.negotiation")}
               </NavLink>
               <NavLink
@@ -216,7 +216,7 @@ const Menubar = ({ onSelect }) => {
                 to="/products"
                 onClick={() => setExpanded(false)}
               >
-                {icon(15)}
+                {icon(19)}
                 {t("menubar.products")}
               </NavLink>
             </>
