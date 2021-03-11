@@ -80,13 +80,13 @@ namespace ACUHelpdesk.Models
                 {
                     Id = 1,
                     RoleId = 1,
-                    CountryId = 7,
-                    Email = "layale@gmail.com",
-                    FirstName = "ليال",
-                    LastName = "باسيل",
+                    CountryId = 9,
+                    Email = "helpdeskacu@gmail.com",
+                    FirstName = "مستخدم",
+                    LastName = "رئيسي",
                     Password = Crypto.HashPassword("admin"),
                     Active = true,
-                    Avatar = "layale.jpg"
+                    Avatar = null
                 });
         }
     }
