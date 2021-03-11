@@ -188,7 +188,7 @@ const Menubar = ({ onSelect }) => {
                                 >
                                     {dditem.option}
                                 </NavDropdown.ItemText>
-                            ) :
+                            ) : 
                                 <NavDropdown.Item
                                     key={dditem.id}
                                     as={Link}
