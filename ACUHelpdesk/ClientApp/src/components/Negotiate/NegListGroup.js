@@ -20,12 +20,14 @@ import NegNeg from "./NegNeg";
 const NegListGroup = ({
   lng,
   addIcon,
+  refreshIcon,
   data,
   memb,
   onItemSelect,
   onAction,
   placement,
-  tooltip,
+  addtooltip,
+  refreshtooltip,
   onInvitation,
   title,
   imageSrc,
@@ -44,7 +46,20 @@ const NegListGroup = ({
             <OverlayTrigger
               key={placement}
               placement={placement}
-              overlay={<Tooltip id={`tooltip-${placement}`}>{tooltip}</Tooltip>}
+              overlay={
+                <Tooltip id={`tooltip-${placement}`}>{refreshtooltip}</Tooltip>
+              }
+            >
+              <NegIconButton onClick={() => onAction("refreshGroup")}>
+                {refreshIcon}
+              </NegIconButton>
+            </OverlayTrigger>
+            <OverlayTrigger
+              key={placement}
+              placement={placement}
+              overlay={
+                <Tooltip id={`tooltip-${placement}`}>{addtooltip}</Tooltip>
+              }
             >
               <NegIconButton onClick={() => onAction("newGroup")}>
                 {addIcon}

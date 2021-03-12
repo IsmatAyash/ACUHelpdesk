@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { MdAddCircle } from "react-icons/md";
+import { MdAddCircle, MdSync } from "react-icons/md";
 import { Card, Spinner } from "react-bootstrap";
 import { NegContainer, NegRow, NegMemberCol } from "./NegMemberElements";
 import NegListGroup from "./NegListGroup";
@@ -206,15 +206,6 @@ const Negotiate = () => {
     setShow(false);
   };
 
-  const doUpdate = async (negotiation, initiate) => {
-    await updateNegotiation(negotiation, initiate);
-    const { data: updatedNeg } = await getNegotiation(negotiation.id);
-    setNeg(mapToViewModel(updatedNeg[0]));
-    setMode("edit");
-    if (initiate) toast.success("لقد تم إطلاق المفاوضات بنجاح، بالتوفيق");
-    else toast.success("لقد تم تعديل هذه المفاوضات بنجاح");
-  };
-
   const handleInvitation = async (id, answer) => {
     try {
       const membscopy = [...members];
@@ -237,23 +228,24 @@ const Negotiate = () => {
   };
 
   const handleInitiateClose = (id, status) => {
-    switch (status) {
-      case "Pending": {
-        const negotiation = {
-          id: id,
-          negInitiatedAt: new Date(),
-          negStatus: "Active",
-        };
-        doUpdate(negotiation, true);
-        break;
-      }
-      case "Active":
-        setCloseShow(true);
-        break;
-      default:
-        break;
-    }
+    const negotiation = {
+      id: id,
+      negInitiatedAt: status === "Pending" ? new Date() : null,
+      negStatus: status === "Pending" ? "Active" : "Completed",
+    };
+    doUpdate(negotiation, true);
   };
+
+  const doUpdate = async (negotiation, initiate) => {
+    await updateNegotiation(negotiation, initiate);
+    const { data: updatedNeg } = await getNegotiation(negotiation.id);
+    setNeg(mapToViewModel(updatedNeg[0]));
+    setMode("edit");
+    if (initiate) toast.success("لقد تم إطلاق المفاوضات بنجاح");
+    else toast.success("لقد تم إبرام هذه المفاوضات بنجاح");
+  };
+
+  const handleEnterResult = () => setCloseShow(true);
 
   return (
     <NegContainer fluid>
@@ -311,11 +303,13 @@ const Negotiate = () => {
               onClose={handleClose}
               show={show}
               addIcon={<MdAddCircle style={{ fontSize: 22 }} />}
+              refreshIcon={<MdSync style={{ fontSize: 22 }} />}
               imageSrc={user.avatarSrc}
               data={negs}
               memb={false}
               placement="bottom"
-              tooltip="زيادة منصة للمفاوضات"
+              addtooltip="زيادة منصة للمفاوضات"
+              refreshtooltip="تحديث المعلومات"
               title="ألمفاوضات"
             />
           )}
@@ -326,6 +320,7 @@ const Negotiate = () => {
               <DisHeader
                 negHeader={neg}
                 onInitiateClose={handleInitiateClose}
+                onEnterResult={handleEnterResult}
               />
             </Card.Header>
             {neg.id !== -1 && <Chat discussions={discussions} neg={neg} />}

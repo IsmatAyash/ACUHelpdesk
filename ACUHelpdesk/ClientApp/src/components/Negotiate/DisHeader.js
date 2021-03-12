@@ -9,7 +9,11 @@ import {
   Col,
   Button,
 } from "react-bootstrap";
-import { MdInfoOutline, MdPlayCircleOutline } from "react-icons/md";
+import {
+  MdInfoOutline,
+  MdPlayCircleOutline,
+  MdTextFields,
+} from "react-icons/md";
 import { UserContext } from "../../services/UserContext";
 import NegInfo from "./NegInfo";
 
@@ -26,7 +30,7 @@ const BadgeTag = styled(Badge)`
   }
 `;
 
-const DisHeader = ({ negHeader, onInitiateClose }) => {
+const DisHeader = ({ negHeader, onInitiateClose, onEnterResult }) => {
   const [infoShow, setInfoShow] = useState(false);
   const {
     id,
@@ -66,7 +70,7 @@ const DisHeader = ({ negHeader, onInitiateClose }) => {
         </Col>
       </Row>
       <Row>
-        <Col sm={8}>
+        <Col>
           <strong>السلع:</strong>{" "}
           {products &&
             products.map(p => (
@@ -83,30 +87,44 @@ const DisHeader = ({ negHeader, onInitiateClose }) => {
               </OverlayTrigger>
             ))}
         </Col>
-        <Col sm={4} className="px-0 mx-0">
-          <Button
-            size="sm"
-            className="ml-1"
-            variant="outline-success"
-            disabled={
-              user.fullName !== createdBy ||
-              status === "Completed" ||
-              status === "Cancelled"
-            }
-            onClick={() => onInitiateClose(id, status)}
-          >
-            <MdPlayCircleOutline className="ml-1" />
-            {status === "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
-          </Button>
-          <Button
-            size="sm"
-            variant="outline-info"
-            onClick={() => setInfoShow(true)}
-          >
-            <MdInfoOutline className="ml-1" />
-            معلومات
-          </Button>
-        </Col>
+      </Row>
+      <Row className="justify-content-end py-2 pl-2">
+        <Button
+          size="sm"
+          className="ml-1"
+          variant="outline-success"
+          disabled={
+            user.fullName !== createdBy ||
+            status === "Completed" ||
+            status === "Cancelled"
+          }
+          onClick={() => onInitiateClose(id, status)}
+        >
+          <MdPlayCircleOutline className="ml-1" />
+          {status === "Active" ? "إبرام المفاوضات" : "إطلاق المفاوضات"}
+        </Button>
+        <Button
+          className="ml-1"
+          size="sm"
+          variant="outline-success"
+          onClick={onEnterResult}
+          disabled={
+            user.fullName !== createdBy ||
+            status === "Completed" ||
+            status === "Cancelled"
+          }
+        >
+          <MdTextFields className="ml-1" />
+          إدخال النتائج
+        </Button>
+        <Button
+          size="sm"
+          variant="outline-info"
+          onClick={() => setInfoShow(true)}
+        >
+          <MdInfoOutline className="ml-1" />
+          معلومات
+        </Button>
         <NegInfo show={infoShow} onHide={() => setInfoShow(false)} />
       </Row>
     </Container>

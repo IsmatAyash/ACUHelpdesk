@@ -223,8 +223,8 @@ namespace ACUHelpdesk.Controllers
                     return NotFound();
                 }
 
-                negotiation.NegInitiatedAt = model.NegInitiatedAt;
-                negotiation.NegStatus = "Active";
+                negotiation.NegInitiatedAt = model.NegInitiatedAt == null ? negotiation.NegInitiatedAt : model.NegInitiatedAt;
+                negotiation.NegStatus = model.NegStatus;
 
                 await _context.SaveChangesAsync();
 
