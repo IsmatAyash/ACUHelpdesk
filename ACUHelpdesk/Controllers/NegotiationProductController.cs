@@ -38,6 +38,7 @@ namespace ACUHelpdesk.Controllers
                                          {
                                              x.Id,
                                              x.Product.ProductDescriptionAR,
+                                             x.Product.ProductCode,
                                              x.Tariff,
                                              x.Remarks,
                                              x.ProductId

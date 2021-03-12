@@ -59,7 +59,7 @@ const NegClose = props => {
     // reset the unit price state value
     setCols({ tariff: 0, remarks: "" });
   };
-
+    console.log('Products', prods);
   return (
     <Modal
       {...props}
@@ -78,7 +78,7 @@ const NegClose = props => {
           <thead>
             <tr>
               <th>السلعة</th>
-              <th>التعرفة</th>
+              <th>التعرفة المتفق عليها</th>
               <th>ملاحظات</th>
               <th>إجرائات</th>
             </tr>
@@ -86,7 +86,7 @@ const NegClose = props => {
           <tbody>
             {prods.map(prod => (
               <tr key={prod.id}>
-                <td>{prod.productDescriptionAR}</td>
+                <td>{prod.productCode} - {prod.productDescriptionAR}</td>
                 <td>
                   {inEditMode.status && inEditMode.rowKey === prod.id ? (
                     <input
