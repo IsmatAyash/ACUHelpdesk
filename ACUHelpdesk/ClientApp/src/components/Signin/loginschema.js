@@ -6,7 +6,7 @@ const Schema = () => {
 
   const schema = Joi.object({
     email: Joi.string()
-      .email({ tlds: { allow: ["com", "net"] } })
+      .email({ tlds: { allow: ["com", "net","org"] } })
       .required()
       .messages({
         "string.base": `${t("login.emailerrmsg")}`,
